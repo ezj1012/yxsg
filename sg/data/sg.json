@@ -1,0 +1,157 @@
+{
+    "playerTemplate": "{\"armorColumn\":50,\"money\":0,\"nobility\":0,\"officepos\":0,\"playerGroup\":0,\"playerRank\":0,\"prestige\":0,\"state\":1,\"unionId\":0,\"unionPos\":0,\"vipLevel\":0,\"warAttackPrestige\":0,\"warDefencePrestige\":0,\"warPrestige\":0}",
+    "provinces": [
+        {
+            "cityCount": 0,
+            "id": 0,
+            "minority": true,
+            "name": "随机",
+            "playerCount": 0,
+            "playerMaxCount": 0
+        },
+        {
+            "cityCount": 0,
+            "id": 1,
+            "minority": false,
+            "name": "司隶",
+            "playerCount": 0,
+            "playerMaxCount": 50
+        },
+        {
+            "cityCount": 0,
+            "id": 2,
+            "minority": false,
+            "name": "冀州",
+            "playerCount": 0,
+            "playerMaxCount": 50
+        },
+        {
+            "cityCount": 0,
+            "id": 3,
+            "minority": false,
+            "name": "豫州",
+            "playerCount": 0,
+            "playerMaxCount": 50
+        },
+        {
+            "cityCount": 0,
+            "id": 4,
+            "minority": false,
+            "name": "兖州",
+            "playerCount": 0,
+            "playerMaxCount": 50
+        },
+        {
+            "cityCount": 0,
+            "id": 5,
+            "minority": false,
+            "name": "徐州",
+            "playerCount": 0,
+            "playerMaxCount": 50
+        },
+        {
+            "cityCount": 0,
+            "id": 6,
+            "minority": false,
+            "name": "青州",
+            "playerCount": 0,
+            "playerMaxCount": 50
+        },
+        {
+            "cityCount": 0,
+            "id": 7,
+            "minority": false,
+            "name": "荆州",
+            "playerCount": 0,
+            "playerMaxCount": 50
+        },
+        {
+            "cityCount": 0,
+            "id": 8,
+            "minority": false,
+            "name": "扬州",
+            "playerCount": 0,
+            "playerMaxCount": 50
+        },
+        {
+            "cityCount": 0,
+            "id": 9,
+            "minority": false,
+            "name": "益州",
+            "playerCount": 0,
+            "playerMaxCount": 50
+        },
+        {
+            "cityCount": 0,
+            "id": 10,
+            "minority": false,
+            "name": "凉州",
+            "playerCount": 0,
+            "playerMaxCount": 50
+        },
+        {
+            "cityCount": 0,
+            "id": 11,
+            "minority": false,
+            "name": "并州",
+            "playerCount": 0,
+            "playerMaxCount": 50
+        },
+        {
+            "cityCount": 0,
+            "id": 12,
+            "minority": false,
+            "name": "幽州",
+            "playerCount": 0,
+            "playerMaxCount": 50
+        },
+        {
+            "cityCount": 0,
+            "id": 13,
+            "minority": false,
+            "name": "交州",
+            "playerCount": 0,
+            "playerMaxCount": 50
+        },
+        {
+            "cityCount": 0,
+            "id": 14,
+            "minority": true,
+            "name": "匈奴",
+            "playerCount": 0,
+            "playerMaxCount": 50
+        },
+        {
+            "cityCount": 0,
+            "id": 15,
+            "minority": true,
+            "name": "乌丸",
+            "playerCount": 0,
+            "playerMaxCount": 50
+        },
+        {
+            "cityCount": 0,
+            "id": 16,
+            "minority": true,
+            "name": "羌",
+            "playerCount": 0,
+            "playerMaxCount": 50
+        },
+        {
+            "cityCount": 0,
+            "id": 17,
+            "minority": true,
+            "name": "南蛮",
+            "playerCount": 0,
+            "playerMaxCount": 50
+        },
+        {
+            "cityCount": 0,
+            "id": 18,
+            "minority": true,
+            "name": "山越",
+            "playerCount": 0,
+            "playerMaxCount": 50
+        }
+    ]
+}

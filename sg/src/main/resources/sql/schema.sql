@@ -1,0 +1,66 @@
+CREATE TABLE IF NOT EXISTS `SYS_PRIMARY_KEY` (
+    `ID` BIGINT NOT NULL AUTO_INCREMENT,
+    `NAME` varchar(100) NOT NULL COMMENT '表名字',
+    `CUR_VALUE` BIGINT NOT NULL COMMENT '当前值',
+    `VERSION` BIGINT NOT NULL COMMENT '当前获取次数',
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `SYS_USER` (
+    `ID` INT NOT NULL,
+    `LOGIN_CODE` varchar(200) COMMENT '登录名称',
+    `PASSWORD` varchar(200) COMMENT '密码',
+    `QQ_NO` varchar(200) COMMENT 'qq号',
+    `ADMIN_FLAG` INT COMMENT '1为管理员,0为普通用户',
+    `STATUS` INT COMMENT '1为正常,2未激活,3锁定,0删除',
+    `LAST_LOGIN_TIME` BIGINT COMMENT '最后登录时间!',
+    `LAST_TOKEN` varchar(200) COMMENT '最后登录Token!',
+    `LAST_IP` varchar(200) COMMENT '最后登录Ip!',
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `SYS_USER_LOG` (
+    `ID` INT NOT NULL,
+    `ACTION` INT COMMENT '1登录,2登出',
+    `REMARK` varchar(500) COMMENT '内容',
+    `TOKEN` varchar(200) COMMENT '最后登录Token!',
+    `IP` varchar(200) COMMENT '最后登录Ip!',
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `MEM_WORLD_TILE` (
+    `ID` INT NOT NULL,
+    `TILE_TYPE` TINYINT COMMENT '格子地型：0:城池;1:平地;2:沙漠;3:森林;4:草地;5:高山;6:湖泊;7:沼泽;',
+    `PROVINCE` TINYINT COMMENT '州',
+    `JUN` TINYINT COMMENT '郡',
+    `CUR_LEVEL` SMALLINT COMMENT '当前等级',
+    `MAX_LEVEL` SMALLINT COMMENT '最大等级',
+    `OWNER_CITY_ID` BIGINT COMMENT '所属城池',
+    `STATE` TINYINT COMMENT '当前状态',
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
+
+
+CREATE TABLE IF NOT EXISTS `GI_PLAYER` (
+  `ID` INT NOT NULL,
+  `NAME` varchar(200)    COMMENT '名字',
+  `STATE` SMALLINT    COMMENT '玩家状态 0: 正常,1 新手,2 免战玩家,4: 被打完主城的玩家',
+  `PLAYER_GROUP` SMALLINT    COMMENT '玩家组 0:正常玩家 1:GM 2: NPC',
+  `GENDER` SMALLINT    COMMENT '性别 1:男 2:女',
+  `LAST_CITY` BIGINT    COMMENT '君主将最后所在城池',
+  `FACE` varchar(100)    COMMENT '脸ID',
+  `FLAG_CHAR` varchar(40)    COMMENT '旗帜名称',
+  `PLAYER_RANK` SMALLINT    COMMENT '排名',
+  `PRESTIGE` BIGINT    COMMENT '声望',
+  `WAR_PRESTIGE` BIGINT    COMMENT '战场获得声望',
+  `WAR_ATTACK_PRESTIGE` BIGINT    COMMENT '战争进攻获得声望',
+  `WAR_DEFENCE_PRESTIGE` BIGINT    COMMENT '战争防御获得声望',
+  `NOBILITY` SMALLINT    COMMENT '爵位等级',
+  `OFFICEPOS` SMALLINT    COMMENT '官职',
+  `UNION_ID` BIGINT    COMMENT '联盟ID',
+  `UNION_POS` SMALLINT    COMMENT '联盟职位',
+  `MONEY` BIGINT    COMMENT '元宝',
+  `ARMOR_COLUMN` SMALLINT    COMMENT '用户的装备栏数量',
+  `VIP_LEVEL` SMALLINT    COMMENT 'vip等级',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
