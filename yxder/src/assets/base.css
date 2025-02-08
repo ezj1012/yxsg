@@ -1,0 +1,14 @@
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Open Sans", "Clear Sans", "Helvetica Neue", Helvetica, Arial, 'Segoe UI Emoji', sans-serif;
+  color: rgb(51, 51, 51);
+  overflow: hidden;
+  tab-size: 4;
+}
