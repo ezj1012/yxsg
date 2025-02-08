@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import com.yxbear.core.CommUtils;
@@ -120,6 +121,25 @@ public class CodeBuilder {
             return model(modelName, AttrType.INT).noAudit();
         }
 
+        // intId = 0,
+        // longId = 1,
+        // intIdNoAudit = 2,
+        // longIdNoAudit = 3,
+        public ModelBuilder model(String modelName, int type) {
+            switch (type) {
+                case 0 :
+                    return model(modelName, AttrType.INT);
+                case 1 :
+                    return model(modelName, AttrType.LONG);
+                case 2 :
+                    return model(modelName, AttrType.INT).noAudit();
+                case 3 :
+                    return model(modelName, AttrType.LONG).noAudit();
+                default :
+                    return model(modelName, AttrType.INT).noAudit();
+            }
+        }
+
         public CodeBuilder buildPackageCode() {
             models.forEach(m -> m.build());
             return code;
@@ -163,6 +183,11 @@ public class CodeBuilder {
 
         public ModelBuilder noAudit() {
             auditable = false;
+            return this;
+        }
+
+        public ModelBuilder attr(AttrBuilder attrBuilder) {
+            attrs.add(attrBuilder);
             return this;
         }
 
@@ -326,6 +351,34 @@ public class CodeBuilder {
             }
         }
 
+        public static AttrType of(String type) {
+            type = type.toLowerCase().trim();
+            if (Objects.equals(type, "str40") || Objects.equals(type, "s40")) {
+                return AttrType.STR40;
+            } else if (Objects.equals(type, "str100") || Objects.equals(type, "s100")) {
+                return AttrType.STR100;
+            } else if (Objects.equals(type, "str200") || Objects.equals(type, "s200") || Objects.equals(type, "str") || Objects.equals(type, "string")) {
+                return AttrType.STR200;
+            } else if (Objects.equals(type, "str500") || Objects.equals(type, "s500")) {
+                return AttrType.STR500;
+            } else if (Objects.equals(type, "str1000") || Objects.equals(type, "s1000")) {
+                return AttrType.STR1000;
+            } else if (Objects.equals(type, "str2000") || Objects.equals(type, "s2000")) {
+                return AttrType.STR2000;
+            } else if (Objects.equals(type, "text")) {
+                return AttrType.TEXT;
+            } else if (Objects.equals(type, "int2") || Objects.equals(type, "tiny")) {
+                return AttrType.INT2;
+            } else if (Objects.equals(type, "int4") || Objects.equals(type, "small")) {
+                return AttrType.INT4;
+            } else if (Objects.equals(type, "int") || Objects.equals(type, "number")) {
+                return AttrType.INT;
+            } else if (Objects.equals(type, "long") || Objects.equals(type, "big")) {
+                return AttrType.LONG;//
+            }
+            return AttrType.STR200;
+        }
+
     }
 
     public static class AttrBuilder {
@@ -373,6 +426,62 @@ public class CodeBuilder {
             return mb;
         }
 
+        /**
+         * 
+         * @param mb
+         * @param attr
+         *            name!:string ="1212" //asdasd
+         * @return
+         */
+        public static AttrBuilder parse(ModelBuilder mb, String attr) {
+            int t = attr.indexOf("//");
+            String desc = "";
+            if (t >= 0) {
+                desc = attr.substring(t + 2, attr.length());
+                attr = attr.substring(0, t).trim();
+            }
+            // 默认值
+            t = attr.indexOf("=");
+            String defaultValue = null;
+            if (t >= 0) {
+                defaultValue = attr.substring(t + 1, attr.length());
+                if (defaultValue.startsWith("\"")) {
+                    defaultValue = defaultValue.substring(1);
+                }
+                if (defaultValue.endsWith("\"")) {
+                    defaultValue = defaultValue.substring(0, defaultValue.length() - 1);
+                }
+
+                attr = attr.substring(0, t).trim();
+            }
+
+            t = attr.indexOf(":");
+            AttrType type = AttrType.STR200;
+            if (t >= 0) {
+                String ts = attr.substring(t + 1, attr.length());
+                type = AttrType.of(ts);
+                attr = attr.substring(0, t).trim();
+            }
+            t = attr.indexOf("!");
+            boolean notNull = false;
+            if (t >= 0) {
+                notNull = true;
+                attr = attr.substring(0, t).trim();
+            }
+            attr = attr.replace(">", "");
+
+            String name = attr;
+            AttrBuilder attrBuilder = new AttrBuilder(mb, name, desc, type);
+            attrBuilder.defaultValue(defaultValue);
+            attrBuilder.notNull(notNull);
+
+            return attrBuilder;
+        }
+
+    }
+
+    public static void main(String[] args) {
+        AttrBuilder.parse(null, "name!:string =\"1212\" //asdasd");
     }
 
     public static class CodeWriter {

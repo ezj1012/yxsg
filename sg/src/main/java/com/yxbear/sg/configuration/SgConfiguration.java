@@ -14,6 +14,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import com.yxbear.core.coder.configuration.EnableCoder;
 import com.yxbear.core.pk.configuration.EnablePrimaryKeyServer;
 import com.yxbear.sg.domain.bean.SGProps;
 import com.yxbear.sg.engine.SgContext;
@@ -34,6 +35,7 @@ import cn.dev33.satoken.util.SaResult;
 @PropertySource({"classpath:sg.properties"})
 @EnableConfigurationProperties({SGProps.class})
 @EnablePrimaryKeyServer
+@EnableCoder
 public class SgConfiguration implements WebMvcConfigurer {
 
     static {

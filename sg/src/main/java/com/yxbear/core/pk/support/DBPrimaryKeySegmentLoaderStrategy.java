@@ -89,7 +89,6 @@ public class DBPrimaryKeySegmentLoaderStrategy implements PrimaryKeySegmentLoade
                 if (updateCount > 0) { return new SimplePrimaryKeySegment(batchSize, value + batchSize, value); }
             } else {
                 // 插入一条新的记录.
-                long cTime = System.currentTimeMillis();
                 String insertSql = "INSERT INTO " + this.tableName + " (NAME,CUR_VALUE,VERSION) values ('" + pkName + "',10000,1) ";
                 if (stmt.execute(insertSql)) { return new SimplePrimaryKeySegment(batchSize, 1L + batchSize, 1L); }
             }
