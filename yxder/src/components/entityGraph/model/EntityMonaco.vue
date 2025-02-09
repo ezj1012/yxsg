@@ -43,7 +43,7 @@ function doEdit(gmData: GraphModel) {
     data.value = gmData.model
 }
 
-defineExpose({ doEdit })
+defineExpose({ doEdit, doClose })
 
 async function doClose() {
     await doSave()

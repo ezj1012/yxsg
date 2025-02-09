@@ -13,9 +13,17 @@ const TeleportContainer = getTeleport();
 const graph = shallowRef<CoderGraph>()
 const models = ref<GraphModel[]>([])
 const coder = shallowRef<YXCoder>()
+const ctrlEl = ref()
 const sctNode = ref('')
 
-provide('entityCoder', { coder, graph, models, sctNode })
+provide('entityCoder', { coder, graph, models, sctNode, editEntity })
+
+async function editEntity(id: string) {
+    const node = models.value.find(c => c.id == id)
+    if (node) {
+        await ctrlEl.value?.doEdit(node)
+    }
+}
 
 onMounted(async () => {
     const cg = new CoderGraph('graph-container')
@@ -27,7 +35,7 @@ onMounted(async () => {
 <template>
     <div class="entity-coder">
         <Splitable :width="450">
-            <EntityCtrl />
+            <EntityCtrl ref="ctrlEl" />
         </Splitable>
         <div class="gr">
             <EntityGraph id="graph-container" />

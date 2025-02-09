@@ -221,7 +221,8 @@ export class CoderGraph {
     graph: Graph
     el: HTMLDivElement
     nodeMovedListener?: (node: GraphNodeCfg) => any
-    nodes: Map<string, Node> = new Map()
+    findNodeIdByClassName?: (className: string) => string | undefined
+    // nodes: Map<string, Node> = new Map()
     rlts: Rlt[] = []
     constructor(containerId: string = 'graph-container') {
         const graphInfo = configGraph(containerId)
@@ -273,7 +274,7 @@ export class CoderGraph {
             data: {},
             ports,
         });
-        this.nodes.set(modelData.model.name || '', node)
+        // this.nodes.set(modelData.model.name || '', node)
         return node;
     }
 
@@ -284,7 +285,7 @@ export class CoderGraph {
         this.graph.getEdges().forEach(edge => this.graph.removeEdge(edge))
 
         this.rlts.forEach(rlt => {
-            const targetCell = this.nodes.get(rlt.targetName)
+            const targetCell = this.findNodeByClassName(rlt.targetName)
             if (targetCell) {
                 const targetPortId = `${targetCell.id}_id`
                 this.graph.addEdge({
@@ -300,6 +301,16 @@ export class CoderGraph {
                 })
             }
         })
+    }
+
+    private findNodeByClassName(className: string) {
+        if (this.findNodeIdByClassName) {
+            const nodeId = this.findNodeIdByClassName(className)
+            if (nodeId) {
+                return this.graph.getCellById(nodeId)
+            }
+        }
+        return undefined
     }
 
     updateNodeRlt(node: Node, rlts: Rlt[]) {
@@ -328,7 +339,7 @@ export class CoderGraph {
         // 更新边
         const exEdges = this.graph.getEdges().filter(edge => edge.id.startsWith(node.id)).reduce((ex, edge) => { ex.set(edge.id, edge); return ex; }, new Map<any, Edge>())
         rlts.forEach(rlt => {
-            const targetCell = this.nodes.get(rlt.targetName)
+            const targetCell = this.findNodeByClassName(rlt.targetName)
             if (targetCell) {
                 const targetPortId = `${targetCell.id}_id`
                 const id = `${rlt.sourcePortId}&${targetPortId}`
@@ -366,10 +377,12 @@ export class CoderGraph {
         }
     }
 
+
+
     dispose() {
         // this.graph.clearCells()
         this.rlts = []
-        this.nodes.clear()
+        // this.nodes.clear()
     }
 
 }

@@ -22,8 +22,11 @@ import com.yxbear.core.coder.configuration.ProjectProps;
 import com.yxbear.core.coder.gen.GenModel;
 import com.yxbear.core.coder.gen.GenModelGen;
 
+import lombok.extern.slf4j.Slf4j;
+
 @RestController
 @RequestMapping("/code")
+@Slf4j
 public class CoderController implements InitializingBean {
 
     @Autowired
@@ -37,6 +40,7 @@ public class CoderController implements InitializingBean {
     public void afterPropertiesSet() throws Exception {
         path = new File(props.getCfgPath()).toPath();
         modelGen = new GenModelGen(props);
+        log.info("代码生成器加载成功!========================>");
     }
 
     @GetMapping("/get")

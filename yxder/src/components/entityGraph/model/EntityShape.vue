@@ -5,6 +5,7 @@ import { computed, inject, onMounted, ref, shallowRef, watch, type Ref, type Sha
 import type { Node } from '@antv/x6';
 import EntityName from './EntityName.vue';
 import EntityAttr from './EntityAttr.vue';
+import BtnEntityToEditor from './BtnEntityToEditor.vue';
 const { models, coder, graph } = inject('entityCoder') as { models: Ref<GraphModel[]>, coder: Ref<YXCoder>, graph: ShallowRef<CoderGraph> }
 
 const node = shallowRef<Node>()
@@ -63,6 +64,7 @@ function resize() {
         <div class="line class-name">
             <EntityName :class-name="data?.name" />
             <div class="line-actions" style="margin-left: 10px;">
+                <BtnEntityToEditor :nid="node?.id" />
                 <div class="line-actions-item codicon codicon-chevron-left" @click="incWidth()"></div>
                 <div class="line-actions-item codicon codicon-chevron-right" @click="addWidth()"></div>
             </div>

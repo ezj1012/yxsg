@@ -14,19 +14,23 @@ const { coder, graph, models, sctNode } = inject('entityCoder') as
     }
 const entityMonacoEl = ref()
 const editing = ref(false)
-const idx = ref(-1)
 async function newModel() { await coder.value?.newEntity() }
 
-function doSct(cidx: number, nodeId?: string) {
-    sctNode.value = filterdModels.value.length == 0 ? undefined : filterdModels.value[cidx]?.id
-    idx.value = cidx
-
+function doSct(nodeId?: string) {
+    sctNode.value = nodeId
 }
 
 async function doEdit(node: GraphModel, focusName = false) {
+    if (editing.value) {
+        await entityMonacoEl.value.doClose()
+    }
+
+    sctNode.value = node.id
     editing.value = true
     await entityMonacoEl.value.doEdit(node, focusName)
 }
+
+defineExpose({ doEdit })
 
 const filterdModels = computed(() => {
     return models.value || [];
@@ -39,19 +43,19 @@ async function keyup(e: KeyboardEvent) {
     if (e.key == 'Tab') {
         e.stopPropagation()
         e.preventDefault()
+        let idx = filterdModels.value.findIndex(m => m.id == sctNode.value)
         if (e.shiftKey) {
-            let t = idx.value - 1;
-            if (t < 0) {
-                t = filterdModels.value.length - 1;
+            idx--
+            if (idx < 0) {
+                idx = filterdModels.value.length - 1;
             }
-            doSct(t)
         } else {
-            let t = idx.value + 1;
-            if (t >= filterdModels.value.length) {
-                t = 0;
+            idx++
+            if (idx >= filterdModels.value.length) {
+                idx = 0;
             }
-            doSct(t)
         }
+        doSct(filterdModels.value[idx].id)
         return
     } else if (sctNode.value) {
         if (e.ctrlKey && e.key == 'd' || e.key == 'F2') {
@@ -99,7 +103,7 @@ onUnmounted(() => {
             <EntityMonaco v-show="editing" ref="entityMonacoEl" :close="() => { editing = false }" />
             <div v-show="!editing">
                 <div class="line entity" :class="[sctNode == gm.id ? 'sct' : '']" v-for=" gm, idx in filterdModels"
-                    @click="doSct(idx)">
+                    @click="doSct(gm.id)">
                     <div class="line-container">
                         <div class="name"> {{ `${gm.model?.name || '未命名'} (${gm.x},${gm.y})` }}</div>
                     </div>

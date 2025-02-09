@@ -77,6 +77,7 @@ export class YXCoder {
         this.graph = graph
         this.models = models
         this.graph.nodeMovedListener = async (data: GraphNodeCfg) => { await this.updatePosition(data) }
+        this.graph.findNodeIdByClassName = (className: string) => { return this.models.value.find(m => m.model.name == className)?.id }
     }
 
     async loading() {
