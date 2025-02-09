@@ -9,26 +9,28 @@ import java.util.List;
 public class G666 {
 
     public static void main(String[] args) throws IOException {
-        File[] fs = new File("D:\\projects\\yxbear.top\\yxsg\\sg\\src\\test\\java\\com\\yxbear\\sg\\coder").listFiles(f -> f.getName().endsWith(".java"));
+        File[] fs = new File("D:\\workspace\\tyy\\tyy-sg\\tyy-sg\\tyy-sg-comm\\src\\main\\java\\com\\tyy\\sg\\domain\\model\\gi").listFiles(f -> f.getName().endsWith(".java"));
         for (File file : fs) {
             System.err.println("=======================================================");
+            System.out.println(file.getName());
             List<String> allLines = Files.readAllLines(file.toPath());
-            allLines.forEach(str -> {
-
-                str = str.trim();
-                if (str.startsWith(".model")) {
-                    System.err.println("=================================");
-                    System.out.println(str);
+            int start = 0;
+            String aa = "";
+            for (String str : allLines) {
+                String st = str.trim();
+                if (st.startsWith("/**")) {
+                    start = 1;
+                    aa = "//" + st.substring(3, st.length() - 3).trim();
+                    // System.out.println(aa);
+                } else if (start == 1) {
+                    st = st.replace("private ", "").trim();
+                    st = st.substring(0, st.length() - 1);
+                    String[] split = st.split(" ");
+                    System.out.println(split[1] + ": " + split[0].toLowerCase() + " " + aa);
+                    start = 0;
                 }
-                if (str.startsWith(".attr")) {
-                    try {
-                        printAttr(str);
-                    } catch (Exception e) {
-                        System.err.println(str);
-                    }
+            }
 
-                }
-            });
         }
 
     }
