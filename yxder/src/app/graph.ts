@@ -64,8 +64,8 @@ Graph.registerPortLayout('entityShapeIdPosition', (portsPositionArgs: any) => {
 })
 
 Graph.registerPortLayout('entityShapeForeignPosition', (portsPositionArgs: any, elemBBox, groupPositionArgs) => {
-    return portsPositionArgs.map((args: { idx: number }) => {
-        return { position: { x: 1, y: 30 + 22 + args.idx * 22 }, angle: 0, }
+    return portsPositionArgs.map((args: { idx: number, redefId: boolean }) => {
+        return { position: { x: 1, y: 30 + (args.redefId ? 0 : 22) + args.idx * 22 }, angle: 0, }
     })
 })
 
@@ -137,9 +137,17 @@ function configGraph(containerId: string) {
                 router: {
                     name: 'er',
                     args: {
-                        offset: 40,
+                        // offset: 40,
+                        offset: 'center',
                         direction: 'H',
                     },
+
+                    // // 只能路由
+                    // name: 'orth',
+                    // args: {
+                    //     startDirections: ['left', 'right'], // 仅允许水平方向
+                    //     endDirections: ['right']
+                    // }
                 },
                 connector: {
                     name: 'rounded',
@@ -181,12 +189,13 @@ export class Rlt {
     id?: string // 渲染后才会产生
 }
 
-export function toForeignKeyPortCfg(node: Node, rlt: Rlt) {
+export function toForeignKeyPortCfg(node: Node, rlt: Rlt, redefId: boolean = false) {
     return {
         group: 'foreignKey',
         id: rlt.sourcePortId,
         args: {
-            idx: rlt.idx
+            idx: rlt.idx,
+            redefId,
         }, size: {
             width: node.getSize().width,
             height: node.getSize().height,
@@ -217,7 +226,6 @@ export function attrToRlt(sourceNodeId: string, attr: string, idx: number) {
 
 
 export class CoderGraph {
-
     graph: Graph
     el: HTMLDivElement
     nodeMovedListener?: (node: GraphNodeCfg) => any
@@ -248,14 +256,19 @@ export class CoderGraph {
         ] as any[]
 
         if (modelData.model.attrs) {
+            let redefId = false
             modelData.model.attrs.forEach((attr, idx) => {
+                if (attr.trim().startsWith('id>')) {
+                    redefId = true
+                }
+
                 const rlt = attrToRlt(modelData.id!, attr, idx)
                 if (rlt) {
                     this.rlts.push(rlt)
                     ports.push({
                         group: 'foreignKey',
                         id: rlt.sourcePortId,
-                        args: { idx }
+                        args: { idx, redefId }
                     })
                 }
             })
@@ -313,7 +326,7 @@ export class CoderGraph {
         return undefined
     }
 
-    updateNodeRlt(node: Node, rlts: Rlt[]) {
+    updateNodeRlt(node: Node, rlts: Rlt[], redefId: boolean = false) {
         // throw new Error('Method not implemented.');
 
         // 更新节点,
@@ -324,8 +337,7 @@ export class CoderGraph {
             if (port) {
                 exPorts.delete(rlt.idx)
             } else {
-
-                updates.push(toForeignKeyPortCfg(node, rlt))
+                updates.push(toForeignKeyPortCfg(node, rlt, redefId))
             }
         })
         for (const port of exPorts.values()) {

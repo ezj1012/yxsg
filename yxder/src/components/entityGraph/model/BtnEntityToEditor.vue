@@ -7,5 +7,5 @@ const { nid } = defineProps({ nid: { type: String } })
 
 </script>
 <template>
-    <div class="line-actions-item codicon codicon-code" @click="() => nid && editEntity(nid)"></div>
+    <div class="line-actions-item codicon codicon-edit" @click="() => nid && editEntity(nid)"></div>
 </template>

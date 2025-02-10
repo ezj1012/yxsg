@@ -437,7 +437,7 @@ public class CodeBuilder {
             int t = attr.indexOf("//");
             String desc = "";
             if (t >= 0) {
-                desc = attr.substring(t + 2, attr.length());
+                desc = attr.substring(t + 2, attr.length()).trim();
                 attr = attr.substring(0, t).trim();
             }
             // 默认值
@@ -454,25 +454,36 @@ public class CodeBuilder {
 
                 attr = attr.substring(0, t).trim();
             }
-
-            t = attr.indexOf(":");
             AttrType type = AttrType.STR200;
+
+            t = attr.indexOf(">");
             if (t >= 0) {
-                String ts = attr.substring(t + 1, attr.length());
-                type = AttrType.of(ts);
+                // TODO 根据真实类的类型进行解析.
+                type = AttrType.INT; // 
                 attr = attr.substring(0, t).trim();
+            } else {
+                t = attr.indexOf(":");
+                if (t >= 0) {
+                    String ts = attr.substring(t + 1, attr.length());
+                    type = AttrType.of(ts);
+                    attr = attr.substring(0, t).trim();
+                }
             }
+            
             t = attr.indexOf("!");
             boolean notNull = false;
             if (t >= 0) {
                 notNull = true;
                 attr = attr.substring(0, t).trim();
             }
+
             attr = attr.replace(">", "");
 
             String name = attr;
             AttrBuilder attrBuilder = new AttrBuilder(mb, name, desc, type);
-            attrBuilder.defaultValue(defaultValue);
+            if (defaultValue != null) {
+                attrBuilder.defaultValue(defaultValue);
+            }
             attrBuilder.notNull(notNull);
 
             return attrBuilder;
@@ -495,10 +506,10 @@ public class CodeBuilder {
 
         static final String MODEL_FORMAT = "package %s;\n\n" + "import %s;\n\n" //
                 + "import lombok.Data;\n\n@Data\n" //
-                + "public class %s implements EntityBean<%s> {\n\n%s%s\n\n}" //
+                + "public class %s implements EntityBean<%s> {\n\n%s%s}" //
         ;
 
-        static final String MODEL_AU_FORMAT = "    /** 创建时间 */\\n    private Long createTime;\\n\\n    /** 最后一次修改时间 */\\n    private Long modifyTime;";
+        static final String MODEL_AU_FORMAT = "    /** 创建时间 */\n    private Long createTime;\n\n    /** 最后一次修改时间 */\n    private Long modifyTime;\n\n";
 
         public static void writeModel(ModelBuilder build) {
             String pkg = build.pkgBuilder.code.getBaseModelPkg() + "." + build.pkgBuilder.pkgName;

@@ -29,6 +29,8 @@ public class GenModelGen {
         for (GenModel gen : cfgs) {
             ModelBuilder model = pkgB.model(gen.getModelName(), gen.extendsType);
             gen.getAttrs().forEach(attr -> {
+                String attrTrim = attr.trim();
+                if (attrTrim.isEmpty() || attrTrim.startsWith("id>") || attrTrim.startsWith("id ")) { return; }
                 model.attr(AttrBuilder.parse(model, attr));
             });
             model._____endCheck____();

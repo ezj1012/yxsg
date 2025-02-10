@@ -109,7 +109,7 @@ onUnmounted(() => {
                     </div>
                     <div class="line-actions">
                         <BtnEntityToCenter :nid="gm.id" />
-                        <div class="line-actions-item codicon codicon-code" @click="doEdit(gm)"></div>
+                        <div class="line-actions-item codicon codicon-edit" @click="doEdit(gm)"></div>
                     </div>
                 </div>
             </div>

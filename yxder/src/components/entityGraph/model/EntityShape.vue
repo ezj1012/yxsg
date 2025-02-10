@@ -6,6 +6,7 @@ import type { Node } from '@antv/x6';
 import EntityName from './EntityName.vue';
 import EntityAttr from './EntityAttr.vue';
 import BtnEntityToEditor from './BtnEntityToEditor.vue';
+import BtnEntityToGen from './BtnEntityToGen.vue';
 const { models, coder, graph } = inject('entityCoder') as { models: Ref<GraphModel[]>, coder: Ref<YXCoder>, graph: ShallowRef<CoderGraph> }
 
 const node = shallowRef<Node>()
@@ -22,13 +23,17 @@ onMounted(() => {
     data.value = models.value.find(m => m.id === node.value?.id)?.model
 
 })
+const redefIdB = ref(false)
 
 watch(() => data.value?.attrs, () => {
     resize()
-    const rlts = data.value?.attrs.map((attr, index) => attrToRlt(node.value!.id, attr, index)).filter(a => a !== undefined)
+    let redefId = false
+    const rlts = data.value?.attrs.map((attr, index) => { if (attr.trim().startsWith('id> ')) { redefId = true; } return attrToRlt(node.value!.id, attr, index) }).filter(a => a !== undefined)
+    redefIdB.value = redefId
     if (rlts != undefined) {
-        graph.value.updateNodeRlt(node.value!, rlts)
+        graph.value.updateNodeRlt(node.value!, rlts, redefId)
     }
+
 }, { immediate: true })
 
 async function addWidth() {
@@ -62,8 +67,11 @@ function resize() {
 <template>
     <div class="line-layout entity-shape ">
         <div class="line class-name">
-            <EntityName :class-name="data?.name" />
-            <div class="line-actions" style="margin-left: 10px;">
+            <div class="line-container">
+                <EntityName :class-name="data?.name" />
+            </div>
+            <div class="line-actions" style="margin-right: 10px;">
+                <BtnEntityToGen :nid="node?.id" />
                 <BtnEntityToEditor :nid="node?.id" />
                 <div class="line-actions-item codicon codicon-chevron-left" @click="incWidth()"></div>
                 <div class="line-actions-item codicon codicon-chevron-right" @click="addWidth()"></div>
@@ -71,7 +79,8 @@ function resize() {
         </div>
         <div class="attrs">
             <template v-if="data">
-                <EntityAttr :attr="`id: ${data.extendsType == 0 || data.extendsType == 2 ? 'int' : 'long'} // auto`"
+                <EntityAttr v-if="!redefIdB"
+                    :attr="`id: ${data.extendsType == 0 || data.extendsType == 2 ? 'int' : 'long'} // auto`"
                     :idx="-1" />
                 <template v-for="(attr, idx) in data.attrs">
                     <EntityAttr :attr="attr" :idx="idx" />
