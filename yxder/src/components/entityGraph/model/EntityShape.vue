@@ -67,10 +67,12 @@ function resize() {
 <template>
     <div class="line-layout entity-shape ">
         <div class="line class-name">
-            <div class="line-container">
+            <div style="position: absolute;z-index: 1;">
                 <EntityName :class-name="data?.name" />
             </div>
-            <div class="line-actions" style="margin-right: 10px;">
+            <div class="line-container">
+            </div>
+            <div class="line-actions" style="margin-right: 10px;z-index: 10;background-color: #303030;">
                 <BtnEntityToGen :nid="node?.id" />
                 <BtnEntityToEditor :nid="node?.id" />
                 <div class="line-actions-item codicon codicon-chevron-left" @click="incWidth()"></div>

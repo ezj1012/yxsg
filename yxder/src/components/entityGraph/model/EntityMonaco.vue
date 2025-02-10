@@ -10,6 +10,7 @@ import EditorLine from './EditorLine.vue';
 import EntityName from './EntityName.vue';
 import { AttrType, EntityMonacoCode } from '@/app/coder';
 import BtnEntityToCenter from './BtnEntityToCenter.vue';
+import BtnEntityToGen from './BtnEntityToGen.vue';
 
 const { close } = defineProps({
     close: { type: Function, default: () => { } }
@@ -94,6 +95,7 @@ const tpyeName = computed(() => {
                 </EditorLine>
             </div>
             <div class="line-actions" style="opacity: 1">
+                <BtnEntityToGen :nid="gm?.id" />
                 <BtnEntityToCenter :nid="gm?.id" />
                 <div class="line-actions-item codicon codicon-reply" @click="() => doClose()"></div>
             </div>
