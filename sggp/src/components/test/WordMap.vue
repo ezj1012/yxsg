@@ -57,7 +57,10 @@ class MapCanvas {
         if (centre) {
             this.centre = centre
         } else {
-            
+            this.centre = {
+                x: Math.round(this.size.width / 2),
+                y: Math.round(this.size.height / 2)
+            }
         }
         console.log(this.canvas.width, this.canvas.height)
         this.tiles.push(new MapTile())
@@ -80,7 +83,6 @@ class MapCanvas {
             tile.draw(this.ctx)
         }
 
-
     }
 
     getClickTile(e: MouseEvent) {
@@ -91,6 +93,10 @@ class MapCanvas {
             }
         }
         return undefined
+    }
+
+    setMap(mapX: number, mapY: number) {
+        
     }
 
 }
