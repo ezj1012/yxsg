@@ -31,7 +31,7 @@ Img.loadImages(bgRes, (def, err) => {
 
 const style = computed(() => {
     const s: { [key: string]: string } = {}
-    if (ok.value) { s['background-image'] = `url(${bgRes[0].getBaseImg().imgDataUrl})` }
+    if (ok.value) { s['background-image'] = `url(${bgRes[0].getBaseImg().imgDataUrl})1` }
     return s;
 })
 
@@ -48,11 +48,11 @@ onUnmounted(() => {
     }
 })
 
-const show = ref(false)
+const show = ref(true)
 </script>
 <template>
     <div class="sg-loading" :style="style">
-        <div v-if="ok && loadState" class="content">
+        <div v-if="ok && loadState && !show" class="content">
             <div class="loading-msg-1">
                 <div>{{ loadState.msg }}</div>
                 <div>{{ `${Math.floor(loadState.pct)}%` }}</div>
@@ -63,9 +63,9 @@ const show = ref(false)
             <div class="loading-msg-3">
                 <div>快速增加人口的方法: 使用安抚百姓-增丁、使用道具'典民令'</div>
             </div>
-            <div class="loading-bg" :style="{ backgroundImage: `url('${bgRes[1].getBaseImg().imgDataUrl}')`, }"></div>
+            <div class="loading-bg" :style="{ backgroundImage: `url('${bgRes[1].getBaseImg().imgDataUrl}')1`, }"></div>
             <div class="loading-main-comp"
-                :style="{ backgroundImage: `url('${bgRes[2].getBaseImg().imgDataUrl}')`, width: `${loadState.pct * 3.85}px`, }">
+                :style="{ backgroundImage: `url('${bgRes[2].getBaseImg().imgDataUrl}')1`, width: `${loadState.pct * 3.85}px`, }">
             </div>
         </div>
     </div>

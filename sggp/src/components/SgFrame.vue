@@ -11,6 +11,7 @@ import StageView from './stages/StageView.vue';
 import EMsg from './msg/EMsg.vue';
 import HMsg from './msg/HMsg.vue';
 import DataShowList from './DataShowList.vue';
+import WordMap from './test/WordMap.vue';
 // import DataShowList from './datas/DataShowList.vue';
 // import EMsg from './msg/EMsg.vue';
 // import RFunPanl from './comps/RFunPanl.vue';
@@ -23,10 +24,11 @@ const isReady = computed(() => sg.value.ready.value)
 <template>
     <div class="sg-main">
         <template v-if="isReady">
-            <StageView />
             <!--
+            <StageView />
             <RFunPanl />
             -->
+            <WordMap />
             <HMsg />
             <EMsg />
         </template>
@@ -34,7 +36,7 @@ const isReady = computed(() => sg.value.ready.value)
             <LoadingView />
         </template>
     </div>
-    <DataShowList />
+    <!-- <DataShowList /> -->
 </template>
 <style lang="less">
 .sg-main {

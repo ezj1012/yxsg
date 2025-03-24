@@ -1,7 +1,9 @@
 package com.yxbear.sg.configuration;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.yxbear.core.coder.configuration.EnableCoder;
 import com.yxbear.core.pk.configuration.EnablePrimaryKeyServer;
+import com.yxbear.core.web.VueRouterHistoryHandler;
 import com.yxbear.sg.domain.bean.SGProps;
 import com.yxbear.sg.engine.SgContext;
 import com.yxbear.sg.engine.SgEngine;
@@ -97,6 +100,11 @@ public class SgConfiguration implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
+        List<String> vueRouters = new ArrayList<>();
+        vueRouters.add("/code/");
+//        vueRouters.add("/code/index.html");
+        registry.addInterceptor(new VueRouterHistoryHandler(vueRouters));
+        
         HashSet<Object> igset = new HashSet<>();
         permitAll.stream().filter(a -> a.startsWith("/mgr")).forEach(igset::add);
         igset.addAll(sgProps.getPermitPermissionAll());
