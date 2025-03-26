@@ -45,6 +45,11 @@ export function wid2xy(wid: number): { x: number, y: number } {
     return { x, y };
 }
 
+export function wid2xyStr(wid: number) {
+    const { x, y } = wid2xy(wid)
+    return `${x},${y}`
+}
+
 export function cid2xy(cid: number): { x: number, y: number } {
     let y = Math.floor(cid / 1000);
     let x = (cid % 1000);

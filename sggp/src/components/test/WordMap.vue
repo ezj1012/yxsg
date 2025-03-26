@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { wid, wid2cid } from '@/app/constant';
+import { wid, wid2cid, wid2xy, wid2xyStr } from '@/app/constant';
 import { Img } from '@/app/img';
 import type { MemMapTile } from '@/app/modelData';
 import type { SanGuo } from '@/app/sg';
-import { inject, onMounted, onUnmounted, reactive, ref, shallowRef, watch } from 'vue';
+import { inject, onMounted, onUnmounted, provide, reactive, ref, shallowRef, watch } from 'vue';
+import WorldMapCtrl from './WorldMapCtrl.vue';
 
 const tileWidth = 108
 const tileHeight = 54
@@ -21,26 +22,25 @@ const bgRes = [
 
 const { sg } = inject('sg') as { sg: SanGuo }
 const canvas = shallowRef<MapCanvas>()
-const ctx = ref()
 
-abstract class DataLoading {
-    xCount!: number
-    yCount!: number
-    tiles: MapTile[] = []
-    mapId: number = 0
+const x = ref(15)
+const y = ref(15)
+provide('worldMap', { x, y, moveTo })
 
-    async load(x: number, y: number) {
-        const tileDatas = await sg.api.envApi.getMapTiles({ x, y, xw: this.xCount, yw: this.yCount })
-        this.mapId = wid(x, y)
-        console.log('mapId', this.mapId)
-        for (let i = 0; i < this.tiles.length; i++) {
-            const tile = this.tiles[i];
-            tile.setData(tileDatas[i])
-        }
-        console.log(tileDatas)
-    }
+// abstract class DataLoading {
+//     xCount!: number
+//     yCount!: number
+//     tiles: MapTile[] = []
 
-}
+//     async load(x: number, y: number) {
+//         const tileDatas = await sg.api.envApi.getMapTiles({ x, y, xw: this.xCount, yw: this.yCount })
+//         for (let i = 0; i < this.tiles.length; i++) {
+//             const tile = this.tiles[i];
+//             tile.setData(tileDatas[i])
+//         }
+//     }
+
+// }
 
 class MapTile {
     x: number
@@ -64,171 +64,212 @@ class MapTile {
 
     draw(ctx: CanvasRenderingContext2D) {
         if (this.data && this.data.id > 0) {
-            ctx.drawImage(bgRes[1].imgEl!, this.x, this.y)
+            ctx.drawImage(this.getImg().imgEl!, this.x, this.y)
+            // const { x, y } = wid2xy(this.data.id)
+            // ctx.fillText(`${x},${y}`, this.x + 30, this.y + 50)
         }
     }
 
+    getImg() {
+        if (this.data) {
+            if (this.data.tileType > 0) {
+                return bgRes[this.data!.tileType]!
+            } else {
+                return bgRes[0]!
+            }
+        }
+        return bgRes[1]!
+    }
 }
 
 
-class TileCanvas extends DataLoading {
-    x: number = 0
-    y: number = 0
-    width: number = 0
-    height: number = 0
-    canvas: HTMLCanvasElement
-    ctx: CanvasRenderingContext2D
-    constructor(xCount: number, yCount: number) {
-        super()
-        const widthSize = 1 + xCount * 2;
-        const heightSize = 1 + yCount * 2;
-        this.xCount = xCount
-        this.yCount = yCount
-        this.width = widthSize * tileWidth
-        this.height = (yCount + 1) * tileHeight  // 21 空白补偿
-        const zeroB = yCount % 2 == 0
-        for (let y = 0; y < heightSize; y++) {
-            const startY = y * 27 - 21;
-            let startX = y % 2 == 0 ? zeroB ? 0 : -54 : zeroB ? -54 : 0
-            for (let x = 0; x < widthSize; x++) {
-                this.tiles.push(new MapTile(startX + x * 108, startY))
-            }
-        }
+// class TileCanvas extends DataLoading {
+//     x: number = 0
+//     y: number = 0
+//     width: number = 0
+//     height: number = 0
+//     canvas: HTMLCanvasElement
+//     ctx: CanvasRenderingContext2D
+//     constructor(xCount: number, yCount: number) {
+//         super()
+//         const widthSize = 1 + xCount * 2;
+//         const heightSize = 1 + yCount * 2;
+//         this.xCount = xCount
+//         this.yCount = yCount
+//         this.width = widthSize * tileWidth
+//         this.height = (yCount + 1) * tileHeight  // 21 空白补偿
+//         const zeroB = yCount % 2 == 0
+//         for (let y = 0; y < heightSize; y++) {
+//             const startY = y * 27 - 21;
+//             let startX = y % 2 == 0 ? zeroB ? 0 : -54 : zeroB ? -54 : 0
+//             for (let x = 0; x < widthSize; x++) {
+//                 this.tiles.push(new MapTile(startX + x * 108, startY))
+//             }
+//         }
 
-        this.canvas = document.createElement('canvas')
-        this.canvas.width = this.width
-        this.canvas.height = this.height
-        this.ctx = this.canvas.getContext('2d')!
-    }
+//         this.canvas = document.createElement('canvas')
+//         this.canvas.width = this.width
+//         this.canvas.height = this.height
+//         this.ctx = this.canvas.getContext('2d')!
+//     }
 
-    draw(ctx: CanvasRenderingContext2D, refresh = true) {
-        if (refresh) {
-            this.ctx.fillStyle = '#0f0'
-            this.ctx.fillRect(0, 0, this.width, this.height)
+//     draw(pCtx: CanvasRenderingContext2D, refresh = true) {
+//         if (refresh) {
+//             this.ctx.fillStyle = '#000'
+//             this.ctx.fillRect(0, 0, this.width, this.height)
 
-            for (let i = 0; i < this.tiles.length; i++) {
-                // this.tiles[i].draw(ctx) 
-                // this.tiles[i].draw(this.ctx)
-            }
+//             for (let i = 0; i < this.tiles.length; i++) {
+//                 this.tiles[i].draw(this.ctx)
+//             }
+//         }
+//         pCtx.drawImage(this.canvas, this.x, this.y)
+//     }
 
-            this.tiles[Math.floor(this.tiles.length / 2)].draw(this.ctx)
-        }
+//     hover(x: number, y: number) {
+//         x = x - this.x
+//         y = y - this.y
+//         for (let i = 0; i < this.tiles.length; i++) {
+//             const tile = this.tiles[i];
+//             if (tile.isHover(x, y)) {
+//                 return tile;
+//             }
+//         }
+//         return undefined
+//     }
+// }
 
-        ctx.drawImage(this.canvas, this.x, this.y)
-    }
+// class MapCanvas {
+//     canvas: HTMLCanvasElement
+//     ctx: CanvasRenderingContext2D
+//     tileCanvas: TileCanvas
+//     size: { width: number, height: number }
+//     center: { x: number, y: number }
+//     centerTile?: MapTile
+//     centerTileDefaultPosition = { x: 0, y: 0 }
+//     constructor(canvas: HTMLCanvasElement, tileCanvas: TileCanvas, size: { width: number, height: number } = { width: 731, height: 550 }, center?: { x: number, y: number }
+//     ) {
+//         this.canvas = canvas
+//         this.canvas.width = size.width
+//         this.canvas.height = size.height
+//         this.tileCanvas = tileCanvas
+//         this.size = size
+//         this.ctx = canvas.getContext('2d')!
+//         if (center) {
+//             this.center = center
+//         } else {
+//             this.center = {
+//                 x: Math.floor(this.size.width / 2),
+//                 y: Math.floor(this.size.height / 2)
+//             }
+//         }
+//     }
 
-    hover(x: number, y: number) {
-        x = x - this.x
-        y = y - this.y
-        for (let i = 0; i < this.tiles.length; i++) {
-            const tile = this.tiles[i];
-            if (tile.isHover(x, y)) {
-                return tile;
-            }
-        }
-        return undefined
-    }
-}
+//     draw() {
+//         this.drawBg()
+//         // 
+//         this.tileCanvas.draw(this.ctx)
+//         this.drawAfter()
+//     }
 
-class MapCanvas {
-    canvas: HTMLCanvasElement
-    ctx: CanvasRenderingContext2D
-    tileCanvas: TileCanvas
-    size: { width: number, height: number }
-    center: { x: number, y: number }
-    centerTile?: MapTile
-    constructor(canvas: HTMLCanvasElement, tileCanvas: TileCanvas, size: { width: number, height: number } = { width: 731, height: 550 }, center?: { x: number, y: number }
-    ) {
-        this.canvas = canvas
-        this.canvas.width = size.width
-        this.canvas.height = size.height
-        this.tileCanvas = tileCanvas
-        this.size = size
-        this.ctx = canvas.getContext('2d')!
-        if (center) {
-            this.center = center
-        } else {
-            this.center = {
-                x: Math.floor(this.size.width / 2),
-                y: Math.floor(this.size.height / 2)
-            }
-        }
-    }
+//     private drawBg() {
+//         // this.ctx.fillStyle = '#FFF';
+//         // this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height)
+//     }
 
-    draw() {
-        this.drawBg()
-        // 
-        this.tileCanvas.draw(this.ctx)
-        this.drawAfter()
-    }
+//     private drawAfter() {
+//         // 十字线与中心点
+//         // this.ctx.fillStyle = '#F00';
+//         // this.ctx.fillRect(this.center.x - 1, this.center.y - 1, 3, 3)
+//         // this.ctx.fillRect(this.center.x, 0, 1, 731)
+//         // this.ctx.fillRect(0, this.center.y, 731, 1)
+//         // this.ctx.lineWidth = 1
+//         // this.ctx.rect(this.centerTileDefaultPosition.x, this.centerTileDefaultPosition.y, 108, 54)
+//     }
 
-    private drawBg() {
-        this.ctx.fillStyle = '#FFF';
-        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height)
-    }
+//     move(mx: number, my: number) {
+//         if (mx == 0 && my == 0) { return }
+//         this.drawBg()
 
-    private drawAfter() {
-        // 十字线与中心点
-        this.ctx.fillStyle = '#F00';
-        this.ctx.fillRect(this.center.x - 1, this.center.y - 1, 3, 3)
-        this.ctx.fillRect(this.center.x, 0, 1, 731)
-        this.ctx.fillRect(0, this.center.y, 731, 1)
-    }
+//         this.tileCanvas.x += mx
+//         this.tileCanvas.y += my
+//         this.tileCanvas.draw(this.ctx, false)
 
-    move(mx: number, my: number) {
-        if (mx == 0 && my == 0) { return }
-        this.drawBg()
+//         this.drawAfter()
+//     }
 
-        this.tileCanvas.x += mx
-        this.tileCanvas.y += my
-        this.tileCanvas.draw(this.ctx, false)
+//     getClickTile(x: number, y: number) {
+//         return this.tileCanvas.hover(x, y)
+//     }
 
-        this.drawAfter()
-    }
+//     async moveTo(x: number, y: number, offsetX = 0, offsetY = 0) {
+//         x = x < 1 ? 1 : x > 500 ? 500 : x
+//         y = y < 1 ? 1 : y > 500 ? 500 : y
+//         await this.tileCanvas.load(x, y)
+//         this.tileCanvasPositionToCenter(offsetX, offsetY)
+//         this.centerTile = this.tileCanvas.hover(this.center.x, this.center.y)
+//         this.draw()
+//     }
 
-    getClickTile(x: number, y: number) {
-        return this.tileCanvas.hover(x, y)
-    }
+//     async refresh() {
+//         const newCenter = this.tileCanvas.hover(this.center.x, this.center.y)
+//         if (newCenter && newCenter != this.centerTile) {
+//             // console.log('画布起始位置', this.center.x - Math.floor(this.tileCanvas.width / 2), this.center.y - Math.floor(this.tileCanvas.height / 2))
+//             // console.log('画布当前位置', this.tileCanvas.x, this.tileCanvas.y)
+//             // console.log('中心块: ', this.centerTileDefaultPosition.x, this.centerTileDefaultPosition.y, 108, 54)
+//             // console.log('newCenter ', wid2xyStr(newCenter.data!.id), newCenter)
+//             // console.log('oldCenter ', wid2xyStr(this.centerTile!.data!.id), this.centerTile)
+//             // console.log('newCenter xy', this.tileCanvas.x + newCenter.x, this.tileCanvas.y + newCenter.y)
+//             const offsetX = this.centerTileDefaultPosition.x - (this.tileCanvas.x + newCenter.x)
+//             const offsetY = this.centerTileDefaultPosition.y - (this.tileCanvas.y + newCenter.y)
+//             // console.log('off', offsetX, offsetY)
+//             const { x, y } = wid2xy(newCenter.data!.id)
+//             await this.moveTo(x, y, offsetX, offsetY)
+//         }
+//     }
 
-    async setMapPosition(x: number, y: number, center = false) {
-        x = x < 1 ? 1 : x > 500 ? 500 : x
-        y = y < 1 ? 1 : y > 500 ? 500 : y
-        await this.tileCanvas.load(x, y)
-        if (center) {
-            this.tileCanvasToCenter()
-        } else {
+//     private tileCanvasPositionToCenter(offsetX = 0, offsetY = 0) {
+//         this.tileCanvas.x = this.center.x - Math.floor(this.tileCanvas.width / 2)
+//         this.tileCanvas.y = this.center.y - Math.floor(this.tileCanvas.height / 2)
+//         const tile = this.tileCanvas.tiles[Math.floor(this.tileCanvas.tiles.length / 2)]
+//         this.centerTileDefaultPosition = { x: this.tileCanvas.x + tile.x, y: this.tileCanvas.y + tile.y }
+//         this.tileCanvas.x -= offsetX
+//         this.tileCanvas.y -= offsetY
 
-        }
-        this.draw()
-    }
-
-    private tileCanvasToCenter() {
-        console.log('center    : ', this.center.x, this.center.y)
-        console.log('tileCanvas: ', this.tileCanvas.width, this.tileCanvas.height)
-        this.tileCanvas.x = this.center.x - Math.floor(this.tileCanvas.width / 2)
-        this.tileCanvas.y = this.center.y - Math.floor(this.tileCanvas.height / 2)
-    }
+//         const newCenter = this.tileCanvas.hover(this.center.x, this.center.y)!
+//         offsetX = this.centerTileDefaultPosition.x - (this.tileCanvas.x + newCenter.x)
+//         offsetY = this.centerTileDefaultPosition.y - (this.tileCanvas.y + newCenter.y)
+//         console.log('off', offsetX, offsetY)
+//     }
 
 
 
-}
+// }
 
 onMounted(async () => {
     await Img.loadImages(bgRes, () => { })
-    const tileCanvas = new TileCanvas(1, 1)
+    const tileCanvas = new TileCanvas(10, 30)
     canvas.value = new MapCanvas(document.getElementById('map')! as HTMLCanvasElement, tileCanvas)
-    await canvas.value.setMapPosition(x.value, y.value, true)
+    await canvas.value.moveTo(x.value, y.value)
 })
 
 const press = ref(false)
 const pressXY = ref({ x: 0, y: 0 })
 
+async function moveTo(mapX: number, mapY: number) {
+    if (canvas.value) {
+        await canvas.value?.moveTo(mapX, mapY)
+        const xy = wid2xy(canvas.value.centerTile!.data!.id)
+        x.value = xy.x
+        y.value = xy.y
+    }
+}
+
 function doClick(e: MouseEvent) {
-    console.log(bgRes[1].imgEl!.height)
+    // console.log(bgRes[1].imgEl!.height)
     console.log('click  ele: ', canvas.value!.getClickTile(e.offsetX, e.offsetY))
-    const cv = canvas.value!
-    console.log('center ele : ', canvas.value!.getClickTile(cv.center.x, cv.center.y))
-    canvas.value!.draw()
+    // const cv = canvas.value!
+    // console.log('center ele : ', canvas.value!.getClickTile(cv.center.x, cv.center.y))
+    // canvas.value!.draw()
 }
 
 function doMouseDown(e: MouseEvent) {
@@ -240,8 +281,8 @@ function doMouseUp(e: MouseEvent) {
     let pr = press.value
     press.value = false
     if (pr) {
+        canvas.value!.refresh()
     }
-
 }
 
 function doMouseMove(e: MouseEvent) {
@@ -257,13 +298,13 @@ function doMouseMove(e: MouseEvent) {
 onUnmounted(async () => {
 })
 
-const x = ref(250)
-const y = ref(250)
+
 </script>
 <template>
     <canvas id="map" class="sg-playing" @click="doClick" @mousemove="doMouseMove" @mousedown="doMouseDown"
         @mouseleave="doMouseUp" @mouseup="doMouseUp">
     </canvas>
+    <WorldMapCtrl />
 </template>
 <style lang="less" scoped>
 .sg-playing {

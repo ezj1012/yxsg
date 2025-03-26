@@ -26,8 +26,8 @@ const isReady = computed(() => sg.value.ready.value)
         <template v-if="isReady">
             <!--
                 <RFunPanl />
-                <StageView />
                 -->
+            <!-- <StageView /> -->
             <WordMap />
             <HMsg />
             <EMsg />
