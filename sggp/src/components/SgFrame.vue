@@ -27,8 +27,8 @@ const isReady = computed(() => sg.value.ready.value)
             <!--
                 <RFunPanl />
                 -->
-            <!-- <StageView /> -->
-            <WordMap />
+            <StageView />
+            <!-- <WordMap /> -->
             <HMsg />
             <EMsg />
         </template>
@@ -36,7 +36,7 @@ const isReady = computed(() => sg.value.ready.value)
             <LoadingView />
         </template>
     </div>
-    <!-- <DataShowList /> -->
+    <DataShowList />
 </template>
 <style lang="less">
 .sg-main {

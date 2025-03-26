@@ -63,4 +63,5 @@ export interface MemMapTile {
     maxLevel: number
     ownerCityId: number
     state: number
+    idStr?: string;
 }

@@ -1,48 +1,56 @@
 <script setup lang="ts">
-import { cid2xy } from '@/app/constant';
+import { Img } from '@/app/img';
 import type { SanGuo } from '@/app/sg';
-import { CanvasWindow } from '@/app/worldMap';
+import { inject, onMounted, onUnmounted, provide, reactive, ref, shallowRef, watch } from 'vue';
 import WorldMapCtrl from './WorldMapCtrl.vue';
-import { inject, onMounted, provide, ref, shallowRef } from 'vue';
+import { bgRes, MapCanvas, MapTile, type MapCtx } from '@/app/worldMap';
+import { cid2xy, wid2xyStr } from '@/app/constant';
+
 
 
 const { sg } = inject('sg') as { sg: SanGuo }
-
-const ws = 10
-const hs = 16
-const w = 731
-const h = 550
-const canvas = shallowRef<HTMLCanvasElement>()
-const window = shallowRef<CanvasWindow>()
-const x = ref(1)
-const y = ref(1)
-provide('worldMap', { window, x, y })
-
-onMounted(async () => {
-    if (canvas.value) {
-        window.value = new CanvasWindow(sg, w, h, ws, hs, canvas.value)
-        const cityId = sg.dataMgr.getByKey('playing#player_lastCity')
-        const xy = cid2xy(cityId)
-        window.value.moveTo(xy.x, xy.y)
-        x.value = xy.x
-        y.value = xy.y
-        window.value.mapChange = (nx: number, ny: number) => {
-            x.value = nx
-            y.value = ny
-        }
-        await window.value.draw()
-    }
+const canvas = shallowRef<MapCanvas>()
+const mapCtx = ref<MapCtx>({
+    x: 15,
+    y: 15,
+    showLv: false,
+    getMapTiles: async (params: { x: number, y: number, xw: number, yw: number }) => await sg.api.envApi.getMapTiles(params),
+    updateMapPosition: (nx: number, ny: number) => { mapCtx.value.x = nx; mapCtx.value.y = ny; },
+    updateHoverTile: (tile: MapTile | undefined) => { updateHover(tile) },
+    moveTo: async (mapX: number, mapY: number) => { await canvas.value?.moveTo(mapX, mapY) },
 })
 
-async function click(e: MouseEvent) {
-    console.log(window.value?.map.lastHoverTiles)
+provide('worldMap', { mapCtx })
+
+onMounted(async () => {
+    await Img.loadImages(bgRes, () => { })
+    canvas.value = new MapCanvas(document.getElementById('world-map')! as HTMLCanvasElement, mapCtx.value)
+
+    const cityId = sg.dataMgr.getByKey('playing#player_lastCity')
+    const xy = cid2xy(cityId)
+    await mapCtx.value.moveTo(xy.x, xy.y)
+
+
+    sg.dataMgr.subscribe('playing#topbutton_level_sct', undefined, (key: string, newValue: any, oldValue: any) => { canvas.value?.showLv(newValue) })
+})
+
+onUnmounted(() => { canvas.value?.dispose() })
+
+
+function doClick(e: MouseEvent) {
+    const tile = canvas.value!.isHover(e.offsetX, e.offsetY)!
+    console.log('click  ele: ', tile?.data, wid2xyStr(tile.data!.id))
+}
+
+function updateHover(tile: MapTile | undefined) {
+    console.log('hover ele', tile?.data)
 }
 
 </script>
-
 <template>
-    <canvas id="world-map" ref="canvas" @click="click">世界地图</canvas>
-    <!-- <WorldMapCtrl /> -->
+    <canvas id="world-map" @click="doClick">
+    </canvas>
+    <WorldMapCtrl />
 </template>
 <style lang="less" scoped>
 #world-map {

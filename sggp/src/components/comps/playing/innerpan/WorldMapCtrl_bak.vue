@@ -1,18 +1,18 @@
-<script setup lang="ts">
+<!-- <script setup lang="ts">
 import { CfgStr } from '@/app/cfg';
 import type { SanGuo } from '@/app/sg';
+import type { CanvasWindow } from '@/app/worldMap';
 import { inject, onMounted, ref, watch, type Ref, type ShallowRef } from 'vue';
-
+import PBtn from '../../PBtn.vue';
 import { actionMgr } from '@/app/action';
 import { cid2xy } from '@/app/constant';
-import type { MapCtx } from '@/app/worldMap';
-import PBtn from '../../PBtn.vue';
+
 
 const { sg } = inject('sg') as { sg: SanGuo }
-const { mapCtx  } = inject('worldMap') as {  mapCtx: Ref<MapCtx>  }
+const { window, x, y } = inject('worldMap') as { window: ShallowRef<CanvasWindow>, x: Ref<number>, y: Ref<number> }
 
 const bgUrl = `url(${sg.res.getImgGroup('playing#world#ctrl#map_controller').hasDef()?.getDataUrl()})`
-const moveBtn = new CfgStr(`K:playing#worldctrl#map_move;T:I_BTN;S:103,104,42,23,100;RFI:playing#world#ctrl#map_move;NOM;ACT:WM_mapCtx.value.moveTo`);
+const moveBtn = new CfgStr(`K:playing#worldctrl#map_move;T:I_BTN;S:103,104,42,23,100;RFI:playing#world#ctrl#map_move;NOM;ACT:WM_MoveTo`);
 const centerBtn = new CfgStr(`K:playing#worldctrl#center;T:I_BTN;S:73.5,31,42,42,100;RFI:playing#world#ctrl#map_mycity;NOM;ACT:WM_MoveCity`);
 const mapBtn = new CfgStr(`K:playing#worldctrl#open_map;T:I_BTN;S:156,107,19,18,100;RFI:playing#world#ctrl#world_map;NOM;SMSG:世界地图;`);
 
@@ -27,39 +27,40 @@ const downBtn = new CfgStr(`K:playing#worldctrl#up;T:I_BTN;S:74,72,43,28,100;RFI
 const downleftBtn = new CfgStr(`K:playing#worldctrl#up;T:I_BTN;S:47,60,41,40,100;RFI:playing#world#ctrl#map_downleft;NOM;ACT:WM_MoveDownLeft;`);
 const leftBtn = new CfgStr(`K:playing#worldctrl#up;T:I_BTN;S:47,32,28,43,100;RFI:playing#world#ctrl#map_left;NOM;ACT:WM_MoveLeft;`);
 
-actionMgr.reg('WM_mapCtx.value.moveTo', async (sg) => {
-    await mapCtx.value.moveTo(mapCtx.value.x, mapCtx.value.y)
-})
+actionMgr.reg('WM_MoveTo', async (sg) => { await window.value?.moveTo(x.value, y.value) })
 actionMgr.reg('WM_MoveCity', async ({ sg }) => {
     const cityId = sg.dataMgr.getByKey('playing#player_lastCity')
     const xy = cid2xy(cityId)
-    await mapCtx.value.moveTo(xy.x, xy.y)
+    await window.value?.moveTo(xy.x, xy.y)
 })
-actionMgr.reg('WM_MoveUp', async ({ sg }) => { await mapCtx.value.moveTo(Number(mapCtx.value.x) - 4, Number(mapCtx.value.y) - 4) })
+actionMgr.reg('WM_MoveUp', async ({ sg }) => { await window.value?.moveTo(Number(x.value) - 4, Number(y.value) - 4) })
 
-actionMgr.reg('WM_MoveUpRight', async ({ sg }) => { await mapCtx.value.moveTo(Number(mapCtx.value.x), Number(mapCtx.value.y) - 5) })
-actionMgr.reg('WM_MoveUpLeft', async ({ sg }) => { await mapCtx.value.moveTo(Number(mapCtx.value.x) - 5, Number(mapCtx.value.y)) })
+actionMgr.reg('WM_MoveUpRight', async ({ sg }) => { await window.value?.moveTo(Number(x.value), Number(y.value) - 5) })
+actionMgr.reg('WM_MoveUpLeft', async ({ sg }) => { await window.value?.moveTo(Number(x.value) - 5, Number(y.value)) })
 
-actionMgr.reg('WM_MoveRight', async ({ sg }) => { await mapCtx.value.moveTo(Number(mapCtx.value.x) + 3, Number(mapCtx.value.y) - 3) })
-actionMgr.reg('WM_MoveDownRight', async ({ sg }) => { await mapCtx.value.moveTo(Number(mapCtx.value.x) + 5, Number(mapCtx.value.y)) })
+actionMgr.reg('WM_MoveRight', async ({ sg }) => { await window.value?.moveTo(Number(x.value) + 3, Number(y.value) - 3) })
+actionMgr.reg('WM_MoveDownRight', async ({ sg }) => { await window.value?.moveTo(Number(x.value) + 5, Number(y.value)) })
 
-actionMgr.reg('WM_MoveDown', async ({ sg }) => { await mapCtx.value.moveTo(Number(mapCtx.value.x) + 4, Number(mapCtx.value.y) + 4) })
-actionMgr.reg('WM_MoveDownLeft', async ({ sg }) => { await mapCtx.value.moveTo(Number(mapCtx.value.x), Number(mapCtx.value.y) + 5) })
-actionMgr.reg('WM_MoveLeft', async ({ sg }) => { await mapCtx.value.moveTo(Number(mapCtx.value.x) - 3, Number(mapCtx.value.y) + 3) })
+actionMgr.reg('WM_MoveDown', async ({ sg }) => { await window.value?.moveTo(Number(x.value) + 4, Number(y.value) + 4) })
+actionMgr.reg('WM_MoveDownLeft', async ({ sg }) => { await window.value?.moveTo(Number(x.value), Number(y.value) + 5) })
+actionMgr.reg('WM_MoveLeft', async ({ sg }) => { await window.value?.moveTo(Number(x.value) - 3, Number(y.value) + 3) })
+
+
+
 
 
 function input() {
-    if (Number.isNaN(Number(mapCtx.value.x))) {
-        mapCtx.value.x = 1
+    if (Number.isNaN(Number(x.value))) {
+        x.value = 1
     } else {
-        mapCtx.value.x < 1 && (mapCtx.value.x = 1)
-        mapCtx.value.x > 500 && (mapCtx.value.x = 500)
+        x.value < 1 && (x.value = 1)
+        x.value > 500 && (x.value = 500)
     }
-    if (Number.isNaN(Number(mapCtx.value.y))) {
-        mapCtx.value.y = 1
+    if (Number.isNaN(Number(y.value))) {
+        y.value = 1
     } else {
-        mapCtx.value.y < 1 && (mapCtx.value.y = 1)
-        mapCtx.value.y > 500 && (mapCtx.value.y = 500)
+        y.value < 1 && (y.value = 1)
+        y.value > 500 && (y.value = 500)
     }
 }
 
@@ -68,8 +69,8 @@ function input() {
 <template>
     <div id="world-map-ctrl">
         <div class="bg" :style="{ backgroundImage: bgUrl }"></div>
-        <input v-model="mapCtx.x" maxlength="3" @input="input" style="left: 36px;" />
-        <input v-model="mapCtx.y" maxlength="3" @input="input" style="left: 72px;" />
+        <input v-model="x" maxlength="3" @input="input" style="left: 36px;" />
+        <input v-model="y" maxlength="3" @input="input" style="left: 72px;" />
         <PBtn :cfg="moveBtn" />
         <PBtn :cfg="mapBtn" />
         <PBtn :cfg="centerBtn" />
@@ -113,4 +114,4 @@ function input() {
         color: var(--gold);
     }
 }
-</style>
+</style> -->

@@ -40,8 +40,11 @@ export function wid2cid(wid: number): number {
 }
 
 export function wid2xy(wid: number): { x: number, y: number } {
-    let y = (Math.floor(wid / 10000) * 10 + Math.floor(((wid % 100) / 10)));
-    let x = (Math.floor((wid % 10000) / 100) * 10 + Math.floor(wid % 10));
+    let x, y = 0
+
+    y = (Math.floor(wid / 10000) * 10 + Math.floor(((wid % 100) / 10)));
+    x = (Math.floor((wid % 10000) / 100) * 10 + Math.floor(wid % 10));
+
     return { x, y };
 }
 
