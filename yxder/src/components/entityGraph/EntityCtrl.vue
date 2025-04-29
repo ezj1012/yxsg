@@ -93,6 +93,12 @@ onUnmounted(() => {
     <div class="entity-ctrl">
         <div class="title-line">
             <div class="title">模型管理: {{ coder?.cfg?.project?.name }}</div>
+            <div class="title" v-if="coder?.cfg?.graphs && coder.cfg.graphs.length > 0">
+                <Select v-model="coder.curGraph" style="width:200px">
+                    <Option v-for="item in coder.cfg?.graphs" :value="item.name" :key="item.name">{{ item.name }}
+                    </Option>
+                </Select>
+            </div>
             <ul class="ops">
                 <li class="action-item ">
                     <a class="action-label codicon codicon-references" @click="newModel"></a>
@@ -102,7 +108,7 @@ onUnmounted(() => {
         <div class="line-layout entities">
             <EntityMonaco v-show="editing" ref="entityMonacoEl" :close="() => { editing = false }" />
             <div v-show="!editing">
-                <div class="line entity" :class="[sctNode == gm.id ? 'sct' : '']" v-for=" gm, idx in filterdModels"
+                <div class="line entity" :class="[sctNode == gm.id ? 'sct' : '']" v-for="gm, idx in filterdModels"
                     @click="doSct(gm.id)">
                     <div class="line-container">
                         <div class="name"> {{ `${gm.model?.name || '未命名'} (${gm.x},${gm.y})` }}</div>

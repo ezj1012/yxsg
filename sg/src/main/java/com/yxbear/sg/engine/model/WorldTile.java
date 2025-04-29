@@ -30,12 +30,18 @@ public class WorldTile {
 
     /** 当前状态 */
     Integer state;
+    
+    /** 旗帜 */
+    String flagChar;
+
+    String idStr;
 
     // 超出范围的.
-    public WorldTile(Integer id) {
+    public WorldTile(Integer id, String idStr) {
         super();
         this.id = id;
         this.state = -1;
+        this.idStr = idStr;
     }
 
 }

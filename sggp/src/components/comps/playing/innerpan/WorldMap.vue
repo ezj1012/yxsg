@@ -18,6 +18,7 @@ const mapCtx = ref<MapCtx>({
     updateMapPosition: (nx: number, ny: number) => { mapCtx.value.x = nx; mapCtx.value.y = ny; },
     updateHoverTile: (tile: MapTile | undefined) => { updateHover(tile) },
     moveTo: async (mapX: number, mapY: number) => { await canvas.value?.moveTo(mapX, mapY) },
+    getSg: () => sg,
 })
 
 provide('worldMap', { mapCtx })

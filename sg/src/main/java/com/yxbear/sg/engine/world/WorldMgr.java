@@ -1,6 +1,7 @@
 package com.yxbear.sg.engine.world;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -53,29 +54,56 @@ public class WorldMgr implements Mgrable {
     }
 
     public List<WorldTile> getWorldTiles(int x, int y, int xw, int yw) {
-        List<Integer> validIds = new ArrayList<>();
-        validIds.add(SystemUtils.wid(x, y));
 
-        int my = y - yw + xw;
-        int mx = x - yw - xw;
-        List<Integer> allIds = new ArrayList<>();
-        for (int j = 0; j < yw * 4 + 1; j++) {
-            boolean t = j % 2 == 0;
-            for (int i = 0; i < xw * 2 + 1; i++) {
-                int nx = mx + i + j / 2;
-                int ny = t ? my - i + j / 2 : my - i + j / 2 + 1;
-                int id = SystemUtils.wid(nx, ny);
-                allIds.add(id);
-                if (nx > 0 && nx < 501 && ny > 0 && ny < 501) {
-                    validIds.add(id);
-                }
-            }
+        List<Integer> validIds = new ArrayList<>();
+        List<Integer> result = new ArrayList<>();
+        Map<Integer, String> errMap = new HashMap<>();
+        int sx = x - xw;
+        int sy = y + xw;
+
+        sx -= (yw + 1) / 2;
+        sy -= (yw + 1) / 2;
+
+        boolean curLeft = yw % 2 == 1;
+        if (curLeft) {
+            sy += 1;
         }
 
-        List<WorldTile> tiles = getCtx().getWorldDataLoader().loadTiles(validIds);
+        int yh = yw * 2 + 1;
+        int xh = xw * 2 + 1;
 
+        for (int i = 0; i < yh; i++) {
+            int nx = sx;
+            int ny = sy;
+            // if(!curLeft) {
+            // System.out.print(" ");
+            // }
+            for (int j = 0; j < xh; j++) {
+                int cx = nx + j;
+                int cy = ny - j;
+                // System.out.print(cx+"_"+cy+"|");
+                int wid = SystemUtils.wid(cx, cy);
+                result.add(wid);
+                if (cx > 0 && cx <= 500 && cy > 0 && cy <= 500) {
+                    validIds.add(wid);
+                } else {
+                    errMap.put(wid, cx + "," + cy);
+                }
+            }
+            // System.out.println();
+            if (curLeft) {
+                sx += 1;
+            } else {
+                sy += 1;
+            }
+            curLeft = !curLeft;
+        }
+        Random random = new Random();
+
+        List<WorldTile> tiles = getCtx().getWorldDataLoader().loadTiles(validIds);
+        tiles.forEach(t -> t.setCurLevel(random.nextInt(30)));
         Map<Integer, WorldTile> idMap = tiles.stream().collect(Collectors.toMap(WorldTile::getId, a -> a));
-        return allIds.stream().map(id -> idMap.computeIfAbsent(id, i -> new WorldTile(i))).toList();
+        return result.stream().map(id -> idMap.computeIfAbsent(id, id2 -> new WorldTile(id2, errMap.get(id2)))).toList();
     }
 
 }

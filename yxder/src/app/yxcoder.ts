@@ -1,4 +1,4 @@
-import type { Ref } from "vue";
+import { ref, type Ref } from "vue";
 import type { CoderGraph } from "./graph";
 import { get, post } from "./httpa";
 import { CellView, Graph, Node } from '@antv/x6';
@@ -71,6 +71,7 @@ export class YXCoder {
 
     cfg?: CodeCfg
     models: Ref<GraphModel[]>
+    curGraph: string
     private graph: CoderGraph
 
     constructor(graph: CoderGraph, models: Ref<GraphModel[]>) {
@@ -78,6 +79,7 @@ export class YXCoder {
         this.models = models
         this.graph.nodeMovedListener = async (data: GraphNodeCfg) => { await this.updatePosition(data) }
         this.graph.findNodeIdByClassName = (className: string) => { return this.models.value.find(m => m.model.name == className)?.id }
+        this.curGraph = ''
     }
 
     async loading() {

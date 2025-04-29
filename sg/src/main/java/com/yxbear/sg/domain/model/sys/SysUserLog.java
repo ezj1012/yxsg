@@ -10,6 +10,9 @@ public class SysUserLog implements EntityBean<Integer> {
     /** 唯一主键 */
     private Integer id;
 
+    /**  */
+    private Integer userId;
+
     /** 1登录,2登出 */
     private Integer action;
 
@@ -22,6 +25,10 @@ public class SysUserLog implements EntityBean<Integer> {
     /** 最后登录Ip! */
     private String ip;
 
+    /** 创建时间 */
+    private Long createTime;
 
+    /** 最后一次修改时间 */
+    private Long modifyTime;
 
 }

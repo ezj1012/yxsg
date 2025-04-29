@@ -1,6 +1,7 @@
 import { wid, wid2xy } from "./constant"
 import { Img } from "./img"
 import type { MemMapTile } from "./modelData"
+import type { SanGuo } from "./sg"
 
 export const tileWidth = 108
 export const tileHeight = 54
@@ -24,16 +25,19 @@ export interface MapCtx {
   updateMapPosition: (x: number, y: number) => any
   updateHoverTile: (tile: MapTile | undefined) => any
   moveTo: (mapX: number, mapY: number) => Promise<void>
+  getSg: () => SanGuo
 }
 
 
 export class MapTile {
   x: number
   y: number
+  mapCtx: MapCtx
   data?: MemMapTile
-  constructor(x: number = 0, y: number = 0) {
+  constructor(x: number = 0, y: number = 0, mapCtx: MapCtx) {
     this.x = x
     this.y = y
+    this.mapCtx = mapCtx
   }
 
   isHover(x: number, y: number) {
@@ -59,12 +63,20 @@ export class MapTile {
   draw(ctx: CanvasRenderingContext2D, cfg: MapCtx) {
     if (!this.data || this.data.state == -1) { return } // 非有效数据
     ctx.drawImage(this.getImg().imgEl!, this.x, this.y)
-    if (cfg.showLv) { // 绘制等级
+    if (cfg.showLv && this.data.tileType != 0) { // 绘制等级
       const { x, y } = wid2xy(this.data.id)
-      // /
       ctx.fillText(`${x},${y}`, this.x + 30, this.y + 50)
+
+      const img = this.mapCtx.getSg().res.getImg(`playing#comm#level_${this.data.curLevel}`)
+      if (img) {
+        ctx.drawImage(img.imgEl!, this.x + 42, this.y + 42)
+      }
+
     }
   }
+
+
+
 }
 
 
@@ -99,7 +111,7 @@ class TileCanvas {
       const startY = y * 27 - 21;
       let startX = y % 2 == 0 ? zeroB ? 0 : -tileHeight : zeroB ? -tileHeight : 0
       for (let x = 0; x < widthSize; x++) {
-        this.tiles.push(new MapTile(startX + x * tileWidth, startY))
+        this.tiles.push(new MapTile(startX + x * tileWidth, startY, mapCtx))
       }
     }
 

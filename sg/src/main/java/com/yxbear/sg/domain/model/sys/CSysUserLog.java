@@ -23,6 +23,14 @@ public class CSysUserLog implements Condition {
 
     private Integer endId;
 
+    private Integer userId;
+
+    private Integer[] userIds;
+
+    private Integer startUserId;
+
+    private Integer endUserId;
+
     private Integer action;
 
     private Integer[] actions;
@@ -48,5 +56,21 @@ public class CSysUserLog implements Condition {
     private String[] ips;
 
     private String ipEqual;
+
+    private Long createTime;
+
+    private Long[] createTimes;
+
+    private Long startCreateTime;
+
+    private Long endCreateTime;
+
+    private Long modifyTime;
+
+    private Long[] modifyTimes;
+
+    private Long startModifyTime;
+
+    private Long endModifyTime;
 
 }

@@ -185,6 +185,7 @@ export class SgRes {
         this.cfgLoader = new FrameCfgLoader(this)
         this.gCfgMgr = new GCfgMgr()
     }
+    
     async loadCfg() {
         this.bar.value.msg = '加载配置资源'
         this.bar.value.pct = 10

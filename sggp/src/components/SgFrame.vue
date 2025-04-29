@@ -11,7 +11,10 @@ import StageView from './stages/StageView.vue';
 import EMsg from './msg/EMsg.vue';
 import HMsg from './msg/HMsg.vue';
 import DataShowList from './DataShowList.vue';
-import WordMap from './test/WordMap.vue';
+import CfgShowList from './CfgShowList.vue';
+import WorldMap from './comps/playing/innerpan/WorldMap.vue';
+
+
 // import DataShowList from './datas/DataShowList.vue';
 // import EMsg from './msg/EMsg.vue';
 // import RFunPanl from './comps/RFunPanl.vue';
@@ -28,7 +31,7 @@ const isReady = computed(() => sg.value.ready.value)
                 <RFunPanl />
                 -->
             <StageView />
-            <!-- <WordMap /> -->
+            <!-- <WorldMap /> -->
             <HMsg />
             <EMsg />
         </template>
@@ -36,7 +39,8 @@ const isReady = computed(() => sg.value.ready.value)
             <LoadingView />
         </template>
     </div>
-    <DataShowList />
+    <CfgShowList />
+    <!-- <DataShowList /> -->
 </template>
 <style lang="less">
 .sg-main {
