@@ -6,6 +6,7 @@ import type { SgApi } from "./api"
 import { StageCfgInfo } from "./stage"
 import { GCfgMgr } from "./global"
 
+
 export class ImgGroupInfo {
     key: string
     cfg: CfgStr
@@ -42,6 +43,33 @@ export class ImgGroupInfo {
     hasAlarm() { return this.mgr.get(this.key + "_alarm") }
     hasSct() { return this.mgr.get(this.key + "_sct") }
     hasDis() { return this.mgr.get(this.key + "_dis") }
+}
+
+export class ScrollHelper {
+    styles: Record<string, any> = {}
+    sg: { res: SgRes } | any
+    constructor(sg: { res: SgRes } | any) {
+        this.sg = sg
+        this.styles['--track-up'] = this.sg.img("common#scroll_uparr")
+        this.styles['--track-up-down'] = this.sg.img("common#scroll_uparr", { filter: (g: any) => g.hasDown() })
+        this.styles['--track-down'] = this.sg.img("common#scroll_downarr")
+        this.styles['--track-down-up'] = this.sg.img("common#scroll_downarr", { filter: (g: any) => g.hasDown() })
+    }
+
+    scrollImg(el: HTMLElement, show: boolean, dataHeight: number) {
+        if (show) {
+            const height = el.getBoundingClientRect().height
+            const newHeight = ((height - 40) * height) / dataHeight;
+            this.styles['--track-img'] = this.sg.img("common#scroll_track", { w: 19, h: height })
+            this.styles['--track-bar'] = this.sg.img("common#scroll_bar", { w: 13, h: newHeight })
+            this.styles['--track-bar-hover'] = this.sg.img("common#scroll_bar", { w: 13, h: newHeight })
+            this.styles['overflow-y'] = 'auto'
+        } else {
+            this.styles['overflow-y'] = 'hidden'
+            el.scrollTop = 0
+        }
+    }
+
 }
 
 export class ImgMgr {
@@ -185,7 +213,7 @@ export class SgRes {
         this.cfgLoader = new FrameCfgLoader(this)
         this.gCfgMgr = new GCfgMgr()
     }
-    
+
     async loadCfg() {
         this.bar.value.msg = '加载配置资源'
         this.bar.value.pct = 10

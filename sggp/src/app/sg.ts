@@ -2,12 +2,13 @@ import { ref, shallowReactive, shallowRef, type App, type Ref, type ShallowRef }
 import { DataMgr } from "./dataMgr";
 import { SgApi } from "./api";
 import { SingleComp, type FunPanComp, type Traceable } from "./model";
-import { SgRes } from "./res";
+import { ImgGroupInfo, SgRes } from "./res";
 import { RadioGroup, StageMgr } from "./stage";
 import { AxiosError } from "axios";
 import { CfgStr } from "./cfg";
 import { DivBg, installClickout, installMsg } from "./directives";
 import { gFunPanComps } from "./constant";
+import type { Img } from "./img";
 
 
 
@@ -72,6 +73,13 @@ export class SanGuo {
 
     pushMsg(msg: string) {
         msg && this.dataMgr.pushMsg(msg)
+    }
+
+    img(key: string, scale?: { w?: number, h?: number, filter?: (g: ImgGroupInfo) => Img.ImgDef }) {
+        const g = this.res.getImgGroup(key)
+        const img = scale?.filter ? scale.filter(g) : g.hasDef()
+        const imgUrl = img?.getImg(scale?.w, scale?.h).imgDataUrl
+        return `url(${imgUrl})`
     }
 
 }

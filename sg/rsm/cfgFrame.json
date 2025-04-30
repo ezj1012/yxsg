@@ -8,6 +8,12 @@
 		"T:I;K:common#mian_bg;",
 		"T:I;K:common#scroll_track;IS:5,24,13,50;",
 		"T:I;K:common#title;",
+        
+        // 表格
+        "T:I;K:common#table_header;IS:3,4,52,18;",
+        "T:I;K:common#table_board;IS:6,6,41,23;",
+        "T:I;K:common#table_contentline;",
+        
 		"T:I;K:loading#main_complete;",
 		"T:I;K:loading#main_pic;",
 		"T:I;K:loading#progress_bg;",

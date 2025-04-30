@@ -55,5 +55,48 @@ sgGame.sg.value = sg
   --red: #f43838;
   /* 金色 */
   --gold: #e5c21e;
+
+  --rxsg-table-header-font-color: #2ebdd7;
+  --rxsg-table-row-bg-color: #182828d9;
+  --rxsg-table-row-hover-bg-color: #2e4e54;
+  --rxsg-table-row-select-bg-color: var(--rxsg-table-row-hover-bg-color)
+}
+
+.scroll_container {
+  &::-webkit-scrollbar-thumb {
+    width: 16px;
+    background: var(--track-bar) no-repeat;
+    background-position-x: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: var(--track-bar-hover) no-repeat;
+    background-position-x: 4px;
+  }
+
+  &::-webkit-scrollbar {
+    width: 20px;
+    background: var(--track-img);
+    background-position: 1px 1px;
+    background-color: #373530fe;
+  }
+
+  &::-webkit-scrollbar-button:decrement {
+    height: 20px;
+    background: var(--track-up) no-repeat scroll 3px 1px;
+
+    &:active {
+      background: var(--track-up-down) no-repeat scroll 3px 1px;
+    }
+  }
+
+  &::-webkit-scrollbar-button:increment {
+    height: 20px;
+    background: var(--track-down-up) no-repeat scroll 3px 1px;
+
+    &:active {
+      background: var(--track-down) no-repeat scroll 3px 1px;
+    }
+  }
 }
 </style>

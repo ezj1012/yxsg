@@ -57,7 +57,7 @@ onUnmounted(async () => {
             <template v-for="comp in stage.info.cfgs" :key="comp.key()">
                 <Text v-if="comp.type() == CfgType.text" :cfg="comp" v-show="comp.show()" :id="comp.key()" />
                 <!-- <Bg v-else-if="comp.type() == CfgType.bg" :cfg="comp" v-show="comp.show()" :id="comp.key()" /> -->
-                <!-- <PBtn v-else-if="comp.isBtn()" :cfg="comp" v-show="comp.show()" :id="comp.key()" /> -->
+                <PBtn v-else-if="comp.isBtn()" :cfg="comp" v-show="comp.show()" :id="comp.key()" />
                 <TextInput v-else-if="comp.type() == CfgType.textInput" :cfg="comp" v-show="comp.show()"
                     :id="comp.key()" />
                 <!-- <Img v-else-if="comp.isImg()" :cfg="comp" v-show="comp.show()" :id="comp.key()" /> -->

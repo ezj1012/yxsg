@@ -29,8 +29,6 @@ function updateStyle() {
         let hh: number = maxHeight ? maxHeight : sc.offsetHeight;
         hh = hh - 4
         if (hh > 40) {
-
-
             tarImageSrc.value = sg.res.getImgGroup("common#scroll_track")?.hasDef()?.getImg(19, hh).imgDataUrl || '123'
             let newHeight = ((hh - 40) * hh) / (maxHeight ? hh + 40 : sc.scrollHeight);
             barImageSrc.value = sg.res.getImgGroup("common#scroll_bar")?.hasDef()?.getImg(13, newHeight).imgDataUrl || '123'
