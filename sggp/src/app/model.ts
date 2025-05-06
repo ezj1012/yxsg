@@ -81,7 +81,7 @@ export interface Compable extends Shapable {
 }
 
 export interface FunPanComp extends Compable, Textable {
-
+    show?: boolean
 }
 
 export interface StageComp extends Compable { }
@@ -129,6 +129,7 @@ export const defaultConverHeader = (headers: any[]) => {
         const styles: Record<string, any> = h.styles || {}
         h.width && (styles.width = `${h.width}px`)
         h.color && (styles.color = h.color)
+        styles.color =  h.color || 'var(--rxsg-table-header-font-color)'
         return new TableHeaderDef(h.width || 0, h.content || '', styles)
     })
 }

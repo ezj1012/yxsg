@@ -14,6 +14,8 @@ import DataShowList from './DataShowList.vue';
 import CfgShowList from './CfgShowList.vue';
 import WorldMap from './comps/playing/innerpan/WorldMap.vue';
 import TableViewTest from './test/TableViewTest.vue';
+import FunPanlTestView from './test/FunPanlTestView.vue';
+import RFunPanl from './comps/RFunPanl.vue';
 
 
 // import DataShowList from './datas/DataShowList.vue';
@@ -28,11 +30,12 @@ const isReady = computed(() => sg.value.ready.value)
 <template>
     <div class="sg-main">
         <template v-if="isReady">
-            <!--
-                <RFunPanl />
-                -->
+            <!-- -->
+              
+            <RFunPanl />  
             <!-- <StageView /> -->
-             <TableViewTest />
+            <FunPanlTestView />
+            <!--  <TableViewTest />-->
             <!-- <WorldMap /> -->
             <HMsg />
             <EMsg />
@@ -41,7 +44,7 @@ const isReady = computed(() => sg.value.ready.value)
             <LoadingView />
         </template>
     </div>
-     <!--  <CfgShowList />
+    <!--  <CfgShowList />
   <DataShowList /> -->
 </template>
 <style lang="less">

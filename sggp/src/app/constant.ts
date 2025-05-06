@@ -17,11 +17,13 @@ export function encode(msg: string) {
 // import FunPanlArmor from "@/components/comps/playing/funpan/FunPanlArmor.vue";
 // import FunPanlKing from "@/components/comps/playing/funpan/FunPanlKing.vue";
 // import FunPanInnverBuild from "@/components/comps/playing/funpan/builds/FunPanInnverBuild.vue";
+import HeroFun from "@/components/test/funpanl/HeroFun.vue";
 export const gFunPanComps = [
     // { key: 'fun_pan#playerinfo_inventory', comp: FunPanlInventory, content: '宝物', size: 13, color: '--gold' },
     // { key: 'fun_pan#playerinfo_armor', comp: FunPanlArmor, content: '装备', size: 13, color: '--gold' },
     // { key: 'fun_pan#playerinfo_king', comp: FunPanlKing, content: '君主', size: 13, color: '--gold' },
     // { key: 'fun_pan#city_build_inner_list', comp: FunPanInnverBuild, content: '建造建筑', size: 13, color: '--gold' },
+    { key: 'fun_pan#hero', comp: HeroFun, content: '英雄', size: 13, color: '--gold' },
 ]
 
 

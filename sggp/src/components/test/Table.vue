@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { ScrollHelper } from '@/app/res'
 import type { SanGuo } from '@/app/sg'
-import { computed, inject, onMounted, ref, watch } from 'vue'
+import { computed, inject, onMounted, onUnmounted, ref, watch } from 'vue'
 import TableHeader from './TableHeader.vue'
 import { TableHeaderDef, TableDataRowDef, TableDataCellDef, defaultConverHeader, defaultConverDatas } from '@/app/model'
 
@@ -28,11 +28,21 @@ const dataEl = ref<HTMLDivElement>()
 const showScroll = ref(false)
 const scrollHelper = ref<ScrollHelper>()
 const bgUrl = ref('')
+const obs = new ResizeObserver(entries => {
+    for (const en of entries) {
+        updateBg()
+        calcDatas()
+    }
+})
 
 onMounted(() => {
+    obs.observe(tableEl.value!)
     scrollHelper.value = new ScrollHelper(sg)
-    updateBg()
-    calcDatas()
+    // updateBg()
+    // calcDatas()
+})
+onUnmounted(() => {
+    obs.disconnect()
 })
 
 watch(props.headers, () => { headers.value = props.headersConvert(props.headers) }, { immediate: true })
@@ -63,6 +73,7 @@ function doClick(row: TableDataRowDef, idx: number, e: MouseEvent) {
 
 function updateBg() {
     const rect = tableEl.value!.getBoundingClientRect()
+    console.log(rect.width, tableEl.value?.parentElement?.getBoundingClientRect().width)
     bgUrl.value = sg.img('common#table_board', { w: rect.width, h: rect.height })
 }
 
