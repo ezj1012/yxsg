@@ -4,23 +4,33 @@ import org.springframework.stereotype.Service;
 
 import com.yxbear.sg.domain.SystemUtils;
 import com.yxbear.sg.domain.bean.LoginUser;
+import com.yxbear.sg.domain.mapper.gi.GiCityBuildMapper;
+import com.yxbear.sg.domain.mapper.gi.GiCityDefenceMapper;
+import com.yxbear.sg.domain.mapper.gi.GiCityMapper;
+import com.yxbear.sg.domain.mapper.gi.GiCityResourceAddMapper;
+import com.yxbear.sg.domain.mapper.gi.GiCityResourceMapper;
 import com.yxbear.sg.domain.mapper.gi.GiPlayerMapper;
 import com.yxbear.sg.domain.model.gi.GiPlayer;
 import com.yxbear.sg.domain.model.gi.GiUnion;
+import com.yxbear.sg.svc.egimpl.ModelFactory;
+import com.yxbear.sg.svc.play.CitySvc;
 import com.yxbear.sg.svc.play.PlaySvc;
 import com.yxbear.sg.svc.play.UnionSvc;
 import com.yxbear.sg.svc.play.bean.PlayInfo;
 import com.yxbear.sg.svc.play.bean.QPlayState;
 
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class PlaySvcImpl implements PlaySvc {
 
-    GiPlayerMapper playMapper;
+    final GiPlayerMapper playMapper;
 
-    UnionSvc unionSvc;
+    final UnionSvc unionSvc;
+
+    final CitySvc citySvc;
 
     @Override
     public PlayInfo getPlayInfo(QPlayState state) {
@@ -37,11 +47,16 @@ public class PlaySvcImpl implements PlaySvc {
                 info.setUnionName(union.getName());
             }
         }
+        
+        citySvc.fillCity(info);
+        
+        
 
         return info;
     }
 
     void deleteAll(int id) {
+        citySvc.deleteAll(id);
         playMapper.deleteById(id);
     }
 

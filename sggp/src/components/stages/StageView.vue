@@ -22,7 +22,6 @@ import InnerMain from '../comps/playing/InnerMain.vue';
 // import Sct from '../comps/Sct.vue';
 // import ProvincesMap from '../comps/regplay/ProvincesMap.vue';
 // import ChatPan from '../comps/playing/ChatPan.vue';
-// import KeyValue from '../comps/KeyValue.vue';
 // import CitySelect from '../comps/playing/CitySelect.vue';
 // import CityRes from '../comps/playing/CityRes.vue';
 // import InnerMain from '../comps/playing/InnerMain.vue';
@@ -56,17 +55,17 @@ onUnmounted(async () => {
         <template v-if="stage && stage.info">
             <template v-for="comp in stage.info.cfgs" :key="comp.key()">
                 <Text v-if="comp.type() == CfgType.text" :cfg="comp" v-show="comp.show()" :id="comp.key()" />
-                <!-- <Bg v-else-if="comp.type() == CfgType.bg" :cfg="comp" v-show="comp.show()" :id="comp.key()" /> -->
+                <Bg v-else-if="comp.type() == CfgType.bg" :cfg="comp" v-show="comp.show()" :id="comp.key()" />
                 <PBtn v-else-if="comp.isBtn()" :cfg="comp" v-show="comp.show()" :id="comp.key()" />
                 <TextInput v-else-if="comp.type() == CfgType.textInput" :cfg="comp" v-show="comp.show()"
                     :id="comp.key()" />
-                <!-- <Img v-else-if="comp.isImg()" :cfg="comp" v-show="comp.show()" :id="comp.key()" /> -->
-                <!-- <Sct v-else-if="comp.type() == CfgType.select" :cfg="comp" v-show="comp.show()" :id="comp.key()" /> -->
-                <!-- <KeyValue v-else-if="comp.type() == CfgType.keyValue" :cfg="comp" v-show="comp.show()"
-                    :id="comp.key()" /> -->
+                <Img v-else-if="comp.isImg()" :cfg="comp" v-show="comp.show()" :id="comp.key()" />
+                <Sct v-else-if="comp.type() == CfgType.select" :cfg="comp" v-show="comp.show()" :id="comp.key()" />
+                <KeyValue v-else-if="comp.type() == CfgType.keyValue" :cfg="comp" v-show="comp.show()"
+                    :id="comp.key()" /> <!-- -->
                 <template v-else-if="comp.type() == CfgType.customComp" v-show="comp.show()">
                     <!-- <ProvincesMap v-if="comp.show() && comp.refComp() == 'provincesMap'" :cfg="comp" :id="comp.key()" /> -->
-                    <!-- <CitySelect v-if="comp.show() && comp.refComp() == 'citySelect'" :cfg="comp" :id="comp.key()" /> -->
+                    <CitySelect v-if="comp.show() && comp.refComp() == 'citySelect'" :cfg="comp" :id="comp.key()" />
                     <!-- <InnerMain v-if="comp.show() && comp.refComp() == 'innerMain'" :cfg="comp" :id="comp.key()" /> -->
                     <!-- <ChatPan v-if="comp.show() && comp.refComp() == 'chatPan'" :cfg="comp" :id="comp.key()" />
                     <CityRes v-if="comp.show() && comp.refComp() == 'cityRes'" :cfg="comp" :id="comp.key()" />

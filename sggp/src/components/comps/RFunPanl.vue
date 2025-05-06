@@ -3,6 +3,8 @@ import type { SanGuo } from '@/app/sg';
 import Empty from './Empty.vue';
 import { computed, inject, watch } from 'vue';
 import type { FunPanComp } from '@/app/model';
+import { CfgStr } from '@/app/cfg';
+import PBtn from './PBtn.vue';
 const { sg } = inject('sg') as { sg: SanGuo }
 
 // const { title, pos } = defineProps({ title: { default: { content: '' } }, pos: { default: { w: 680, h: 490, x: 290, y: 50 } } }) as { title: Textable, pos: Shapable }
@@ -14,6 +16,8 @@ const w = computed(() => comp.value.w || 680)
 const h = computed(() => comp.value.h || 490)
 const x = computed(() => comp.value.x || 290)
 const y = computed(() => comp.value.y || 50)
+const closeBtn = new CfgStr("K:funpanl#close;T:I_BTN;S:580,400,60,32,4;RFI:common#btn_red;ACT:closeFunPan;TXT:T:关闭,F:15,C:#FFF,;")
+
 </script>
 
 <template>
@@ -26,6 +30,7 @@ const y = computed(() => comp.value.y || 50)
         </div>
         <div class="body">
             <component class="fun-body" :is="comp.comp" :id="comp.key"></component>
+            <PBtn :cfg="closeBtn" />
         </div>
     </main>
 </template>

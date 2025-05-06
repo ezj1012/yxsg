@@ -9,6 +9,7 @@ import com.yxbear.sg.domain.model.gi.GiPlayer;
 import com.yxbear.sg.engine.SgEngine;
 import com.yxbear.sg.engine.model.ProvinceLand;
 import com.yxbear.sg.engine.model.SgData;
+import com.yxbear.sg.svc.cfg.bean.CityCreator;
 import com.yxbear.sg.svc.play.bean.RegPlay;
 
 @Service
@@ -29,12 +30,18 @@ public class ModelFactory {
         play.setName(regPlay.getName());
         play.setFlagChar(regPlay.getName().substring(0, 1));
         play.setLastCity(SystemUtils.wid2cid(land.getId()));
-        
+
         return play;
     }
 
     public SgData getGameData() {
         return engine.getCtx().getData();
+    }
+
+    public CityCreator withFirstCity(ProvinceLand land, Userable user) {
+        
+        
+        return null;
     }
 
 }

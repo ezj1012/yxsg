@@ -23,7 +23,7 @@ export const gFunPanComps = [
     // { key: 'fun_pan#playerinfo_armor', comp: FunPanlArmor, content: '装备', size: 13, color: '--gold' },
     // { key: 'fun_pan#playerinfo_king', comp: FunPanlKing, content: '君主', size: 13, color: '--gold' },
     // { key: 'fun_pan#city_build_inner_list', comp: FunPanInnverBuild, content: '建造建筑', size: 13, color: '--gold' },
-    { key: 'fun_pan#hero', comp: HeroFun, content: '英雄', size: 13, color: '--gold' },
+    { key: 'fun_pan#topbutton_hero', comp: HeroFun, content: '英雄', size: 13, color: '--gold' },
 ]
 
 

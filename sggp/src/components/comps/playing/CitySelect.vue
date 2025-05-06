@@ -50,7 +50,7 @@ const opsStyle = computed(() => {
       '--def': sctBg,
       '--active': sctDownBg,
     }" @click="() => showOptions = !showOptions">
-      {{ cityName || '' }}
+      {{ cityName || '12' }}
     </div>
     <Scroll v-show="showOptions" class="scroll" :max-height="160" :style="opsStyle" :scorll="true">
       <ul v-show="showOptions">

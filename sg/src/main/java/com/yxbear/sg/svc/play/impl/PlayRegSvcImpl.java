@@ -16,10 +16,14 @@ import com.yxbear.sg.engine.SgEngine;
 import com.yxbear.sg.engine.model.ProvinceLand;
 import com.yxbear.sg.engine.world.WorldMgr;
 import com.yxbear.sg.svc.egimpl.ModelFactory;
+import com.yxbear.sg.svc.play.CitySvc;
 import com.yxbear.sg.svc.play.PlayRegSvc;
 import com.yxbear.sg.svc.play.bean.RegPlay;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class PlayRegSvcImpl implements PlayRegSvc {
 
     ConcurrentHashMap<String, RegPlay> lockedNames = new ConcurrentHashMap<>();
@@ -30,12 +34,14 @@ public class PlayRegSvcImpl implements PlayRegSvc {
 
     final ModelFactory modelFactory;
 
-    public PlayRegSvcImpl(SgEngine sgEngine, GiPlayerMapper playMapper, ModelFactory modelFactory) {
-        super();
-        this.sgEngine = sgEngine;
-        this.playMapper = playMapper;
-        this.modelFactory = modelFactory;
-    }
+    final CitySvc citySvc;
+
+    // public PlayRegSvcImpl(SgEngine sgEngine, GiPlayerMapper playMapper, ModelFactory modelFactory) {
+    // super();
+    // this.sgEngine = sgEngine;
+    // this.playMapper = playMapper;
+    // this.modelFactory = modelFactory;
+    // }
 
     @Override
     public void regPlay(RegPlay regPlay) {
@@ -50,6 +56,8 @@ public class PlayRegSvcImpl implements PlayRegSvc {
             checkName(regPlay, user);
             land = worldMgr.randomAndLockLand(regPlay.getProvinceId());
             createPlayer(land, user, regPlay);
+            citySvc.createFirstCity(land, user);
+
         } finally {
             lockedNames.remove(regPlay.getName());
             worldMgr.release(land);
