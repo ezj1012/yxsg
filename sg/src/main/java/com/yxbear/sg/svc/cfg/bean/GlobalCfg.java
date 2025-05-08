@@ -10,5 +10,7 @@ public class GlobalCfg {
     private String name;
 
     private List<PlayerIcon> playerIcons;
+    
+    
 
 }

@@ -51,11 +51,11 @@ public class CitySvcImpl implements CitySvc {
     @Override
     public void createFirstCity(ProvinceLand land, Userable user) {
         CityCreator cityCreator = modelFactory.withFirstCity(land, user);
-        cityMapper.saveOrUpdate(cityCreator.getCity());
-        cityResourceMapper.saveOrUpdate(cityCreator.getResource());
-        cityResourceAddMapper.saveOrUpdate(cityCreator.getResourceAdd());
-        cityDefenceMapper.saveOrUpdateBatch(cityCreator.getDefences());
-        cityBuildMapper.saveOrUpdateBatch(cityCreator.getBuilds());
+        cityMapper.save(cityCreator.getCity());
+        // cityResourceMapper.save(cityCreator.getResource());
+        // cityResourceAddMapper.save(cityCreator.getResourceAdd());
+        // cityCreator.getDefences().forEach(cityDefenceMapper::save);
+        // cityCreator.getBuilds().forEach(cityBuildMapper::save);
     }
 
     public GiCity createLastCity(PlayInfo info) {
@@ -70,10 +70,11 @@ public class CitySvcImpl implements CitySvc {
 
     @Override
     public void fillCity(PlayInfo info) {
-        List<GiCity> citys = cityMapper.queryList(CGiCity.builder().playId(info.getId()).build(), "create_time asc");
+        List<GiCity> citys = cityMapper.queryList(CGiCity.builder().playId(info.getId()).build(), "ID");
         if (citys.isEmpty()) {
             // 被大空了.
             citys = Arrays.asList(createLastCity(info));
+            // return;
         }
 
         GiCity city = citys.stream().filter(c -> Objects.equals(c.getId(), info.getLastCity())).findFirst().orElse(citys.getFirst());

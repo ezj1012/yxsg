@@ -17,6 +17,7 @@ import com.yxbear.sg.engine.model.ProvinceLand;
 import com.yxbear.sg.engine.world.WorldMgr;
 import com.yxbear.sg.svc.egimpl.ModelFactory;
 import com.yxbear.sg.svc.play.CitySvc;
+import com.yxbear.sg.svc.play.HeroSvc;
 import com.yxbear.sg.svc.play.PlayRegSvc;
 import com.yxbear.sg.svc.play.bean.RegPlay;
 
@@ -35,6 +36,8 @@ public class PlayRegSvcImpl implements PlayRegSvc {
     final ModelFactory modelFactory;
 
     final CitySvc citySvc;
+    
+    final HeroSvc heroSvc;
 
     // public PlayRegSvcImpl(SgEngine sgEngine, GiPlayerMapper playMapper, ModelFactory modelFactory) {
     // super();
@@ -57,6 +60,7 @@ public class PlayRegSvcImpl implements PlayRegSvc {
             land = worldMgr.randomAndLockLand(regPlay.getProvinceId());
             createPlayer(land, user, regPlay);
             citySvc.createFirstCity(land, user);
+            heroSvc.createFirstHero(land, user);
 
         } finally {
             lockedNames.remove(regPlay.getName());

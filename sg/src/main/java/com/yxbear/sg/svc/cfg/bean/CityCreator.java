@@ -9,9 +9,13 @@ import com.yxbear.sg.domain.model.gi.GiCityHero;
 import com.yxbear.sg.domain.model.gi.GiCityResource;
 import com.yxbear.sg.domain.model.gi.GiCityResourceAdd;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class CityCreator {
 
     GiCity city;

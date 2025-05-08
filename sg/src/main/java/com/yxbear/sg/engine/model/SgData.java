@@ -11,4 +11,6 @@ public class SgData {
 
     String playerTemplate;
 
+    String cityTemplate;
+
 }

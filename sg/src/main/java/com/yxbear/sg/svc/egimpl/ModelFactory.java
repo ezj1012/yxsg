@@ -3,8 +3,11 @@ package com.yxbear.sg.svc.egimpl;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson2.JSON;
+import com.yxbear.core.coder.CoderController;
+import com.yxbear.core.coder.configuration.CoderConfiguration;
 import com.yxbear.sg.domain.SystemUtils;
 import com.yxbear.sg.domain.bean.Userable;
+import com.yxbear.sg.domain.model.gi.GiCity;
 import com.yxbear.sg.domain.model.gi.GiPlayer;
 import com.yxbear.sg.engine.SgEngine;
 import com.yxbear.sg.engine.model.ProvinceLand;
@@ -15,11 +18,17 @@ import com.yxbear.sg.svc.play.bean.RegPlay;
 @Service
 public class ModelFactory {
 
+    private final CoderController coderController;
+
+    private final CoderConfiguration coderConfiguration;
+
     final SgEngine engine;
 
-    public ModelFactory(SgEngine engine) {
+    public ModelFactory(SgEngine engine, CoderConfiguration coderConfiguration, CoderController coderController) {
         super();
         this.engine = engine;
+        this.coderConfiguration = coderConfiguration;
+        this.coderController = coderController;
     }
 
     public GiPlayer withPlayer(ProvinceLand land, Userable user, RegPlay regPlay) {
@@ -39,9 +48,23 @@ public class ModelFactory {
     }
 
     public CityCreator withFirstCity(ProvinceLand land, Userable user) {
+        CityCreator cc = JSON.parseObject(getGameData().getCityTemplate(), CityCreator.class);
+        GiCity city = cc.getCity();
+        city.setId(land.toCityId());
+        city.setPlayId(user.getId());
         
-        
-        return null;
+        return cc;
+    }
+
+    public static void main(String[] args) {
+        GiCity city = new GiCity();
+        city.setName("新城池");
+        city.setState(1);
+        city.setCityType(0);
+        CityCreator c = new CityCreator();
+        c.setCity(city);
+        System.out.println(JSON.toJSONString(c));
+
     }
 
 }
