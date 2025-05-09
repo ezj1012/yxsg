@@ -58,6 +58,9 @@ public interface BaseMapper<I extends Number, T extends EntityBean<I>, C extends
     }
 
     @InsertProvider
+    void replaceSave(@Param("entity") T t);
+
+    @InsertProvider
     void save(@Param("entity") T t);
 
     @UpdateProvider

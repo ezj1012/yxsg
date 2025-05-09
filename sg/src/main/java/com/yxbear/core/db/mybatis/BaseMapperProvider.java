@@ -75,8 +75,26 @@ public class BaseMapperProvider implements ProviderMethodResolver {
         return queryList(cdt, orders, context);
     }
 
+    public static String replaceSave(@Param("entity") EntityBean<?> bean, ProviderContext context) {
+        if (bean.getId() == null) { return save(bean, context); }
+
+        MyBatisTableInfo tableInfo = tableInfo(context);
+        beforeSave(bean, tableInfo);
+        String sql = tableInfo.replaceSave(bean);
+
+        log.debug(sql);
+        return sql;
+    }
+
     public static String save(@Param("entity") EntityBean<?> bean, ProviderContext context) {
         MyBatisTableInfo tableInfo = tableInfo(context);
+        beforeSave(bean, tableInfo);
+        String sql = tableInfo.save(bean).toString();
+        log.debug(sql);
+        return sql;
+    }
+
+    private static void beforeSave(@Param("entity") EntityBean<?> bean, MyBatisTableInfo tableInfo) {
         if (bean.getId() == null) {
             try {
                 TableColumn idColumn = tableInfo.getTabelInfo().getIdColumn();
@@ -96,9 +114,6 @@ public class BaseMapperProvider implements ProviderMethodResolver {
                 aer.setModifyTime(createTime);
             }
         }
-        String sql = tableInfo.save(bean).toString();
-        log.debug(sql);
-        return sql;
     }
 
     public static String updateById(@Param("id") Number id, @Param("entity") EntityBean<?> bean, ProviderContext context) {

@@ -62,6 +62,11 @@ public class MyBatisTableInfo {
         return select().WHERE(ID_CDT);
     }
 
+    public String replaceSave(EntityBean<?> bean) {
+        SQL save = save(bean);
+        return "REPLACE" + save.toString().substring(6);
+    }
+
     public SQL save(EntityBean<?> bean) {
         SQL sql = new SQL().INSERT_INTO(tableInfo.getTableName());
         tableInfo.getColumns().forEach(col -> {
