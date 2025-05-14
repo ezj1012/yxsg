@@ -1,8 +1,6 @@
 package com.yxbear.sg.svc.play.impl;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 import org.springframework.stereotype.Service;
 
@@ -24,8 +22,6 @@ import com.yxbear.sg.engine.model.ProvinceLand;
 import com.yxbear.sg.svc.cfg.bean.CityCreator;
 import com.yxbear.sg.svc.egimpl.ModelFactory;
 import com.yxbear.sg.svc.play.CitySvc;
-import com.yxbear.sg.svc.play.bean.CityInfo;
-import com.yxbear.sg.svc.play.bean.CityIntro;
 import com.yxbear.sg.svc.play.bean.PlayInfo;
 
 import lombok.RequiredArgsConstructor;
@@ -66,28 +62,6 @@ public class CitySvcImpl implements CitySvc {
         } finally {
             sgEngine.getWorldMgr().release(land);
         }
-    }
-
-    @Override
-    public void fillCity(PlayInfo info) {
-        List<GiCity> citys = cityMapper.queryList(CGiCity.builder().playId(info.getId()).build(), "ID");
-        if (citys.isEmpty()) {
-            // 被大空了.
-            citys = Arrays.asList(createLastCity(info));
-            // return;
-        }
-
-        GiCity city = citys.stream().filter(c -> Objects.equals(c.getId(), info.getLastCity())).findFirst().orElse(citys.getFirst());
-        CityInfo cityInfo = fillCityInfo(SystemUtils.copy(city, CityInfo.class));
-
-        info.setCities(citys.stream().map(CityIntro::from).toList());
-        info.setCity(cityInfo);
-
-    }
-
-    private CityInfo fillCityInfo(CityInfo cityInfo) {
-
-        return cityInfo;
     }
 
     @Override

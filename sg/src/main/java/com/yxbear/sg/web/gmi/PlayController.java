@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.yxbear.core.bean.R;
 import com.yxbear.sg.domain.bean.LoginUser;
 import com.yxbear.sg.svc.play.PlayRegSvc;
-import com.yxbear.sg.svc.play.PlaySvc;
+import com.yxbear.sg.svc.play.PlayInfoSvc;
 import com.yxbear.sg.svc.play.bean.PlayInfo;
 import com.yxbear.sg.svc.play.bean.QPlayState;
 import com.yxbear.sg.svc.play.bean.RegPlay;
@@ -24,7 +24,7 @@ public class PlayController {
 
     SSOSvc ssoSvc;
 
-    PlaySvc palySvc;
+    PlayInfoSvc palySvc;
 
     PlayRegSvc playRegSvc;
 
