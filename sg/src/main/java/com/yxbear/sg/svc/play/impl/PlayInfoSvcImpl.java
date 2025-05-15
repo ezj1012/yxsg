@@ -24,7 +24,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class PlaySvcImpl implements PlayInfoSvc {
+public class PlayInfoSvcImpl implements PlayInfoSvc {
 
     final GiPlayerMapper playMapper;
 
