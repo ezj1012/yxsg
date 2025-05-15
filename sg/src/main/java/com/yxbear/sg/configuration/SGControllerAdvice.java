@@ -11,6 +11,8 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
+import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -26,7 +28,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
-@ControllerAdvice(basePackages = {"com.yxbear.sg"})
+@ControllerAdvice(basePackages = { "com.yxbear.sg" })
 public class SGControllerAdvice implements ResponseBodyAdvice<Object> {
 
     /**
@@ -36,8 +38,9 @@ public class SGControllerAdvice implements ResponseBodyAdvice<Object> {
      * @param response
      * @param exception
      */
-    @ExceptionHandler({CoreException.class})
-    public void frameworkExceptionHandler(HttpServletRequest request, HttpServletResponse response, Exception exception, InputStream is) {
+    @ExceptionHandler({ CoreException.class })
+    public void frameworkExceptionHandler(HttpServletRequest request, HttpServletResponse response, Exception exception,
+            InputStream is) {
         log.error(exception.getMessage(), exception);
         int stateCode = HttpStatus.INTERNAL_SERVER_ERROR.value();
 
@@ -55,7 +58,8 @@ public class SGControllerAdvice implements ResponseBodyAdvice<Object> {
     }
 
     // @ExceptionHandler({NotLoginException.class})
-    // public void notLoginExceptionHandler(HttpServletRequest request, HttpServletResponse response, Exception exception, InputStream is) {
+    // public void notLoginExceptionHandler(HttpServletRequest request,
+    // HttpServletResponse response, Exception exception, InputStream is) {
     // log.error(exception.getMessage(), exception);
     // int stateCode = HttpStatus.INTERNAL_SERVER_ERROR.value();
     //
@@ -99,14 +103,20 @@ public class SGControllerAdvice implements ResponseBodyAdvice<Object> {
     }
 
     @Override
-    public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
+    public boolean supports(@NonNull MethodParameter returnType,
+            @NonNull Class<? extends HttpMessageConverter<?>> converterType) {
         // 需要测试文件类型会不会走这个方法,如果文件类型会走则应该返回false
         return true;
     }
 
     @Override
-    public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class<? extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
-        if (body == null) { return new R<>(body); }
+    public Object beforeBodyWrite(@Nullable Object body, @NonNull MethodParameter returnType,
+            @NonNull MediaType selectedContentType,
+            @NonNull Class<? extends HttpMessageConverter<?>> selectedConverterType, @NonNull ServerHttpRequest request,
+            @NonNull ServerHttpResponse response) {
+        if (body == null) {
+            return new R<>(body);
+        }
         if (body instanceof R) {
             R<?> t = (R<?>) body;
             if (t.getCode() != 200) {
@@ -116,7 +126,9 @@ public class SGControllerAdvice implements ResponseBodyAdvice<Object> {
                 }
             }
             return body;
-        } else if (body instanceof String) { return JSON.toJSONString(new R<>(body)); }
+        } else if (body instanceof String) {
+            return JSON.toJSONString(new R<>(body));
+        }
         return new R<>(body);
     }
 

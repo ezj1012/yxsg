@@ -14,6 +14,7 @@ import com.yxbear.sg.domain.model.gi.CGiCity;
 import com.yxbear.sg.domain.model.gi.GiCity;
 import com.yxbear.sg.domain.model.gi.GiPlayer;
 import com.yxbear.sg.domain.model.gi.GiUnion;
+import com.yxbear.sg.svc.play.CommQuerySvc;
 import com.yxbear.sg.svc.play.PlayInfoSvc;
 import com.yxbear.sg.svc.play.bean.CityInfo;
 import com.yxbear.sg.svc.play.bean.CityIntro;
@@ -31,16 +32,17 @@ public class PlayInfoSvcImpl implements PlayInfoSvc {
     final GiCityMapper cityMapper;
 
     final GiUnionMapper unionMapper;
-    // final UnionSvc unionSvc;
 
-    // final CitySvc citySvc;
+    final CommQuerySvc querySvc;
 
     @Override
     public PlayInfo getPlayInfo(QPlayState state) {
         LoginUser user = SystemUtils.getCurUser();
         // deleteAll(user.getId());
         GiPlayer player = playMapper.selectById(user.getId());
-        if (player == null) { return null; }
+        if (player == null) {
+            return null;
+        }
 
         PlayInfo info = SystemUtils.copy(player, PlayInfo.class);
 
@@ -58,18 +60,12 @@ public class PlayInfoSvcImpl implements PlayInfoSvc {
             // return;
         }
 
-        GiCity city = citys.stream().filter(c -> Objects.equals(c.getId(), info.getLastCity())).findFirst().orElse(citys.getFirst());
-        CityInfo cityInfo = fillCityInfo(SystemUtils.copy(city, CityInfo.class));
+        GiCity city = citys.stream().filter(c -> Objects.equals(c.getId(), info.getLastCity())).findFirst()
+                .orElse(citys.getFirst());
+        CityInfo cityInfo = querySvc.getCityInfo(city.getId());
 
         info.setCities(citys.stream().map(CityIntro::from).toList());
         info.setCity(cityInfo);
-
-        //
-
-    }
-
-    private CityInfo fillCityInfo(CityInfo cityInfo) {
-        return cityInfo;
     }
 
     private void fillUnion(PlayInfo info) {

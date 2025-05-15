@@ -64,7 +64,7 @@ onUnmounted(async () => {
                 <KeyValue v-else-if="comp.type() == CfgType.keyValue" :cfg="comp" v-show="comp.show()"
                     :id="comp.key()" /> <!-- -->
                 <template v-else-if="comp.type() == CfgType.customComp" v-show="comp.show()">
-                    <!-- <ProvincesMap v-if="comp.show() && comp.refComp() == 'provincesMap'" :cfg="comp" :id="comp.key()" /> -->
+                    <ProvincesMap v-if="comp.show() && comp.refComp() == 'provincesMap'" :cfg="comp" :id="comp.key()" />
                     <CitySelect v-if="comp.show() && comp.refComp() == 'citySelect'" :cfg="comp" :id="comp.key()" />
                     <!-- <InnerMain v-if="comp.show() && comp.refComp() == 'innerMain'" :cfg="comp" :id="comp.key()" /> -->
                     <!-- <ChatPan v-if="comp.show() && comp.refComp() == 'chatPan'" :cfg="comp" :id="comp.key()" />

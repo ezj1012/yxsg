@@ -69,6 +69,14 @@ public class CGiCity implements Condition {
 
     private Integer endCounsellorId;
 
+    private Integer generalId;
+
+    private Integer[] generalIds;
+
+    private Integer startGeneralId;
+
+    private Integer endGeneralId;
+
     private Integer provinceId;
 
     private Integer[] provinceIds;

@@ -1,6 +1,7 @@
 package com.yxbear.sg.engine.world;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -103,7 +104,13 @@ public class WorldMgr implements Mgrable {
         List<WorldTile> tiles = getCtx().getWorldDataLoader().loadTiles(validIds);
         tiles.forEach(t -> t.setCurLevel(random.nextInt(30)));
         Map<Integer, WorldTile> idMap = tiles.stream().collect(Collectors.toMap(WorldTile::getId, a -> a));
-        return result.stream().map(id -> idMap.computeIfAbsent(id, id2 -> new WorldTile(id2, errMap.get(id2)))).toList();
+        return result.stream().map(id -> idMap.computeIfAbsent(id, id2 -> new WorldTile(id2, errMap.get(id2))))
+                .toList();
+    }
+
+    public ProvinceLand getLand(int wid) {
+        WorldTile worldTile = getCtx().getWorldDataLoader().loadTiles(Arrays.asList(wid)).get(0);
+        return new ProvinceLand(wid, ctx.getData().getProvinces().get(worldTile.getProvince()));
     }
 
 }

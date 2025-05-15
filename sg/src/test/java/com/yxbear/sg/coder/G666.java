@@ -3,13 +3,14 @@ package com.yxbear.sg.coder;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.Iterator;
 import java.util.List;
 
 public class G666 {
 
     public static void main(String[] args) throws IOException {
-        File[] fs = new File("D:\\workspace\\tyy\\tyy-sg\\tyy-sg\\tyy-sg-comm\\src\\main\\java\\com\\tyy\\sg\\domain\\model\\gi").listFiles(f -> f.getName().endsWith(".java"));
+        File[] fs = new File(
+                "D:\\workspace\\tyy\\tyy-sg\\tyy-sg\\tyy-sg-comm\\src\\main\\java\\com\\tyy\\sg\\domain\\model\\gi")
+                .listFiles(f -> f.getName().endsWith(".java"));
         for (File file : fs) {
             System.err.println("=======================================================");
             System.out.println(file.getName());

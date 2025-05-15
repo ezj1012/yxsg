@@ -7,6 +7,12 @@ public interface CitySvc {
 
     void createFirstCity(ProvinceLand land, Userable user);
 
+    void createBuilding(int cid, int pos, int bId);
+
+    // void upgradeBuilding(int cid, int cbId);
+
+    // void degradeBuilding(int cid, int cbId, boolean useGoods);
+
     void deleteAll(int playId);
 
 }

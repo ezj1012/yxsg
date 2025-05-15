@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.lang.NonNull;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -35,8 +36,8 @@ import cn.dev33.satoken.stp.StpUtil;
 import cn.dev33.satoken.util.SaResult;
 
 @Configuration
-@PropertySource({"classpath:sg.properties"})
-@EnableConfigurationProperties({SGProps.class})
+@PropertySource({ "classpath:sg.properties" })
+@EnableConfigurationProperties({ SGProps.class })
 @EnablePrimaryKeyServer
 @EnableCoder
 public class SgConfiguration implements WebMvcConfigurer {
@@ -76,8 +77,7 @@ public class SgConfiguration implements WebMvcConfigurer {
                 //
                 .addExclude(permitAll.toArray(new String[permitAll.size()]))
                 //
-                .setAuth(obj ->
-                {
+                .setAuth(obj -> {
                     if (!StpUtil.isLogin()) {
                         if (SaHolder.getRequest().isAjax()) {
                             SpringMVCUtil.getResponse().setStatus(401);
@@ -88,8 +88,10 @@ public class SgConfiguration implements WebMvcConfigurer {
                             // SaHolder.getRequest().forward("/index.html");
                             // SaRouter.back();
                             // } else {
-                            // String back = SaFoxUtil.joinParam(SaHolder.getRequest().getUrl(), SpringMVCUtil.getRequest().getQueryString());
-                            // SaHolder.getResponse().redirect("/sso/login?back=" + SaFoxUtil.encodeUrl(back));
+                            // String back = SaFoxUtil.joinParam(SaHolder.getRequest().getUrl(),
+                            // SpringMVCUtil.getRequest().getQueryString());
+                            // SaHolder.getResponse().redirect("/sso/login?back=" +
+                            // SaFoxUtil.encodeUrl(back));
                             // SaHolder.getResponse().redirect("/");
                             // SaRouter.back();
                             // }
@@ -99,12 +101,12 @@ public class SgConfiguration implements WebMvcConfigurer {
     }
 
     @Override
-    public void addInterceptors(InterceptorRegistry registry) {
+    public void addInterceptors(@NonNull InterceptorRegistry registry) {
         List<String> vueRouters = new ArrayList<>();
         vueRouters.add("/code/");
-//        vueRouters.add("/code/index.html");
+        // vueRouters.add("/code/index.html");
         registry.addInterceptor(new VueRouterHistoryHandler(vueRouters));
-        
+
         HashSet<Object> igset = new HashSet<>();
         permitAll.stream().filter(a -> a.startsWith("/mgr")).forEach(igset::add);
         igset.addAll(sgProps.getPermitPermissionAll());
@@ -117,7 +119,7 @@ public class SgConfiguration implements WebMvcConfigurer {
     }
 
     @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+    public void addResourceHandlers(@NonNull ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/rsm/**").addResourceLocations(
                 //
                 new FileSystemResource(sgProps.getRsmDir() + "/"));

@@ -4,23 +4,34 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson2.JSON;
 import com.yxbear.core.exception.ServiceException;
+import com.yxbear.sg.domain.SystemUtils;
 import com.yxbear.sg.domain.bean.SGProps;
+import com.yxbear.sg.domain.mapper.cfg.CfgBuildingConditionMapper;
+import com.yxbear.sg.domain.mapper.cfg.CfgBuildingLevelMapper;
+import com.yxbear.sg.domain.mapper.cfg.CfgBuildingMapper;
+import com.yxbear.sg.domain.model.cfg.CfgBuildingCondition;
+import com.yxbear.sg.domain.model.cfg.CfgBuildingLevel;
 import com.yxbear.sg.svc.cfg.FrameCfgSvc;
+import com.yxbear.sg.svc.cfg.bean.Building;
 import com.yxbear.sg.svc.cfg.bean.FrameCfg;
 import com.yxbear.sg.svc.cfg.bean.GlobalCfg;
 import com.yxbear.sg.svc.cfg.bean.PlayerIcon;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
 // @AllArgsConstructor
+@RequiredArgsConstructor
 public class FrameCfgSvcImpl implements FrameCfgSvc, InitializingBean {
-
-    SGProps sgProps;
 
     File frameCfgFile;
 
@@ -30,10 +41,11 @@ public class FrameCfgSvcImpl implements FrameCfgSvc, InitializingBean {
 
     GlobalCfg globalCfg;
 
-    public FrameCfgSvcImpl(SGProps sgProps) {
-        super();
-        this.sgProps = sgProps;
-    }
+    final SGProps sgProps;
+
+    final CfgBuildingMapper buildingMapper;
+    final CfgBuildingLevelMapper buildingLevelMapper;
+    final CfgBuildingConditionMapper buildingConditionMapper;
 
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -60,6 +72,26 @@ public class FrameCfgSvcImpl implements FrameCfgSvc, InitializingBean {
         globalCfg = new GlobalCfg();
         PlayerIcon.refresh(iconDir);
         globalCfg.setPlayerIcons(PlayerIcon.getPlayerIcons());
+        globalCfg.setBuildingsMap(readBuilding());
+    }
+
+    private Map<Integer, Building> readBuilding() {
+        Map<Integer, Map<Integer, CfgBuildingLevel>> bLvMap = buildingLevelMapper.queryAll().stream()
+                .collect(Collectors.groupingBy(CfgBuildingLevel::getBuildId,
+                        Collectors.toMap(CfgBuildingLevel::getLevel, Function.identity())));
+        Map<Integer, Map<Integer, List<CfgBuildingCondition>>> bCdtMap = buildingConditionMapper.queryAll().stream()
+                .collect(Collectors.groupingBy(CfgBuildingCondition::getBuildId,
+                        Collectors.groupingBy(CfgBuildingCondition::getLevelId)));
+
+        Map<Integer, Building> bMap = buildingMapper.queryAll().stream()
+                .map(b -> {
+                    Building rb = SystemUtils.copy(b, Building.class);
+                    rb.setLevels(bLvMap.get(b.getId()));
+                    rb.setPreCdts(bCdtMap.get(b.getId()));
+                    return rb;
+                }).collect(Collectors.toMap(b -> b.getId(), b -> b));
+
+        return bMap;
     }
 
     private void readFrameCfg() {

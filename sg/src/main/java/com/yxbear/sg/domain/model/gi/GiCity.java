@@ -22,13 +22,16 @@ public class GiCity implements EntityBean<Integer> {
     /** 城池状态0：正常;1：新手保护;2：免战;3：休假 */
     private Integer state;
 
-    /**  */
+    /** 城守ID */
     private Integer chiefhId;
 
-    /**  */
+    /** 军师ID */
     private Integer counsellorId;
 
-    /**  */
+    /** 将军ID */
+    private Integer generalId;
+
+    /** 城池所属州 */
     private Integer provinceId;
 
     /** 否是可以募兵，0表示不可以，1表示可以，大于2，最后招募时间 */
