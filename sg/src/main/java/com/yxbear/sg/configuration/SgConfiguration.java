@@ -8,6 +8,7 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
@@ -36,8 +37,8 @@ import cn.dev33.satoken.stp.StpUtil;
 import cn.dev33.satoken.util.SaResult;
 
 @Configuration
-@PropertySource({ "classpath:sg.properties" })
-@EnableConfigurationProperties({ SGProps.class })
+@PropertySource({"classpath:sg.properties"})
+@EnableConfigurationProperties({SGProps.class})
 @EnablePrimaryKeyServer
 @EnableCoder
 public class SgConfiguration implements WebMvcConfigurer {
@@ -128,9 +129,13 @@ public class SgConfiguration implements WebMvcConfigurer {
     }
 
     @Bean
-    SgEngine initSgEngine(SgWorldDataLoader worldDataLoader) {
-        SgDataLoader dataMgr = new DefaultSgDataLoader();
-        SgContext ctx = new SgContext(dataMgr, worldDataLoader);
+    SgDataLoader iniWorldDataLoader() {
+        return new DefaultSgDataLoader();
+    }
+
+    @Bean
+    SgEngine initSgEngine(ApplicationContext applicationContext) {
+        SgContext ctx = new SgContext(applicationContext);
         return new SgEngine(ctx);
     }
 

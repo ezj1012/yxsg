@@ -505,7 +505,8 @@ public class CodeBuilder {
         }
 
         static final String MODEL_FORMAT = "package %s;\n\n" + "import %s;\n\n" //
-                + "import lombok.Data;\n\n@Data\n" //
+
+                + "import lombok.AllArgsConstructor;\nimport lombok.Data;\nimport lombok.NoArgsConstructor;\n\n@Data\n@NoArgsConstructor\n@AllArgsConstructor\n" //
                 + "public class %s implements EntityBean<%s> {\n\n%s%s}" //
         ;
 

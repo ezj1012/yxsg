@@ -2,7 +2,6 @@ package com.yxbear.sg.web.adm;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -68,6 +67,12 @@ public class CommController {
     @GetMapping("/city/{cid}/{pos}/{bid}")
     public R<CityInfo> getMethodName(@PathVariable int cid, @PathVariable int pos, @PathVariable int bid) {
         citySvc.createBuilding(cid, pos, bid);
+        return R.of(querySvc.getCityInfo(cid));
+    }
+
+    @GetMapping("/city/{cid}/{cbId}/up")
+    public R<CityInfo> buildUp(@PathVariable int cid, @PathVariable int cbId) {
+        citySvc.upgradeBuilding(cid, cbId);
         return R.of(querySvc.getCityInfo(cid));
     }
 

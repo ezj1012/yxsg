@@ -4,12 +4,15 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.Collection;
+import java.util.Map;
 
 public class CommUtils {
 
     public static final DateTimeFormatter YYYYMMDDHHMMSS_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
 
-    public static final DateTimeFormatter YYYYMMDDHHMMSS2_FORMATTER = DateTimeFormatter.ofPattern("yyyy年MM月dd日 HH:mm:ss");
+    public static final DateTimeFormatter YYYYMMDDHHMMSS2_FORMATTER = DateTimeFormatter
+            .ofPattern("yyyy年MM月dd日 HH:mm:ss");
 
     public static Long curDateTime() {
         return Long.parseLong(YYYYMMDDHHMMSS_FORMATTER.format(LocalDateTime.now()));
@@ -44,6 +47,14 @@ public class CommUtils {
         return obj == null || "".equals(obj.trim());
     }
 
+    public static boolean isEmpty(Map<?, ?> obj) {
+        return obj == null || obj.isEmpty();
+    }
+
+    public static boolean isEmpty(Collection<?> obj) {
+        return obj == null || obj.isEmpty();
+    }
+
     public static String upFirstChar(String name) {
         char[] charArray = name.toCharArray();
         charArray[0] = Character.toUpperCase(charArray[0]);
@@ -64,7 +75,8 @@ public class CommUtils {
     // Object v = f.get(s);
     // if (v == null) {
     // String defaultValue = f.getAnnotation(Cfg.class).defaultValue();
-    // if ((defaultValue == null || "".equals(defaultValue)) && Number.class.isAssignableFrom(f.getType())) { return "0"; }
+    // if ((defaultValue == null || "".equals(defaultValue)) &&
+    // Number.class.isAssignableFrom(f.getType())) { return "0"; }
     // return defaultValue;
     // } else if (v instanceof Boolean) {
     // return (boolean) v ? "1" : "0";

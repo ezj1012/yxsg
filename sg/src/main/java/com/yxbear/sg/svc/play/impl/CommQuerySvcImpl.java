@@ -1,14 +1,22 @@
 package com.yxbear.sg.svc.play.impl;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
+import com.yxbear.core.CommUtils;
 import com.yxbear.sg.domain.SystemUtils;
+import com.yxbear.sg.domain.mapper.cfg.CfgGoodsMapper;
 import com.yxbear.sg.domain.mapper.gi.GiCityBuildMapper;
 import com.yxbear.sg.domain.mapper.gi.GiCityDefenceMapper;
 import com.yxbear.sg.domain.mapper.gi.GiCityMapper;
 import com.yxbear.sg.domain.mapper.gi.GiCityResourceAddMapper;
 import com.yxbear.sg.domain.mapper.gi.GiCityResourceMapper;
 import com.yxbear.sg.domain.mapper.gi.GiCitySoldierMapper;
+import com.yxbear.sg.domain.model.cfg.CCfgGoods;
+import com.yxbear.sg.domain.model.cfg.CfgGoods;
 import com.yxbear.sg.domain.model.gi.CGiCityBuild;
 import com.yxbear.sg.domain.model.gi.CGiCityDefence;
 import com.yxbear.sg.domain.model.gi.CGiCitySoldier;
@@ -30,6 +38,8 @@ public class CommQuerySvcImpl implements CommQuerySvc {
     final GiCityDefenceMapper defMapper;
     final GiCitySoldierMapper soldierMapper;
 
+    final CfgGoodsMapper goodsMapper;
+
     @Override
     public CityInfo getCityInfo(int cid) {
         GiCity city = cityMapper.selectById(cid);
@@ -50,5 +60,13 @@ public class CommQuerySvcImpl implements CommQuerySvc {
         info.setMaxOuterBuild(20 + lv * 3);
         return info;
     }
-    
+
+    @Override
+    public List<CfgGoods> getGoods(Collection<Integer> ids) {
+        if (CommUtils.isEmpty(ids)) {
+            return new ArrayList<>();
+        }
+        return goodsMapper.queryList(CCfgGoods.builder().ids(ids.toArray(Integer[]::new)).build(), "id");
+    }
+
 }

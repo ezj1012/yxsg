@@ -2,9 +2,13 @@ package com.yxbear.sg.domain.model.gi;
 
 import com.yxbear.core.bean.EntityBean;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class GiCityBuild implements EntityBean<Integer> {
 
     /** 唯一主键 */

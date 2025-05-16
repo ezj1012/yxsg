@@ -31,6 +31,9 @@ public class GiCity implements EntityBean<Integer> {
     /** 将军ID */
     private Integer generalId;
 
+    /** 书院等级 */
+    private Integer collegelv;
+
     /** 城池所属州 */
     private Integer provinceId;
 

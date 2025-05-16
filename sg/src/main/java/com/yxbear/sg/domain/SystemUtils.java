@@ -1,5 +1,6 @@
 package com.yxbear.sg.domain;
 
+import com.yxbear.core.exception.ServiceException;
 import org.springframework.beans.BeanUtils;
 
 import com.yxbear.core.exception.CoreException;
@@ -22,7 +23,9 @@ public class SystemUtils {
     }
 
     public static void checkEmpty(Object obj, String str) {
-        if (obj == null || obj instanceof String && "".equals(((String) obj).trim())) { throw new CoreException("参数" + str + "不可为空!"); }
+        if (obj == null || obj instanceof String && "".equals(((String) obj).trim())) {
+            throw new CoreException("参数" + str + "不可为空!");
+        }
     }
 
     public static <T> T copy(Object source, Class<? extends T> clazz) {
@@ -32,11 +35,8 @@ public class SystemUtils {
     }
 
     /**
-     * 
-     * @param x
-     *            1-500
-     * @param y
-     *            1-500
+     * @param x 1-500
+     * @param y 1-500
      * @return
      */
     public static int wid(int x, int y) {
@@ -50,7 +50,7 @@ public class SystemUtils {
     public static int[] cid2xy(int cid) {
         int y = Math.floorDiv(cid, 1000);
         int x = (cid % 1000);
-        return new int[] {x, y};
+        return new int[]{x, y};
     }
 
     public static int wid2cid(int wid) {
@@ -62,7 +62,7 @@ public class SystemUtils {
     public static int[] wid2xy(int wid) {
         int y = (Math.floorDiv(wid, 10000) * 10 + Math.floorDiv((wid % 100), 10));
         int x = (Math.floorDiv((wid % 10000), 100) * 10 + (wid % 10));
-        return new int[] {x, y};
+        return new int[]{x, y};
     }
 
     public static int cid2wid(int cid) {
@@ -70,9 +70,45 @@ public class SystemUtils {
         int x = (cid % 1000);
         return wid(x, y);
     }
+
+    /**
+     * 计算减免后的值
+     *
+     * @param base  基础值
+     * @param level 减免次数 >=0
+     * @param rate  百分比 30 = 30%
+     * @return 至少返回1
+     */
+    public static long calculateDerateAndMin1(Long base, Long level, double rate) {
+        long r = calculateDerate(base, level, rate);
+        return r == 0 ? 1 : r;
+    }
+
+    public static long calculateDerate(Long base, Long level, double rate) {
+        if (base == null || base < 1) {
+            return 1;
+        }
+        if (level == null || level < 1) {
+            return base;
+        }
+        return (long) (base * Math.pow((100 - rate) / 100d, level));
+    }
+
     public static void main(String[] args) {
-        System.out.println(true&true);
-        System.out.println(true&false);
-        System.out.println(false&true);
+        System.out.println(true & true);
+        System.out.println(true & false);
+        System.out.println(false & true);
+    }
+
+    public static void check(boolean cdt, String msg) {
+        if (cdt) {
+            throw new ServiceException(msg);
+        }
+    }
+
+    public static void check(boolean cdt, String msg, int code) {
+        if (cdt) {
+            throw new ServiceException(code, msg);
+        }
     }
 }

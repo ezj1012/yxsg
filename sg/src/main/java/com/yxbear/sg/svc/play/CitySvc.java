@@ -1,7 +1,10 @@
 package com.yxbear.sg.svc.play;
 
 import com.yxbear.sg.domain.bean.Userable;
+import com.yxbear.sg.domain.model.mem.MemCityBuildUpgrading;
 import com.yxbear.sg.engine.model.ProvinceLand;
+
+import java.util.List;
 
 public interface CitySvc {
 
@@ -9,10 +12,11 @@ public interface CitySvc {
 
     void createBuilding(int cid, int pos, int bId);
 
-    // void upgradeBuilding(int cid, int cbId);
+    void upgradeBuilding(int cid, int cbId);
 
     // void degradeBuilding(int cid, int cbId, boolean useGoods);
 
     void deleteAll(int playId);
 
+    void finishBuildUpgrading(List<MemCityBuildUpgrading> list);
 }

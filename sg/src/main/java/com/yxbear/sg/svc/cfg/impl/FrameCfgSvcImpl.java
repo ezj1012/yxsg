@@ -3,6 +3,7 @@ package com.yxbear.sg.svc.cfg.impl;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -79,9 +80,12 @@ public class FrameCfgSvcImpl implements FrameCfgSvc, InitializingBean {
         Map<Integer, Map<Integer, CfgBuildingLevel>> bLvMap = buildingLevelMapper.queryAll().stream()
                 .collect(Collectors.groupingBy(CfgBuildingLevel::getBuildId,
                         Collectors.toMap(CfgBuildingLevel::getLevel, Function.identity())));
-        Map<Integer, Map<Integer, List<CfgBuildingCondition>>> bCdtMap = buildingConditionMapper.queryAll().stream()
-                .collect(Collectors.groupingBy(CfgBuildingCondition::getBuildId,
-                        Collectors.groupingBy(CfgBuildingCondition::getLevelId)));
+        Map<Integer, Map<Integer, Map<Integer, Map<Integer, Integer>>>> bCdtMap = new HashMap<>();
+        for (CfgBuildingCondition cfgBuildingCondition : buildingConditionMapper.queryAll()) {
+            if (bCdtMap.computeIfAbsent(cfgBuildingCondition.getBuildId(), k1 -> new HashMap<>()).computeIfAbsent(cfgBuildingCondition.getLevelId(), key -> new HashMap<>()).computeIfAbsent(cfgBuildingCondition.getPreType(), k -> new HashMap<>()).put(cfgBuildingCondition.getPreId(), cfgBuildingCondition.getPreLevel()) != null) {
+                throw new IllegalStateException("Duplicate key");
+            }
+        }
 
         Map<Integer, Building> bMap = buildingMapper.queryAll().stream()
                 .map(b -> {

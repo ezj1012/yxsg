@@ -34,3 +34,28 @@ CREATE TABLE IF NOT EXISTS `CFG_BUILDING_LEVEL` (
   `MODIFY_TIME` bigint,
   PRIMARY KEY (`id`)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
+
+
+CREATE TABLE IF NOT EXISTS `CFG_GOODS` (
+  `ID` INT NOT NULL,
+  `NAME` varchar(100)    COMMENT '名字',
+  `INUSE` TINYINT    COMMENT '0: 禁用 1:使用中',
+  `BATTLE` SMALLINT    COMMENT '战场获得概率',
+  `COPPER_BOX` SMALLINT    COMMENT '青铜箱获得概率',
+  `SILVER_BOX` SMALLINT    COMMENT '白银箱获得概率',
+  `GOLD_BOX` SMALLINT    COMMENT '黄金箱获得概率',
+  `DIAMOND_BOX` SMALLINT    COMMENT '钻石箱获得概率',
+  `GOODS_VALUE` INT    COMMENT '价值 /** */',
+  `GROUP_TYPE` TINYINT    COMMENT '0: 宝物类,1:加速类,2:生产类,3:宝箱类,4:珠宝类,5:任务类',
+  `IMAGE` varchar(1000)    COMMENT '物品图片',
+  `DESCRIPTION` varchar(1000)    COMMENT '描述',
+  `USE_GUIDE` varchar(1000)    COMMENT '使用指南',
+  `AUTO_USE` TINYINT    COMMENT '0: 无法主动使用,1:可以页面使用',
+  `ZUOQI_TYPE` TINYINT    COMMENT '1: 盔类, 2:甲类, 3:鞍类, 4:绳类, 5:脚类',
+  `LEVEL` INT    COMMENT '等级',
+  `ATTRS` varchar(200)    COMMENT '属性加成',
+  `IMAGE_TYPE` INT    COMMENT '1: 将领头像image = x对应hero_boy_x.jpg /** */',
+  `BATCH` TINYINT    COMMENT '0表示不能批量使用，1表示可以批量使用',
+  `COMPOSE` TINYINT    COMMENT '0表示不可以合成，1表示可以合成',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4

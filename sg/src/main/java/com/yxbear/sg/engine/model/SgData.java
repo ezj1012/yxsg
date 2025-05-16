@@ -13,4 +13,7 @@ public class SgData {
 
     String cityTemplate;
 
+    int jobBuild = 3;
+
+    int jobTech = 3;
 }
