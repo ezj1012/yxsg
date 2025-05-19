@@ -32,13 +32,13 @@ public class DerateSvcImpl implements DerateSvc {
 
 
     @Override
-    public UseRes derateRes(GiCity city, GiCityHero hero, CfgBuildingLevel globLv, UseRes res) {
-        PlayContext ctx = sgEngine.getPlayCtx(city.getPlayId());
+    public UseRes derateRes(int playId, Long heroAffairs, CfgBuildingLevel goalLv, UseRes res) {
+        PlayContext ctx = sgEngine.getPlayCtx(playId);
 
         boolean hasBaseResDerate;
-        if (globLv.getLevel() <= 5) {
+        if (goalLv.getLevel() <= 5) {
             hasBaseResDerate = ctx.hasUsingGoods(baseResDerateFid);
-        } else if (globLv.getLevel() <= 12) {
+        } else if (goalLv.getLevel() <= 12) {
             hasBaseResDerate = ctx.hasUsingGoods(baseResDerateFid[1], baseResDerateFid[2]);
         } else {
             hasBaseResDerate = ctx.hasUsingGoods(baseResDerateFid[2]);
@@ -47,12 +47,10 @@ public class DerateSvcImpl implements DerateSvc {
         if (hasBaseResDerate) {
             res.derateBaseRes(baseResDerateRate);
         }
-        if (hero != null) {
-            res.derateTime(hero.getAffairsAddOn(), heroBuildDerateRate);
+        if (heroAffairs != null && heroAffairs != 0) {
+            res.derateTime(heroAffairs, heroBuildDerateRate);
         }
         res.derateTime(ctx.getTechLv(buildTechId), buildTechDerateRate);
-
-
         return res;
     }
 

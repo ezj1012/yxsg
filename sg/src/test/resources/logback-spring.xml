@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <!-- 定义日志格式 -->
+    <property name="LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss} %-5level %logger{36} - [%file:%line] %msg%n"/>
+
+    <!-- 文件输出 -->
+    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+        <file>./data/sg.log</file>
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 控制台输出 -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 根日志级别和附加器 -->
+    <root level="INFO">
+        <appender-ref ref="FILE"/>
+        <appender-ref ref="CONSOLE"/>
+    </root>
+
+    <!-- 特定包的日志级别 -->
+    <logger name="org.mybatis" level="debug"/>
+    <logger name="org.mybatis.spring.SqlSessionUtils" level="WARN"/>
+    <logger name="org.mybatis.spring.transaction.SpringManagedTransaction" level="WARN"/>
+
+
+    <logger name="org.apache.catalina" level="ERROR"/>
+    <logger name="org.apache.coyote" level="ERROR"/>
+    <logger name="org.apache.tomcat" level="ERROR"/>
+    <logger name="com.zaxxer.hikari" level="ERROR"/>
+    <logger name="org.springframework.boot.web.embedded.tomcat" level="ERROR"/>
+    <logger name="org.springframework.boot.autoconfigure" level="ERROR"/>
+    <logger name="com.yxbear.sg.domain.mapper.*" level="trace"/>
+    <logger name="com.yxbear.sg.domain.mapper.mem.MemCityBuildUpgradingMapper" level="ERROR"/>
+
+</configuration>

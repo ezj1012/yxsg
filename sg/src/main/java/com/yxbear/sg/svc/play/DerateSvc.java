@@ -7,5 +7,5 @@ import com.yxbear.sg.svc.play.bean.UseRes;
 
 public interface DerateSvc {
 
-    UseRes derateRes(GiCity city, GiCityHero hero, CfgBuildingLevel globLv, UseRes res);
+    UseRes derateRes(int playId, Long heroAffairs, CfgBuildingLevel goalLv, UseRes res);
 }

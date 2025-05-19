@@ -4,8 +4,6 @@ import com.yxbear.sg.domain.bean.Userable;
 import com.yxbear.sg.domain.model.mem.MemCityBuildUpgrading;
 import com.yxbear.sg.engine.model.ProvinceLand;
 
-import java.util.List;
-
 public interface CitySvc {
 
     void createFirstCity(ProvinceLand land, Userable user);
@@ -18,5 +16,5 @@ public interface CitySvc {
 
     void deleteAll(int playId);
 
-    void finishBuildUpgrading(List<MemCityBuildUpgrading> list);
+    void finishBuildUpgrading(MemCityBuildUpgrading item);
 }

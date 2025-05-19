@@ -6,10 +6,13 @@ import com.yxbear.sg.engine.loader.SgWorldDataLoader;
 import com.yxbear.sg.engine.model.SgData;
 
 import lombok.Getter;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import org.springframework.context.ApplicationContext;
 
-
-public class SgContext {
+public class SgContext implements AutoCloseable {
     @Getter
     ApplicationContext appCtx;
 
@@ -24,6 +27,9 @@ public class SgContext {
     @Getter
     SgData data;
 
+    @Getter
+    private final ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor();
+
     public SgContext(ApplicationContext applicationContext) {
         super();
         appCtx = applicationContext;
@@ -34,14 +40,21 @@ public class SgContext {
         worldDataLoader = appCtx.getBean(SgWorldDataLoader.class);
         jobWorker = appCtx.getBean(SgJobWorker.class);
         data = dataMgr.load();
-
-        this.updateJobPeriod();
+        jobWorker.updateJobPeriod();
     }
 
-    public synchronized void updateJobPeriod() {
-        // 使用Spring 的 Schedule 对
-        jobWorker.schedule(new SgJobWorker.Task("processBuilding", jobWorker::processBuilding), Math.min(1, data.getJobBuild()));
+    public void publishEvent(SgContextEvent event) {
+        executor.execute(() -> {
+            try {
+                this.appCtx.publishEvent(event);
+            } catch (Exception e) {
+            }
+        });
+    }
 
+    @Override
+    public void close() throws Exception {
+        executor.shutdown();
     }
 
 }

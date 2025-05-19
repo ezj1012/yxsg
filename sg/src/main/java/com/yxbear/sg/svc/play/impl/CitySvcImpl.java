@@ -4,6 +4,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import com.yxbear.core.CommUtils;
+import com.yxbear.sg.domain.SGConstant;
+import com.yxbear.sg.domain.mapper.gi.ext.GiCityExtMapper;
 import com.yxbear.sg.domain.mapper.gi.ext.GiCityResourceExtMapper;
 import com.yxbear.sg.domain.mapper.mem.MemCityBuildUpgradingMapper;
 import com.yxbear.sg.domain.model.gi.*;
@@ -11,6 +13,7 @@ import com.yxbear.sg.domain.model.mem.CMemCityBuildUpgrading;
 import com.yxbear.sg.domain.model.mem.MemCityBuildUpgrading;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.yxbear.core.exception.ServiceException;
@@ -34,6 +37,7 @@ import com.yxbear.sg.svc.egimpl.ModelFactory;
 import com.yxbear.sg.svc.play.CitySvc;
 import com.yxbear.sg.svc.play.DerateSvc;
 import com.yxbear.sg.svc.play.PlayStateSvc;
+import com.yxbear.sg.svc.play.bean.HeroAddExp;
 import com.yxbear.sg.svc.play.bean.PlayInfo;
 import com.yxbear.sg.svc.play.bean.UseRes;
 
@@ -43,36 +47,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CitySvcImpl implements CitySvc {
 
-    /**
-     * 特殊建筑ID集合：这些ID代表游戏中具有唯一功能的建筑类型。
-     * <pre>
-     * 编号对应建筑如下：
-     * 6  - 官府
-     * 7  - 书院
-     * 13 - 市场
-     * 14 - 铁匠铺
-     * 16 - 马厩
-     * 15 - 工匠作坊
-     * 10 - 客栈
-     * 17 - 仓库
-     * 8  - 校场
-     * 11 - 招贤馆
-     * 12 - 鸿胪寺
-     * 18 - 驿站
-     * 19 - 烽火台
-     * 20 - 城墙
-     * </pre>
-     */
-    public static final Set<Integer> UNIQUE_BUILD_IDS = Set.of(6, 7, 13, 14, 16, 15, 10, 17, 8, 11, 12, 18, 19, 20);
-
     final SgEngine sgEngine;
     final FrameCfgSvc cfgSvc;
     final PlayStateSvc playStateSvc;
     final ModelFactory modelFactory;
     final GiCityMapper cityMapper;
+    final GiCityExtMapper cityExtMapper;
     final GiCityResourceMapper cityResourceMapper;
     final GiCityResourceExtMapper cityResourceExtMapper;
-
 
     final GiCityResourceAddMapper cityResourceAddMapper;
     final GiCityDefenceMapper cityDefenceMapper;
@@ -135,7 +117,8 @@ public class CitySvcImpl implements CitySvc {
         b.setStatus(1);
         cityBuildMapper.updateById(cbId, b);
 
-        MemCityBuildUpgrading mb = new MemCityBuildUpgrading(cbId, city.getPlayId(), cid, 1, lv, useRes.getUpgradeEndTimeMillis());
+        MemCityBuildUpgrading mb = new MemCityBuildUpgrading(cbId, city.getPlayId(), cid, 1, lv,
+                useRes.getUpgradeEndTimeMillis());
         mbMapper.save(mb);
         sgEngine.event(mb);
     }
@@ -162,11 +145,11 @@ public class CitySvcImpl implements CitySvc {
         cityBuildMapper.save(b);
         int cbId = b.getId();
 
-        MemCityBuildUpgrading mb = new MemCityBuildUpgrading(cbId, city.getPlayId(), cid, 1, lv, useRes.getUpgradeEndTimeMillis());
+        MemCityBuildUpgrading mb = new MemCityBuildUpgrading(cbId, city.getPlayId(), cid, 1, lv,
+                useRes.getUpgradeEndTimeMillis());
         mbMapper.save(mb);
         sgEngine.event(mb);
     }
-
 
     private UseRes checkAllAndDeductRes(GiCity city, Building building, int lv, PlayContext playCtx) {
         SystemUtils.check(!playCtx.checkBuildingCount(countWorkProcess(city.getId())), "队列已经满!", 1000);
@@ -179,7 +162,7 @@ public class CitySvcImpl implements CitySvc {
         GiCityHero hero = city.getChiefhId() == null ? null : heroMapper.selectById(city.getChiefhId());
 
         UseRes useRes = UseRes.from(level, preCdts.get(2));
-        useRes = derateSvc.derateRes(city, hero, level, useRes);
+        useRes = derateSvc.derateRes(city.getPlayId(), hero == null ? 0 : hero.getAffairsAddOn(), level, useRes);
         SystemUtils.check(!check(res, useRes), "城池资源不足!");
         SystemUtils.check(!checkBuildCdt(city.getId(), preCdts.get(0)), "建筑要求不满足!");
         SystemUtils.check(!playCtx.checkTech(city.getCollegelv(), preCdts.get(1)), "所需科技不满足!");
@@ -192,28 +175,26 @@ public class CitySvcImpl implements CitySvc {
         return useRes;
     }
 
-
     private int countWorkProcess(int cid) {
         return cityBuildMapper.count(CGiCityBuild.builder().cityId(cid).startStatus(0).build()).intValue();
     }
 
     public void useBaseRes(int cid, UseRes res) {
-        cityResourceExtMapper.useBaseRes(cid, res.getUpgradeWood()
-                , res.getUpgradeRock()
-                , res.getUpgradeIron()
-                , res.getUpgradeFood()
-                , res.getUpgradeGold()
-                , res.getUpgradePeople()
-        );
+        cityResourceExtMapper.useBaseRes(cid, res.getUpgradeWood(), res.getUpgradeRock(), res.getUpgradeIron(),
+                res.getUpgradeFood(), res.getUpgradeGold(), res.getUpgradePeople());
     }
 
     public boolean checkBuildCdt(int cityId, Map<Integer, Integer> buildIdAndLv) {
-        if (CommUtils.isEmpty(buildIdAndLv)) return true;
-        Map<Integer, Integer> idLv = cityBuildMapper.queryList(CGiCityBuild.builder().cityId(cityId).bids(buildIdAndLv.keySet().toArray(Integer[]::new)).build(), "id")
+        if (CommUtils.isEmpty(buildIdAndLv))
+            return true;
+        Map<Integer, Integer> idLv = cityBuildMapper
+                .queryList(CGiCityBuild.builder().cityId(cityId).bids(buildIdAndLv.keySet().toArray(Integer[]::new))
+                        .build(), "id")
                 .stream().collect(Collectors.toMap(GiCityBuild::getBid, GiCityBuild::getLv));
         for (Map.Entry<Integer, Integer> e : buildIdAndLv.entrySet()) {
             Integer rLv = idLv.get(e.getKey());
-            if (rLv == null || rLv < e.getValue()) return false;
+            if (rLv == null || rLv < e.getValue())
+                return false;
         }
         return true;
     }
@@ -246,16 +227,41 @@ public class CitySvcImpl implements CitySvc {
     }
 
     private boolean checkUnique(int cityId, int bid) {
-        if (UNIQUE_BUILD_IDS.contains(bid)) {
+        if (SGConstant.UNIQUE_BUILD_IDS.contains(bid)) {
             Long count = cityBuildMapper.count(CGiCityBuild.builder().cityId(cityId).bid(bid).build());
             return count <= 0;
         }
         return true;
     }
 
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     @Override
-    public void finishBuildUpgrading(List<MemCityBuildUpgrading> list) {
+    public void finishBuildUpgrading(MemCityBuildUpgrading mem) {
+        Integer id = mem.getId();
+        mbMapper.deleteById(id);
+
+        if (mem.getStatus() == 2 && mem.getGoalLv() == 0) {
+            cityBuildMapper.deleteById(id);
+        } else {
+            GiCityBuild upt = new GiCityBuild();
+            upt.setStatus(0);
+            upt.setLv(mem.getGoalLv());
+            cityBuildMapper.updateById(id, upt);
+        }
+
+        if (mem.getStatus() == 1) {
+            GiCityBuild build = cityBuildMapper.selectById(id);
+            if (build != null) {
+                GiCity hero = cityExtMapper.getCityTakeOfficeHero(build.getCityId());
+                if (hero != null && hero.getChiefhId() != null) {
+                    long exp = cfgSvc.getGlobalCfg().getAndCheckBuilding(build.getBid()).getAndCheckLv(mem.getGoalLv())
+                            .getUpgradeTime();
+                    HeroAddExp expAdd = HeroAddExp.fromBuild(hero.getChiefhId(), exp);
+                    sgEngine.event(expAdd);
+                }
+            }
+        }
 
     }
+
 }

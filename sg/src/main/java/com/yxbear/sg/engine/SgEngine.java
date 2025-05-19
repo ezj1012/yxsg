@@ -3,7 +3,6 @@ package com.yxbear.sg.engine;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.yxbear.sg.domain.model.mem.MemCityBuildUpgrading;
 import org.springframework.context.SmartLifecycle;
 
 import com.yxbear.sg.engine.world.WorldMgr;
@@ -69,6 +68,7 @@ public class SgEngine implements SmartLifecycle, Mgrable {
         return worldMgr;
     }
 
-    public void event(MemCityBuildUpgrading mb) {
+    public void event(Object mb) {
+        ctx.publishEvent(new SgContextEvent(mb));
     }
 }

@@ -10,6 +10,7 @@ import lombok.Data;
 
 @Data
 public class UseRes {
+
     /**
      * 消耗木材
      */
@@ -66,6 +67,10 @@ public class UseRes {
 
     public void derateTime(long attr, double rate) {
         upgradeTime = SystemUtils.calculateDerateAndMin1(upgradeTime, attr, rate);
+    }
+
+    public static UseRes from(CfgBuildingLevel lv) {
+        return from(lv, null);
     }
 
     public static UseRes from(CfgBuildingLevel lv, Map<Integer, Integer> useGoods) {

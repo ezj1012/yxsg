@@ -76,4 +76,8 @@ public class CommController {
         return R.of(querySvc.getCityInfo(cid));
     }
 
+    @GetMapping("/city/builds/{cid}/{place}")
+    public R<Object> getCityBuilds(@PathVariable int cid, @PathVariable int place) {
+        return R.of(querySvc.getCityBuildUpgradeInfo(cid, place == 0 ? false : place == 1 ? true : null));
+    }
 }

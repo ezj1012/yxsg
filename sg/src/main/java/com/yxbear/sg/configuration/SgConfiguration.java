@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.lang.NonNull;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -37,6 +38,7 @@ import cn.dev33.satoken.stp.StpUtil;
 import cn.dev33.satoken.util.SaResult;
 
 @Configuration
+@EnableTransactionManagement
 @PropertySource({"classpath:sg.properties"})
 @EnableConfigurationProperties({SGProps.class})
 @EnablePrimaryKeyServer
