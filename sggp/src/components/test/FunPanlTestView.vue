@@ -1,16 +1,27 @@
 <script lang="ts" setup>
-import { gFunPanComps } from '@/app/constant';
+import { encode, gFunPanComps } from '@/app/constant';
 import type { SanGuo } from '@/app/sg';
 import { inject, onMounted, ref } from 'vue';
 
 const { sg } = inject('sg') as { sg: SanGuo }
 const panKey = ref('')
-onMounted(()=>{
+onMounted(() => {
     panKey.value = gFunPanComps[0].key
 })
 function doChange(key: any) {
     sg.funPanMgr.setComp(key === '' ? '' : panKey.value)
 }
+
+async function doLogin() {
+    try {
+        await sg.api.userApi.login('qwe123', encode('qwe1234'))
+        await sg.refreshPlay()
+    } catch (error) {
+        sg.pushMsg("登录失败!");
+        return false;
+    }
+}
+
 </script>
 <template>
     <div class="table-wrap">
@@ -19,6 +30,7 @@ function doChange(key: any) {
         </select>
         <div @click="doChange" class="btn">确定</div>
         <div @click="doChange('')" class="btn">取消</div>
+        <div @click="doLogin()" class="btn">login</div>
     </div>
 </template>
 <style lang="less" scoped>
@@ -28,6 +40,11 @@ function doChange(key: any) {
     position: fixed;
     top: 0px;
     left: 0px;
+    opacity: 0;
+
+    &:hover {
+        opacity: 1;
+    }
 
     .btn {
         width: 150px;
@@ -39,9 +56,9 @@ function doChange(key: any) {
         box-shadow: 0 0 1px 1px black;
         cursor: pointer;
 
-        &:hover{
+        &:hover {
             box-shadow: 0 0 1px 1px black,
-            0 0 10px 1px black;
+                0 0 10px 1px black;
         }
     }
 }

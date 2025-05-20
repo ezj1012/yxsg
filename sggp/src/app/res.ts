@@ -210,8 +210,8 @@ export class SgRes {
         this.api = api
         this.imgMgr = new ImgMgr()
         this.stageCfgMgr = new StageCfgMgr()
-        this.cfgLoader = new FrameCfgLoader(this)
         this.gCfgMgr = new GCfgMgr()
+        this.cfgLoader = new FrameCfgLoader(this)
     }
 
     async loadCfg() {

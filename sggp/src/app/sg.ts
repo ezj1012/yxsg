@@ -34,7 +34,6 @@ export class SanGuo {
             return this.res.getImgMgr().getGroup(key)
         })
         RadioGroup.dataMgr = shallowRef(this.dataMgr)
-
     }
 
     testStage() { this.stageMgr.testStage() }

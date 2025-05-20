@@ -22,7 +22,16 @@ export interface Province {
 
 export interface GlobalCfg {
     playerIcons: PlayerIcon[]
+    buildingsMap: Record<number, CityBuilding>
 }
+export interface CityBuilding {
+    id: number
+    place: number
+    name: string
+    typeName: string
+    description: string
+}
+
 export interface CityIntro {
     id: number
     name: string
@@ -50,7 +59,11 @@ export interface PlayInfo {
     armorColumn: number
     vipLevel: number
     cities: CityIntro[]
-    // city: PlayCityInfo
+    city: PlayCityInfo
+}
+
+export interface PlayCityInfo {
+    
 }
 
 

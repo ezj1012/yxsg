@@ -15,8 +15,6 @@ export const bgRes = [
   Img.of(`/rsm/images/playing/world/lake.png`, true),//6:湖泊
   Img.of(`/rsm/images/playing/world/swamp.png`, true),//7:沼泽
 ]
-
-
 export interface MapCtx {
   x: number
   y: number
@@ -27,8 +25,6 @@ export interface MapCtx {
   moveTo: (mapX: number, mapY: number) => Promise<void>
   getSg: () => SanGuo
 }
-
-
 export class MapTile {
   x: number
   y: number
@@ -74,14 +70,7 @@ export class MapTile {
 
     }
   }
-
-
-
 }
-
-
-
-
 class TileCanvas {
   x: number = 0
   y: number = 0
@@ -150,9 +139,6 @@ class TileCanvas {
     this.draw()
   }
 }
-
-
-
 export class MapCanvas {
   canvas: HTMLCanvasElement
   ctx: CanvasRenderingContext2D;

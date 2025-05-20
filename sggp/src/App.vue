@@ -62,6 +62,10 @@ sgGame.sg.value = sg
   --rxsg-table-row-select-bg-color: var(--rxsg-table-row-hover-bg-color)
 }
 
+.bor {
+  box-shadow: 0px 0px 0px 0.5px #80867C inset, 0px 0px 0px 1px #7D6F66 inset,
+}
+
 .scroll_container {
   &::-webkit-scrollbar-thumb {
     width: 16px;

@@ -53,7 +53,6 @@ export class UserApi {
         this.sgApi = sgApi
     }
 
-
     async login(username: string, password: string): Promise<void> {
         try {
             const data = (await this.sgApi.post('/play/login', { username, password })).data as { id: number, name: string, token: string }
@@ -78,9 +77,11 @@ export class CfgApi {
     async loadFrameCfg(): Promise<FrameCfg> {
         return (await this.sgApi.get('/cfg/frame')).data
     }
+
     async loadGlobalCfg(): Promise<GlobalCfg> {
         return (await this.sgApi.get('/cfg/global')).data
     }
+    
 }
 
 // 动态数据

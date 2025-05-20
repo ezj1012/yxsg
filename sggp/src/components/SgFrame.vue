@@ -32,8 +32,8 @@ const isReady = computed(() => sg.value.ready.value)
         <template v-if="isReady">
             <RFunPanl />
             <FunPanlTestView />
-            <!-- -->
-            <StageView />
+            <!--
+            <StageView /> -->
 
             <!--  <TableViewTest />-->
             <!-- <WorldMap /> -->
