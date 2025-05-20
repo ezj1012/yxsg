@@ -1,160 +1,89 @@
-import { ref, shallowRef, type Ref } from "vue"
-import { CfgKey, CfgStr, CfgType } from "./cfg"
-import { Img } from "./img"
-import type { FrameCfg, FrameStageCfg, Traceable } from "./model"
+import { shallowRef, type Ref } from "vue";
 import type { SgApi } from "./api"
-import { StageCfgInfo } from "./stage"
-import { GCfgMgr } from "./global"
+import type { Traceable } from "./commModel";
+import { Img } from "./utils/img";
+import { CfgStr } from "./cfg";
+import { configuerImgs, ImgMgr } from "./res/imgRes";
+import type { FrameStageCfg } from "./api/apiModel";
 
 
-export class ImgGroupInfo {
-    key: string
-    cfg: CfgStr
-    mgr: ImgMgr
-    constructor(cfg: CfgStr, mgr: ImgMgr) {
+export class StageCfgInfo {
+    cfg: FrameStageCfg
+    cfgs: CfgStr[] = []
+    radioGroup = new Map<string, RadioGroup>()
+
+    constructor(cfg: FrameStageCfg) {
         this.cfg = cfg
-        this.key = cfg.key()
-        this.mgr = mgr
+        cfg.comps.forEach(c => this.addCfgStr(new CfgStr(c)))
     }
 
-    getKey() {
-        if (this.hasDef()) {
-            return this.key
-        } else if (this.hasOn()) {
-            return this.key + "_on"
-        } else if (this.hasDown()) {
-            return this.key + "_down"
-        } else if (this.hasAlarm()) {
-            return this.key + "_alarm"
-        } else if (this.hasSct()) {
-            return this.key + "_sct"
-        } else if (this.hasSctOn()) {
-            return this.key + "_son"
-        } else if (this.hasDis()) {
-            return this.key + "_dis"
+    updateGroup(cfgStr: CfgStr) {
+        const groupCfg = cfgStr.radio()
+        if (!groupCfg || !groupCfg.groupKey) { return }
+        let rg = this.radioGroup.get(groupCfg.groupKey)
+        if (!rg) {
+            rg = new RadioGroup(groupCfg.groupKey)
+            this.radioGroup.set(groupCfg.groupKey, rg)
         }
-        return ''
+        rg.addCfg(cfgStr, groupCfg.value || cfgStr.key(), groupCfg.isDefSct)
     }
 
-    hasDef() { return this.mgr.get(this.key) }
-    hasOn() { return this.mgr.get(this.key + "_on") }
-    hasSctOn() { return this.mgr.get(this.key + "_son") }
-    hasDown() { return this.mgr.get(this.key + "_down") }
-    hasAlarm() { return this.mgr.get(this.key + "_alarm") }
-    hasSct() { return this.mgr.get(this.key + "_sct") }
-    hasDis() { return this.mgr.get(this.key + "_dis") }
-}
-
-export class ScrollHelper {
-    styles: Record<string, any> = {}
-    sg: { res: SgRes } | any
-    constructor(sg: { res: SgRes } | any) {
-        this.sg = sg
-        this.styles['--track-up'] = this.sg.img("common#scroll_uparr")
-        this.styles['--track-up-down'] = this.sg.img("common#scroll_uparr", { filter: (g: any) => g.hasDown() })
-        this.styles['--track-down'] = this.sg.img("common#scroll_downarr")
-        this.styles['--track-down-up'] = this.sg.img("common#scroll_downarr", { filter: (g: any) => g.hasDown() })
+    addCfgStr(cfg: CfgStr) {
+        this.updateGroup(cfg)
+        this.cfgs.push(cfg)
     }
-
-    scrollImg(el: HTMLElement, show: boolean, dataHeight: number) {
-        if (show) {
-            const height = el.getBoundingClientRect().height
-            const newHeight = ((height - 40) * height) / dataHeight;
-            this.styles['--track-img'] = this.sg.img("common#scroll_track", { w: 19, h: height })
-            this.styles['--track-bar'] = this.sg.img("common#scroll_bar", { w: 13, h: newHeight })
-            this.styles['--track-bar-hover'] = this.sg.img("common#scroll_bar", { w: 13, h: newHeight })
-            this.styles['overflow-y'] = 'auto'
-        } else {
-            this.styles['overflow-y'] = 'hidden'
-            el.scrollTop = 0
-        }
-    }
-
 }
-
-export class ImgMgr {
-    clear() {
-        this.imgs.clear()
-        this.imgGroups.clear()
-        this.lvImgs.value = undefined
-    }
-    private imgs = new Map<string, Img.ImgDef>()
-    private imgGroups = new Map<string, ImgGroupInfo>()
-    private lvImgs = shallowRef<Map<number, Img.ImgDef>>()
-
-    getGroup(key: string) { return this.imgGroups.get(key) }
-    getGroups() { return this.imgGroups }
-    get(key: string) { return this.imgs.get(key) }
-    getImgs() { return this.imgs }
-
-}
-
-
-function configuerImgs(cfgs: FrameCfg, imgMgr: ImgMgr): CfgStr[] {
-    const comps: CfgStr[] = []
-
-    cfgs.imgs.forEach(url => {
-        const ir = new CfgStr(url, true);
-        const key = ir.key()
-        const scale = ir.get(CfgKey.imgSacle)
-        const pixel = ir.isPixel()
-
-        const defs: Img.ImgDef[] = []
-        const imgPath = key.replaceAll("#", "/");
-
-        genImgAndPutCache(imgMgr, defs, key, `${cfgs.rsmHttpRoot}${imgPath}.png`, pixel, scale)
-        ir.get(CfgKey.imgOn) && (genImgAndPutCache(imgMgr, defs, key + "_on", `${cfgs.rsmHttpRoot}${imgPath}_on.png`, pixel, scale))
-        ir.get(CfgKey.imgSctOn) && (genImgAndPutCache(imgMgr, defs, key + "_son", `${cfgs.rsmHttpRoot}${imgPath}_son.png`, pixel, scale))
-        ir.get(CfgKey.imgDown) && (genImgAndPutCache(imgMgr, defs, key + "_down", `${cfgs.rsmHttpRoot}${imgPath}_down.png`, pixel, scale))
-        ir.get(CfgKey.imgAlarm) && (genImgAndPutCache(imgMgr, defs, key + "_alarm", `${cfgs.rsmHttpRoot}${imgPath}_alarm.png`, pixel, scale))
-        ir.get(CfgKey.imgSct) && (genImgAndPutCache(imgMgr, defs, key + "_sct", `${cfgs.rsmHttpRoot}${imgPath}_sct.png`, pixel, scale))
-        ir.get(CfgKey.imgDis) && (genImgAndPutCache(imgMgr, defs, key + "_dis", `${cfgs.rsmHttpRoot}${imgPath}_dis.png`, pixel, scale))
-        let grInfo = imgMgr.getGroups().get(key)
-        if (grInfo) {
-            grInfo.cfg = ir
-        } else {
-            grInfo = new ImgGroupInfo(ir, imgMgr)
-            imgMgr.getGroups().set(key, grInfo)
-        }
-        if (ir.type() !== CfgType.img) {
-            ir.imgGroup = grInfo
-            comps.push(ir)
-        }
-    })
-    return comps
-}
-
-function genImgAndPutCache(imgMgr: ImgMgr, defs: Img.ImgDef[], key: string, url: string, pixel: boolean, scale?: string) {
-    const img = Img.of(url, pixel, scale)
-    imgMgr.getImgs().set(key, img)
-    defs.push(img)
-}
-
 
 export class StageCfgMgr {
     private cfgMap = new Map<string, StageCfgInfo>()
     clear() { this.cfgMap.clear() }
-    get(stage: string): StageCfgInfo { return this.cfgMap.get(stage)! }
-    getRadioGroup(stageKey: string, groupKey: string) { return this.cfgMap.get(stageKey)?.radioGroup.get(groupKey) }
+    // get(stage: string): StageCfgInfo { return this.cfgMap.get(stage)! }
+    // getRadioGroup(stageKey: string, groupKey: string) { return this.cfgMap.get(stageKey)?.radioGroup.get(groupKey) }
+
     addStageCfg(cfg: FrameStageCfg) { this.cfgMap.set(cfg.key, new StageCfgInfo(cfg)) }
     appendStageChildrenCfg(cfg: CfgStr) { this.cfgMap.get(cfg.stage)?.addCfgStr(cfg) }
 }
 
-class FrameCfgLoader {
-    ctx: SgRes
-    constructor(ctx: SgRes) {
-        this.ctx = ctx
+
+export class SgRes {
+    private _imgMgr: ImgMgr
+    private _cfgMgr: StageCfgMgr
+    constructor() {
+        this._imgMgr = new ImgMgr()
+        this._cfgMgr = new StageCfgMgr()
     }
-    async load(force: boolean, bar: Traceable): Promise<void> {
+
+    async clear() {
+        this._imgMgr.clear()
+        this._cfgMgr.clear()
+    }
+
+    get imgMgr() { return this._imgMgr }
+    get stageCfgMgr() { return this._cfgMgr }
+    get globarMgr() { return }
+    
+}
+
+
+export class SgResLoader {
+    private _res: SgRes
+    private _api: SgApi
+    constructor(res: SgRes, api: SgApi) {
+        this._api = api;
+        this._res = res;
+    }
+
+    async load(force: boolean, bar: Traceable) {
+        bar.msg = '加载配置资源'
+        bar.pct = 10
+        force && await this._res.clear()
+
+        const imgMgr = this._res.imgMgr
+        const fsMgr = this._res.stageCfgMgr
+        const gCfgMgr = this._res.globarMgr
         await new Promise(resolve => {
-            this.ctx.getApi().cfgApi.loadFrameCfg().then(data => {
+            this._api.cfgApi.loadFrameCfg().then(data => {
                 bar.pct = 10
-                const imgMgr = this.ctx.getImgMgr()
-                const fsMgr = this.ctx.getStageCfgMgr()
-                if (force) {
-                    imgMgr.clear()
-                    fsMgr.clear()
-                }
                 bar.pct = 30
                 const imgCfs = configuerImgs(data, imgMgr)
                 // 更新舞台配置
@@ -168,9 +97,9 @@ class FrameCfgLoader {
 
         await new Promise(resolve => {
             bar.pct = 30
-            this.ctx.getApi().cfgApi.loadGlobalCfg().then(data => {
+            this._api.cfgApi.loadGlobalCfg().then(data => {
                 bar.pct = 10
-                const gCfgMgr = this.ctx.getGlobarMgr()
+
                 gCfgMgr.configuer(data)
                 bar.pct = 99
                 resolve(bar)
@@ -179,8 +108,7 @@ class FrameCfgLoader {
 
         bar.msg = '加载图片资源'
         bar.pct = 0
-        return new Promise((inject) => {
-            const imgMgr = this.ctx.getImgMgr()
+        await new Promise(resolve => {
             const defs = Array.from(imgMgr.getImgs().values())
             let count = 0;
             const st = new Date().getTime()
@@ -189,41 +117,10 @@ class FrameCfgLoader {
                 const temp = (count * 100) / defs.length;
                 bar.pct = temp > 100 ? 100 : temp
                 if (count == defs.length) {
-                    inject()
+                    resolve(bar)
                 }
             })
         })
-
+        return new Promise(resolve => { resolve(bar) })
     }
-}
-
-export class SgRes {
-    private bar: Ref<Traceable>
-    private api: SgApi
-    private imgMgr: ImgMgr
-    private cfgLoader: FrameCfgLoader
-    stageCfgMgr: StageCfgMgr
-    gCfgMgr: GCfgMgr
-
-    constructor(bar: Ref<Traceable>, api: SgApi) {
-        this.bar = bar
-        this.api = api
-        this.imgMgr = new ImgMgr()
-        this.stageCfgMgr = new StageCfgMgr()
-        this.gCfgMgr = new GCfgMgr()
-        this.cfgLoader = new FrameCfgLoader(this)
-    }
-
-    async loadCfg() {
-        this.bar.value.msg = '加载配置资源'
-        this.bar.value.pct = 10
-        await this.cfgLoader.load(false, this.bar.value)
-    }
-
-    getImgMgr() { return this.imgMgr }
-    getStageCfgMgr() { return this.stageCfgMgr }
-    getApi() { return this.api }
-    getGlobarMgr() { return this.gCfgMgr }
-    getImg(key: string) { return this.imgMgr.get(key) }
-    getImgGroup(key: string) { return this.imgMgr.getGroup(key)! }
 }

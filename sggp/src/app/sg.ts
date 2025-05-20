@@ -1,97 +1,132 @@
-import { ref, shallowReactive, shallowRef, type App, type Ref, type ShallowRef } from "vue";
-import { DataMgr } from "./dataMgr";
+import { ref, shallowRef, type App, type Ref } from "vue";
+import type { Traceable } from "./commModel";
 import { SgApi } from "./api";
-import { SingleComp, type FunPanComp, type Traceable } from "./model";
-import { ImgGroupInfo, SgRes } from "./res";
-import { RadioGroup, StageMgr } from "./stage";
-import { AxiosError } from "axios";
-import { CfgStr } from "./cfg";
-import { DivBg, installClickout, installMsg } from "./directives";
-import { gFunPanComps } from "./constant";
-import type { Img } from "./img";
+import type { IUserToken } from "./api/apiComm";
+import type { AxiosError } from "axios";
+import type { PlayInfo, User } from "./api/apiModel";
+import { StageMgr, type Stage } from "./stage";
+import { SgRes, SgResLoader } from "./res";
+
+const userCacheKey = 'currentUser'
+export interface SgCtx {
+
+    refresh(): Promise<void>
+
+    get user(): User | undefined
+
+    get play(): PlayInfo | undefined
+
+    get stage(): Stage
+
+    get stageMgr(): StageMgr
+}
+
+export class SgCtxImpl implements SgCtx {
+
+    private _api: SgApi
+    private _stageMgr: StageMgr
+    private _userMgr: UserMgr
+    private _resLoader: SgResLoader
+    private _res: SgRes
+
+    constructor() {
+        this._userMgr = new UserMgr(this)
+        this._api = new SgApi(this._userMgr)
+        this._stageMgr = new StageMgr(this)
+        this._res = new SgRes()
+        this._resLoader = new SgResLoader(this._res, this._api)
 
 
+    }
+
+    async loadRes(tr: Ref<Traceable>) {
+        await this._resLoader.load(tr)
+    }
+
+    async refresh() {
+        this.stageMgr.stage
+    }
+
+
+    get api() { return this._api }
+    get user() { return this._userMgr.user }
+    get play() { return undefined }
+    get stage() { return this._stageMgr.stage }
+    get stageMgr(): StageMgr { return this._stageMgr }
+}
 
 export class SanGuo {
-
-    el: Ref<HTMLDivElement>
-    dataMgr: DataMgr
-    api: SgApi
-    bar = ref<Traceable>({ pct: 0, msg: '' })
-    res: SgRes
+    debug = ref(false)
     ready = ref(false)
-    stageMgr: StageMgr
-    funPanMgr = new SingleComp<FunPanComp>(gFunPanComps)
-
+    private _ctx: SgCtxImpl
+    private _el: Ref<HTMLDivElement>
     constructor(el: Ref<HTMLDivElement>) {
-        this.el = el
-        this.dataMgr = new DataMgr(this)
-        this.api = new SgApi(this.dataMgr, this)
-        this.res = new SgRes(this.bar, this.api)
-        this.stageMgr = new StageMgr(this.dataMgr)
-
-        CfgStr.imgGroupGetter = shallowRef((key: string) => {
-            return this.res.getImgMgr().getGroup(key)
-        })
-        RadioGroup.dataMgr = shallowRef(this.dataMgr)
+        this._el = el
+        this._ctx = new SgCtxImpl()
     }
 
-    testStage() { this.stageMgr.testStage() }
-
-    async setup(tr: Ref<Traceable | undefined> | ShallowRef<Traceable | undefined>) {
-        tr.value = this.bar.value
-        const st = new Date().getTime()
-        await this.res.loadCfg()
-        this.stageMgr.updateCfg(this.res.getStageCfgMgr())
-        await this.refreshPlay()
+    /**
+     * 启动服务,加载资源
+     * @param tr 
+     */
+    async setup(tr: Ref<Traceable> = shallowRef({ msg: '', pct: 0 })) {
+        console.log('setup')
+        await this._ctx.loadRes(tr)
+        await this._ctx.refresh()
         this.ready.value = true
+        console.log('setup', this.ready.value)
     }
 
-    async refreshPlay() {
-        let play = undefined;
-        try {
-            play = await this.api.playApi.getPlay()
-            this.dataMgr.setPlay(play)
-            this.stageMgr.testStage()
-        } catch (error) {
-            error instanceof AxiosError && this.handlerErr(error)
-        }
+    get ctx(): SgCtx {
+        return this._ctx
     }
-
-    async handlerErr(err: AxiosError) {
-        if (err.response && err.response.data) {
-            if (err.response.status == 401) {
-                this.api.clear()
-                this.dataMgr.setPlay(undefined)
-            } else if ((err.response.data as any).message) {
-                this.dataMgr.pushMsg((err.response?.data as any).message)
-            }
-        }
-        this.stageMgr.testStage()
-    }
-
-    pushMsg(msg: string) {
-        msg && this.dataMgr.pushMsg(msg)
-    }
-
-    img(key: string, scale?: { w?: number, h?: number, filter?: (g: ImgGroupInfo) => Img.ImgDef }) {
-        const g = this.res.getImgGroup(key)
-        const img = scale?.filter ? scale.filter(g) : g.hasDef()
-        const imgUrl = img?.getImg(scale?.w, scale?.h).imgDataUrl
-        return `url(${imgUrl})`
-    }
-
 }
+
+
 
 namespace sgGame {
 
     export const sg = shallowRef<SanGuo>()
 
     export function install(app: App) {
-        installMsg(app, sg)
-        installClickout(app, sg)
-        DivBg.installBg(app, sg)
-        DivBg.installSize(app, sg)
+        // installMsg(app, sg)
+        // installClickout(app, sg)
+        // DivBg.installBg(app, sg)
+        // DivBg.installSize(app, sg)
     }
 }
 export default sgGame
+
+
+
+class UserMgr implements IUserToken {
+    private _user?: User
+    private _ctx: SgCtx
+    constructor(ctx: SgCtx) {
+        this._ctx = ctx
+        const curUser = localStorage.getItem(userCacheKey)
+        if (curUser) {
+            try {
+                this._user = JSON.parse(curUser)
+            } catch (error) {
+            }
+        }
+    }
+
+    async login(username: string, passwd: string) {
+        throw new Error("Method not implemented.");
+        this._ctx.stage
+    }
+
+    async logout() {
+        localStorage.removeItem(userCacheKey)
+        // this._playMgr.setPlay(undefined)
+        this._user = undefined
+        this._ctx.stage
+    }
+
+    handler401() { this.logout() }
+    getToken(): string | undefined { return this._user?.token }
+    getTokenKey(): string { return 'yxsg' }
+    get user() { return this._user }
+}

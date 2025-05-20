@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Img } from '@/app/img';
+import { Img } from '@/app/utils/img';
 import type { SanGuo } from '@/app/sg';
 import { inject, onMounted, onUnmounted, provide, reactive, ref, shallowRef, watch } from 'vue';
 import WorldMapCtrl from './WorldMapCtrl.vue';

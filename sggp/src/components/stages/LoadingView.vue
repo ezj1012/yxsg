@@ -1,74 +1,73 @@
 <script setup lang="ts">
-// import { type LoadingProgressBar, baseUrl } from '@/app/model/comm';
-import type { Traceable } from '@/app/model'
+import type { Traceable } from '@/app/commModel'
 import type { SanGuo } from '@/app/sg'
-import { Img } from '@/app/img';
-// import Ctrl from '@/app/ctrl';
+import { Img } from '@/app/utils/img';
 import { computed, onUnmounted, ref, watch, shallowRef, inject, onMounted } from 'vue';
-// import { LoginStage, SanGuo, Stage, LoadingStage } from '@/app/sanguo';
 
 const { sg } = inject('sg') as { sg: SanGuo }
-const ok = ref(false)
+
+const resOk = ref(false)
 const count = shallowRef(0)
 const bgRes = [
     Img.of(`/rsm/images/loading/main_pic.png`, false),
     Img.of(`/rsm/images/loading/progress_bg.png`, false),
     Img.of(`/rsm/images/loading/main_complete.png`, false),
 ]
-
-
-const loadState = ref<Traceable>()
-const traceState = shallowRef<Traceable>()
-const timerId = ref()
-// // 加载本身资源
+// // 加载本页面使用的图片资源
 Img.loadImages(bgRes, (def, err) => {
     count.value++;
     if (count.value == bgRes.length) {
-        ok.value = true;
+        resOk.value = true;
         count.value = 0;
     }
 });
 
+const loadState = ref<Traceable>()
+const traceState = shallowRef<Traceable>({ msg: '', pct: 0 })
+const timerId = ref()
+
 const style = computed(() => {
     const s: { [key: string]: string } = {}
-    if (ok.value) { s['background-image'] = `url(${bgRes[0].getBaseImg().imgDataUrl})1` }
+    if (resOk.value) { s['background-image'] = `url(${bgRes[0].getBaseImg().imgDataUrl})` }
     return s;
 })
 
-
 onMounted(async () => {
-    traceState.value = { ...loadState.value } as any
+    // 由于是堵塞任务, 所以这里每100ms获取一次进度条信息.
     timerId.value = setInterval(() => loadState.value = { ...traceState.value } as any, 100)
     await sg.setup(traceState)
 })
 
 onUnmounted(() => {
-    if (timerId.value) {
-        clearInterval(timerId.value)
-    }
+    timerId.value && clearInterval(timerId.value)
 })
 
-const show = ref(true)
 </script>
 <template>
-    <div class="sg-loading" :style="style">
-        <div v-if="ok && loadState && !show" class="content">
-            <div class="loading-msg-1">
-                <div>{{ loadState.msg }}</div>
-                <div>{{ `${Math.floor(loadState.pct)}%` }}</div>
-            </div>
-            <div class="loading-msg-2">
-                <div>如果你是第一打开游戏, 加载文件可能较大,请耐心等待.</div>
-            </div>
-            <div class="loading-msg-3">
-                <div>快速增加人口的方法: 使用安抚百姓-增丁、使用道具'典民令'</div>
-            </div>
-            <div class="loading-bg" :style="{ backgroundImage: `url('${bgRes[1].getBaseImg().imgDataUrl}')1`, }"></div>
-            <div class="loading-main-comp"
-                :style="{ backgroundImage: `url('${bgRes[2].getBaseImg().imgDataUrl}')1`, width: `${loadState.pct * 3.85}px`, }">
+    <template v-if="sg.debug">
+        <div class="sg-loading"> {{ loadState }}</div>
+    </template>
+    <template v-else>
+        <div class="sg-loading" :style="style">
+            <div v-if="resOk && loadState" class="content">
+                <div class="loading-msg-1">
+                    <div>{{ loadState.msg }}</div>
+                    <div>{{ `${Math.floor(loadState.pct)}%` }}</div>
+                </div>
+                <div class="loading-msg-2">
+                    <div>如果你是第一打开游戏, 加载文件可能较大,请耐心等待.</div>
+                </div>
+                <div class="loading-msg-3">
+                    <div>快速增加人口的方法: 使用安抚百姓-增丁、使用道具'典民令'</div>
+                </div>
+                <div class="loading-bg" :style="{ backgroundImage: `url('${bgRes[1].getBaseImg().imgDataUrl}')1`, }">
+                </div>
+                <div class="loading-main-comp"
+                    :style="{ backgroundImage: `url('${bgRes[2].getBaseImg().imgDataUrl}')1`, width: `${loadState.pct * 3.85}px`, }">
+                </div>
             </div>
         </div>
-    </div>
+    </template>
 </template>
 <style lang="less" scoped>
 .sg-loading {

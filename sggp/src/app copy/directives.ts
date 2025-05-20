@@ -1,7 +1,7 @@
 import type { App, DirectiveBinding, ShallowRef } from "vue"
 import type { SanGuo } from "./sg"
 import { CfgStr } from "./cfg"
-import { Img } from "./img"
+import { Img } from "../app/utils/img"
 import type { HoverMsgDef } from "./model"
 
 
@@ -55,7 +55,6 @@ export function installClickout(app: App, sg: ShallowRef<SanGuo | undefined>) {
         , unmounted(el, binding) { document.removeEventListener("click", el.handler); }
     })
 }
-
 
 export namespace DivBg {
 

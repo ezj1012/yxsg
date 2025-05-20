@@ -12,10 +12,7 @@ export class User {
     }
 }
 
-export interface Traceable {
-    msg: string
-    pct: number
-}
+
 
 export interface Shapable {
     x?: number

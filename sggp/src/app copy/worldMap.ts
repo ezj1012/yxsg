@@ -1,5 +1,5 @@
 import { wid, wid2xy } from "./constant"
-import { Img } from "./img"
+import { Img } from "../app/utils/img"
 import type { MemMapTile } from "./modelData"
 import type { SanGuo } from "./sg"
 

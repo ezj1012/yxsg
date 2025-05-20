@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import SgFrame from './components/SgFrame.vue'
-import sgGame, { SanGuo } from './app/sg';
+import { SanGuo } from './app/sg';
+// import sgGame, { SanGuo } from './app/sg';
 
 const sgEl = ref()
 const sg = new SanGuo(sgEl)
-sgGame.sg.value = sg
+sg.debug.value = true
+// sgGame.sg.value = sg
 </script>
 
 <template>

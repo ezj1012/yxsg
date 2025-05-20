@@ -1,133 +1,72 @@
-import { ref, type Ref, type ShallowRef } from "vue"
-import { CfgStr } from "./cfg"
-import type { FrameStageCfg } from "./model"
-import type { DataMgr } from "./dataMgr"
-import type { StageCfgMgr } from "./res"
+import { ref } from "vue";
+import type { SgCtx } from "./sg";
 
-export const gStageComps = [
-    { key: 'login', },
-    { key: 'regplay', },
-    { key: 'playing', },
-]
+export interface Stage {
+    onUnmounted?(): Promise<any>;
+    onMounted?(): Promise<any>;
+    get key(): string
+    info: any
+}
 
-export class RadioGroup {
-    static dataMgr: ShallowRef<DataMgr>
-    groupKey: string
-    sctKey = ref<string>()
-    cfgs: { cfg: CfgStr, value: string }[] = []
-    fun = (key: string, newValue: any, oldValue: any) => {
-        this.call(key, newValue, oldValue)
+function useLoginStage() {
+    return {
+        key: 'login',
+        info: {},
+        async onUnmounted() { },
+        async onMounted() { },
     }
-    constructor(groupKey: string) {
-        this.groupKey = groupKey
+}
+
+function useRegplayStage() {
+    return {
+        key: 'regplay',
+        info: {},
+        async onUnmounted() { },
+        async onMounted() { },
+    }
+}
+
+function usePlayingStage() {
+    return {
+        key: 'playing',
+        info: {},
+        async onUnmounted() { },
+        async onMounted() { },
+    }
+}
+
+
+export class StageMgr {
+    private _ctx: SgCtx
+    private _cahce = new Map<string, Stage>()
+    stageKey = ref('login')
+    constructor(ctx: SgCtx) {
+        this._ctx = ctx
+        const loginStage = useLoginStage();
+        const regplayStage = useRegplayStage();
+        const playStage = usePlayingStage();
+        this._cahce.set(loginStage.key, loginStage)
+        this._cahce.set(regplayStage.key, regplayStage)
+        this._cahce.set(playStage.key, playStage)
+        this.stage
     }
 
-    addCfg(cfg: CfgStr, value: string, isDefaultSct: boolean = false) {
-        const sctKey = `${cfg.key()}_sct`
-        this.cfgs.push({ cfg, value })
-        RadioGroup.dataMgr.value?.subscribe(sctKey, undefined, this.fun)
-        if (isDefaultSct) {
-            this.call(sctKey, true, false)
+    get stage() {
+        let stage = 'login'
+        if (this._ctx.play) {
+            stage = 'playing'
+        } else if (this._ctx.user) {
+            stage = 'regplay'
         }
+        this.stageKey.value = stage
+        return this._cahce.get(stage)!
     }
 
-    removeCfg(cfg: CfgStr) {
-        for (let i = 0; i < this.cfgs.length; i++) {
-            if (this.cfgs[i].cfg.key() == cfg.key()) {
-                this.cfgs.splice(i, 1)
-                RadioGroup.dataMgr.value?.unsubscribe(`${cfg.key()}_sct`, this.fun)
-                return
-            }
-        }
-    }
-
-    getSctCfg() {
-        for (let i = 0; i < this.cfgs.length; i++) {
-            if (this.cfgs[i].cfg.key() == this.sctKey.value) {
-                return this.cfgs[i]
-            }
+    getStage(key?: string) {
+        if (key) {
+            return this._cahce.get(key)
         }
         return undefined
     }
 
-    getSctValue() {
-        const cfg = this.getSctCfg()
-        return cfg ? cfg.value : undefined
-    }
-
-    call(key: string, newValue: any, oldValue: any) {
-        if (newValue == true) {
-            this.sctKey.value = key.substring(0, key.length - 4)
-            for (let i = 0; i < this.cfgs.length; i++) {
-                const oKey = `${this.cfgs[i].cfg.key()}_sct`
-                const bef = RadioGroup.dataMgr.value?.get(oKey)
-                if (oKey !== key) {
-                    RadioGroup.dataMgr.value?.set(oKey, false)
-                }
-            }
-            RadioGroup.dataMgr.value?.set(`group#${this.groupKey}`, this.getSctValue())
-        }
-    }
-}
-
-
-export class StageCfgInfo {
-    cfg: FrameStageCfg
-    cfgs: CfgStr[] = []
-    radioGroup = new Map<string, RadioGroup>()
-
-    constructor(cfg: FrameStageCfg) {
-        this.cfg = cfg
-        cfg.comps.forEach(c => this.addCfgStr(new CfgStr(c)))
-    }
-
-    updateGroup(cfgStr: CfgStr) {
-        const groupCfg = cfgStr.radio()
-        if (!groupCfg || !groupCfg.groupKey) { return }
-        let rg = this.radioGroup.get(groupCfg.groupKey)
-        if (!rg) {
-            rg = new RadioGroup(groupCfg.groupKey)
-            this.radioGroup.set(groupCfg.groupKey, rg)
-        }
-        rg.addCfg(cfgStr, groupCfg.value || cfgStr.key(), groupCfg.isDefSct)
-    }
-
-    addCfgStr(cfg: CfgStr) {
-        this.updateGroup(cfg)
-        this.cfgs.push(cfg)
-    }
-}
-
-export interface StageCfg {
-    key: string
-    info?: StageCfgInfo
-}
-
-export class StageMgr {
-    stage = ref<string>()
-    dataMgr: DataMgr
-    cfgMap = new Map<string, StageCfg>()
-    constructor(dataMgr: DataMgr, cfgs?: StageCfg[]) {
-        this.dataMgr = dataMgr
-        cfgs = cfgs || gStageComps
-        cfgs.forEach(cfg => this.cfgMap.set(cfg.key, cfg))
-    }
-
-    testStage() {
-        if (this.dataMgr.hasPlay()) {
-            this.stage.value = 'playing'
-        } else if (this.dataMgr.isLogin()) {
-            this.stage.value = 'regplay'
-        } else {
-            this.stage.value = 'login'
-        }
-    }
-
-    getStageCfg(key?: string) {
-        return key ? this.cfgMap.get(key) : undefined
-    }
-
-    updateCfg(scm: StageCfgMgr) {
-        this.cfgMap.forEach((value: StageCfg, key: string) => { value.info = scm.get(key) })
-    }
 }
