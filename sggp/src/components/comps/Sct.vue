@@ -1,11 +1,11 @@
 <script lang="ts" setup>
 import { CfgKey, type CfgStr } from '@/app/cfg';
-import type { Shapable, Textable } from '@/app/model';
 
 
 import type { SanGuo } from '@/app/sg';
 import { computed, inject, onUnmounted, ref, watch } from 'vue';
 import Scroll from './Scroll.vue';
+import type { Shapable, Textable } from '@/app/commModel';
 
 const { sg } = inject('sg') as { sg: SanGuo }
 const { cfg } = defineProps({ cfg: { required: true } }) as { cfg: CfgStr }
@@ -27,7 +27,7 @@ const text = ref<Textable>()
 watch(() => cfg, () => {
     cfg.parseCfg({ key, size, text })
     optionsKey.value = cfg.key() + '_options';
-    sg.dataMgr.subscribe(key.value, 0, (key: string, newValue: any, oldValue: any) => {
+    sg.ctx.dataMgr.subscribe(key.value, 0, (key: string, newValue: any, oldValue: any) => {
         for (let i = 0; i < options.value.length; i++) {
             const kv = options.value[i];
             if (kv.key == newValue) {
@@ -37,7 +37,7 @@ watch(() => cfg, () => {
         }
         sctOp.value = '随机'
     })
-    sg.dataMgr.subscribeValue(optionsKey.value, options)
+    sg.ctx.dataMgr.subscribeValue(optionsKey.value, options)
     // setSub(sctKey, sct, sctable.value ? `${key.value}_sct` : undefined, sctableDefVal.value.isDefSct)
     // setSub(disKey, dis, imgGroup.value && imgGroup.value.hasDis() ? `${key.value}_dis` : undefined)
     // setSub(alaKey, ala, imgGroup.value && imgGroup.value.hasAlarm() ? `${key.value}_ala` : undefined)
@@ -46,8 +46,8 @@ watch(() => cfg, () => {
     if (size.value && size.value.styles) {
         Object.assign(tempStyles, size.value.styles)
 
-        const onBg = sg.res.getImgGroup('common#select')?.hasDef()?.getImg(size.value.w, size.value.h).imgDataUrl
-        const downBg = sg.res.getImgGroup('common#select')?.hasDown()?.getImg(size.value.w, size.value.h).imgDataUrl
+        const onBg = sg.ctx.res.getImgGroup('common#select')?.hasDef()?.getImg(size.value.w, size.value.h).imgDataUrl
+        const downBg = sg.ctx.res.getImgGroup('common#select')?.hasDown()?.getImg(size.value.w, size.value.h).imgDataUrl
         tempStyles['--bg'] = `url(${onBg})`
         tempStyles['--abg'] = `url(${downBg})`
         tempStyles['min-height'] = `${size.value.h}px`
@@ -75,8 +75,8 @@ watch(() => cfg, () => {
         </div>
         <Scroll v-show="showOptions" class="scroll12" :max-height="maxHeight" :scroll="`auto`">
             <ul v-show="showOptions">
-                <li v-for="(item, index) in options" :class="[sg.dataMgr.get(key) == item.key ? 'selected' : '']"
-                    @click.stop="() => { sg.dataMgr.set(key, item.key); showOptions = false }">
+                <li v-for="(item, index) in options" :class="[sg.ctx.dataMgr.get(key) == item.key ? 'selected' : '']"
+                    @click.stop="() => { sg.ctx.dataMgr.set(key, item.key); showOptions = false }">
                     <span :style="textStyle"> {{ item.value }}</span>
                 </li>
             </ul>

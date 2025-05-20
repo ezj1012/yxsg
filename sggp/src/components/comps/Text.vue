@@ -4,11 +4,11 @@
 // import DataMgr from '@/app/stage/DataMgr';
 // import Res from '@/app/utils/Res';
 import { CfgKey, type CfgStr } from '@/app/cfg';
-import type { Textable } from '@/app/model';
-import type { SanGuo } from '@/app/sg';
+import type { Textable } from '@/app/commModel';
+import type { SanGuo, SgCtx } from '@/app/sg';
 import { computed, inject, onMounted, onUnmounted, ref, watch } from 'vue';
 
-const { sg } = inject('sg') as { sg: SanGuo }
+const { sg, ctx } = inject('sg') as { sg: SanGuo, ctx: SgCtx }
 const { cfg } = defineProps({ cfg: { required: true } }) as { cfg: CfgStr }
 
 const data = ref('')
@@ -22,11 +22,11 @@ watch(() => cfg, () => {
   cfg.parseCfg({ text, styles, html, msg })
   type.value = cfg.get(CfgKey.inputType)
   const defVal = text.value ? text.value.content : ''
-  sg.dataMgr.subscribeValue(cfg.key(), data, defVal)
+  ctx.dataMgr.subscribeValue(cfg.key(), data, defVal)
 }, { immediate: true })
 
 onUnmounted(() => {
-  sg.dataMgr.unsubscribe(cfg.key())
+  ctx.dataMgr.unsubscribe(cfg.key())
 })
 
 const finalStyles = computed(() => {

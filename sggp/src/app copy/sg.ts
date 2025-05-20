@@ -7,7 +7,7 @@ import { RadioGroup, StageMgr } from "./stage";
 import { AxiosError } from "axios";
 import { CfgStr } from "./cfg";
 import { DivBg, installClickout, installMsg } from "./directives";
-import { gFunPanComps } from "./constant";
+import { gFunPanComps } from "../app/constant";
 import type { Img } from "../app/utils/img";
 
 

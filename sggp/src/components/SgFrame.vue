@@ -1,48 +1,33 @@
 <script setup lang="ts">
 
 import { computed, onMounted, provide, defineAsyncComponent, type ModelRef, ref, watch } from 'vue';
-// // import RFunPanl from '../comps/RFunPanl.vue';
-// import StageView from './stages/StageView.vue';
-// import HMsg from './msg/HMsg.vue';
+
 import type { SanGuo } from '@/app/sg';
 import LoadingView from './stages/LoadingView.vue';
 import StageView from './stages/StageView.vue';
-// import EMsg from './msg/EMsg.vue';
-// import HMsg from './msg/HMsg.vue';
-// import DataShowList from './DataShowList.vue';
-// import CfgShowList from './CfgShowList.vue';
-// import WorldMap from './comps/playing/innerpan/WorldMap.vue';
-// import TableViewTest from './test/TableViewTest.vue';
-// import FunPanlTestView from './test/FunPanlTestView.vue';
-// import RFunPanl from './comps/RFunPanl.vue';
-
-
-// import DataShowList from './datas/DataShowList.vue';
-// import EMsg from './msg/EMsg.vue';
-// import RFunPanl from './comps/RFunPanl.vue';
+import EMsg from './msg/EMsg.vue';
+import HMsg from './msg/HMsg.vue';
+import RFunPanl from './comps/RFunPanl.vue';
+import FunPanlTestView from './test/FunPanlTestView.vue';
 
 const sg: ModelRef<SanGuo> = defineModel({ required: true })
-provide('sg', { sg: sg.value })
+provide('sg', { sg: sg.value, ctx: sg.value.ctx, res: sg.value.ctx.res })
 const isReady = computed(() => sg.value.ready.value)
-
-// 模拟启动
-// setTimeout(() => { sg.value.setup() }, 2000)
-
 
 </script>
 <template>
     <div class="sg-main">
         <template v-if="isReady">
-            isReady
-            <!-- <RFunPanl />
-            <FunPanlTestView /> -->
+            <!--  -->
+            <RFunPanl />
+            <FunPanlTestView />
             <!-- -->
             <StageView />
 
             <!--  <TableViewTest />-->
             <!-- <WorldMap /> -->
-            <!-- <HMsg />
-            <EMsg /> -->
+            <HMsg />
+            <EMsg />
         </template>
         <template v-else>
             <LoadingView />

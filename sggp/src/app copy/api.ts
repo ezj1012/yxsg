@@ -112,8 +112,8 @@ export class PlayApi {
 
     async getPlay(): Promise<PlayInfo> {
         const params: Record<string, any> = {}
-        // const dataMgr = this.sgApi.sg.dataMgr
-        params.cityId = this.sgApi.sg.dataMgr.getByKey("playing#player_lastCity")
+        // const dataMgr = this.sgApi.sg.ctx.dataMgr
+        params.cityId = this.sgApi.sg.ctx.dataMgr.getByKey("playing#player_lastCity")
         return (await this.sgApi.post('/play/info', params)).data
     }
 

@@ -2,10 +2,12 @@
 import { actionMgr } from '@/app/action';
 import { CfgStr } from '@/app/cfg';
 import type { SanGuo } from '@/app/sg';
-import { inject, computed } from 'vue';
+import { inject, computed, ref } from 'vue';
 import PBtn from '../comps/PBtn.vue';
+import type { ErrMsgMgr } from '@/app/msg/errMsg';
 const { sg } = inject('sg') as { sg: SanGuo }
-const msgs = computed(() => sg.dataMgr.dataCache.showErrorMsgs)
+const errMgs = ref<ErrMsgMgr>(sg.ctx.errMsgMgr)
+const msgs = computed(() => errMgs.value.msgs)
 const key = 'any#msg_ok'
 const key2 = 'any#msg_cancel'
 actionMgr.register({
@@ -14,7 +16,7 @@ actionMgr.register({
             const msg = msgs.value[msgs.value.length - 1]
             msg.ok && await msg.ok()
         } finally {
-            sg.dataMgr.removeMsg()
+            errMgs.value.removeMsg()
         }
     }
 })
@@ -24,7 +26,7 @@ actionMgr.register({
             const msg = msgs.value[msgs.value.length - 1]
             msg.cancel && await msg.cancel()
         } finally {
-            sg.dataMgr.removeMsg()
+            errMgs.value.removeMsg()
         }
     }
 })

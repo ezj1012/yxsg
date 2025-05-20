@@ -5,14 +5,14 @@ import { ref, inject, watch, computed, onBeforeUpdate, onUpdated, provide, onMou
 
 import { cid2xy } from '@/app/constant';
 import Scroll from '../Scroll.vue';
-import type { CityIntro } from '@/app/modelData';
+import type { CityIntro } from '@/app/api/apiModel';
 
 const { sg } = inject('sg') as { sg: SanGuo }
 const { cfg } = defineProps({ cfg: { required: true } }) as { cfg: CfgStr }
 
-const bg = `url(${sg.res.getImgGroup('common#title')?.hasDef()?.getDataUrl()})`
-const sctBg = `url(${sg.res.getImgGroup('common#scroll_downarr')?.hasDef()?.getDataUrl()})`
-const sctDownBg = `url(${sg.res.getImgGroup('common#scroll_downarr')?.hasDown()?.getDataUrl()})`
+const bg = `url(${sg.ctx.res.getImgGroup('common#title')?.hasDef()?.getDataUrl()})`
+const sctBg = `url(${sg.ctx.res.getImgGroup('common#scroll_downarr')?.hasDef()?.getDataUrl()})`
+const sctDownBg = `url(${sg.ctx.res.getImgGroup('common#scroll_downarr')?.hasDown()?.getDataUrl()})`
 
 const citys = ref<CityIntro[]>([])
 const cityName = computed(() => toCityShowName(citys.value.find(c => c.id == lastCityId.value)))
@@ -20,15 +20,15 @@ const lastCityId = ref<number>()
 const showOptions = ref(false)
 
 watch(() => cfg, () => {
-  sg.dataMgr.subscribeValue("playing#player_lastCity", lastCityId)
-  sg.dataMgr.subscribeValue("playing#player_cities", citys)
+  sg.ctx.dataMgr.subscribeValue("playing#player_lastCity", lastCityId)
+  sg.ctx.dataMgr.subscribeValue("playing#player_cities", citys)
   console.log(`CitySelect: watch cfg: `, lastCityId.value, citys.value)
 }, { immediate: true })
 
 async function changeCity(city: CityIntro) {
-  sg.dataMgr.set("playing#player_lastCity", city.id)
+  sg.ctx.dataMgr.set("playing#player_lastCity", city.id)
   showOptions.value = false
-  await sg.refreshPlay()
+  await sg.ctx.playMgr.refreshPlay()
 }
 
 function toCityShowName(city?: CityIntro) {

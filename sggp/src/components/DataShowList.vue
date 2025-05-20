@@ -9,10 +9,10 @@ const { sg } = inject('sg') as { sg: SanGuo }
 const datas = computed(() => {
     const keys = []
 
-    for (const key of sg.dataMgr.dataCache.cache.keys()) {
+    for (const key of sg.ctx.dataMgr.dataCache.cache.keys()) {
         keys.push({
             key,
-            value: sg.dataMgr.dataCache.cache.get(key)
+            value: sg.ctx.dataMgr.dataCache.cache.get(key)
         })
     }
 

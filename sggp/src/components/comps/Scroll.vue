@@ -29,14 +29,14 @@ function updateStyle() {
         let hh: number = maxHeight ? maxHeight : sc.offsetHeight;
         hh = hh - 4
         if (hh > 40) {
-            tarImageSrc.value = sg.res.getImgGroup("common#scroll_track")?.hasDef()?.getImg(19, hh).imgDataUrl || '123'
+            tarImageSrc.value = sg.ctx.res.getImgGroup("common#scroll_track")?.hasDef()?.getImg(19, hh).imgDataUrl || '123'
             let newHeight = ((hh - 40) * hh) / (maxHeight ? hh + 40 : sc.scrollHeight);
-            barImageSrc.value = sg.res.getImgGroup("common#scroll_bar")?.hasDef()?.getImg(13, newHeight).imgDataUrl || '123'
-            barHoverImageSrc.value = sg.res.getImgGroup("common#scroll_bar")?.hasOn()?.getImg(13, newHeight).imgDataUrl || '123'
-            scrollDown.value = sg.res.getImgGroup("common#scroll_downarr")?.hasDef()?.getDataUrl() || '123'
-            scrollDownUp.value = sg.res.getImgGroup("common#scroll_downarr")?.hasDown()?.getDataUrl() || '123'
-            scrollUp.value = sg.res.getImgGroup("common#scroll_uparr")?.hasDef()?.getDataUrl() || '123'
-            scrollUpDown.value = sg.res.getImgGroup("common#scroll_uparr")?.hasDown()?.getDataUrl() || '123'
+            barImageSrc.value = sg.ctx.res.getImgGroup("common#scroll_bar")?.hasDef()?.getImg(13, newHeight).imgDataUrl || '123'
+            barHoverImageSrc.value = sg.ctx.res.getImgGroup("common#scroll_bar")?.hasOn()?.getImg(13, newHeight).imgDataUrl || '123'
+            scrollDown.value = sg.ctx.res.getImgGroup("common#scroll_downarr")?.hasDef()?.getDataUrl() || '123'
+            scrollDownUp.value = sg.ctx.res.getImgGroup("common#scroll_downarr")?.hasDown()?.getDataUrl() || '123'
+            scrollUp.value = sg.ctx.res.getImgGroup("common#scroll_uparr")?.hasDef()?.getDataUrl() || '123'
+            scrollUpDown.value = sg.ctx.res.getImgGroup("common#scroll_uparr")?.hasDown()?.getDataUrl() || '123'
             var t = {
                 '--track-img': `url(${tarImageSrc.value})`,
                 '--track-bar': `url(${barImageSrc.value})`,

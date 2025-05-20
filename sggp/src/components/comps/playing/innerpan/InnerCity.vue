@@ -15,11 +15,11 @@ onMounted(() => { })
 
 // const msgInfo = ref('')
 const msgV = ref({ content: '', isHover: isHoverItem })
-const buildMgr = sg.dataMgr.playMgr.cityMgr.innerBuildMgr
+const buildMgr = sg.ctx.dataMgr.playMgr.cityMgr.innerBuildMgr
 const builds = ref(buildMgr.builds)
 const isShowLvImg = ref(true)
-const highBg = `url(${sg.res.getImgGroup('playing#innercity#map_high').hasDef()?.getDataUrl()})`
-const lowBg = `url(${sg.res.getImgGroup('playing#innercity#map_low').hasDef()?.getDataUrl()})`
+const highBg = `url(${sg.ctx.res.getImgGroup('playing#innercity#map_high').hasDef()?.getDataUrl()})`
+const lowBg = `url(${sg.ctx.res.getImgGroup('playing#innercity#map_low').hasDef()?.getDataUrl()})`
 const styles = computed(() => {
     const s = {} as any
     s.backgroundImage = builds.value[1].getLv() && builds.value[1].getLv() > 0 ? highBg : lowBg
@@ -31,7 +31,7 @@ function isHoverItem(e: MouseEvent) {
         const build = builds.value[i]
         if (build.getImg().isHover(e.offsetX - build.getX(), e.offsetY - build.getY())) {
             msgV.value.content = build.getMsg()
-            // sg.dataMgr.setHoverMsg(build.getMsg())
+            // sg.ctx.dataMgr.setHoverMsg(build.getMsg())
             if (hoverbuildIdx.value !== i) {
                 hoverbuildIdx.value = i
             }
@@ -67,7 +67,7 @@ async function clickBuild(e: MouseEvent) {
 
 async function openBuildList(build: any) {
     sg.funPanMgr.setComp('fun_pan#city_build_inner_list')
-    // sg.dataMgr.setByKey(DATA_KEY_CITY_BUILD_INNER, build)
+    // sg.ctx.dataMgr.setByKey(DATA_KEY_CITY_BUILD_INNER, build)
 }
 
 

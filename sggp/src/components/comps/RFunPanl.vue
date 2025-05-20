@@ -2,16 +2,16 @@
 import type { SanGuo } from '@/app/sg';
 import Empty from './Empty.vue';
 import { computed, inject, watch } from 'vue';
-import type { FunPanComp } from '@/app/model';
+import type { FunPanComp } from '@/app/commModel';
 import { CfgStr } from '@/app/cfg';
 import PBtn from './PBtn.vue';
 const { sg } = inject('sg') as { sg: SanGuo }
 
 // const { title, pos } = defineProps({ title: { default: { content: '' } }, pos: { default: { w: 680, h: 490, x: 290, y: 50 } } }) as { title: Textable, pos: Shapable }
 
-const bgUrl = computed(() => sg.img('common#title'))
+const bgUrl = computed(() => sg.ctx.res.img('common#title'))
 const empty: FunPanComp = { key: 'fun_pan#empty', comp: Empty, content: '', size: 12, color: '--c-', x: 0, y: 0, w: 0, h: 0 }
-const comp = computed(() => (sg.funPanMgr.getComp() || empty) as FunPanComp)
+const comp = computed(() => (sg.ctx.funPanMgr.getComp() || empty) as FunPanComp)
 const w = computed(() => comp.value.w || 680)
 const h = computed(() => comp.value.h || 490)
 const x = computed(() => comp.value.x || 290)

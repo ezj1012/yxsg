@@ -1,9 +1,9 @@
 <script lang="ts" setup>
-import { ScrollHelper } from '@/app/res'
 import type { SanGuo } from '@/app/sg'
 import { computed, inject, onMounted, onUnmounted, ref, watch } from 'vue'
 import TableHeader from './TableHeader.vue'
-import { TableHeaderDef, TableDataRowDef, TableDataCellDef, defaultConverHeader, defaultConverDatas } from '@/app/model'
+import { TableHeaderDef, TableDataRowDef, TableDataCellDef, defaultConverHeader, defaultConverDatas, ScrollHelper } from '@/app/commModel'
+import type { SgRes } from '@/app/res'
 
 
 const emit = defineEmits(['change'])
@@ -16,7 +16,7 @@ const props = defineProps({
     datasConver: { type: Function, default: defaultConverDatas },
 })
 
-const { sg } = inject('sg') as { sg: SanGuo }
+const { sg, res } = inject('sg') as { sg: SanGuo, res: SgRes }
 
 const empty = new TableDataRowDef([], true)
 const headers = ref<TableHeaderDef[]>([])
@@ -37,7 +37,7 @@ const obs = new ResizeObserver(entries => {
 
 onMounted(() => {
     obs.observe(tableEl.value!)
-    scrollHelper.value = new ScrollHelper(sg)
+    scrollHelper.value = new ScrollHelper(sg.ctx.res)
     // updateBg()
     // calcDatas()
 })
@@ -74,15 +74,15 @@ function doClick(row: TableDataRowDef, idx: number, e: MouseEvent) {
 function updateBg() {
     const rect = tableEl.value!.getBoundingClientRect()
     console.log(rect.width, tableEl.value?.parentElement?.getBoundingClientRect().width)
-    bgUrl.value = sg.img('common#table_board', { w: rect.width, h: rect.height })
+    bgUrl.value = res.img('common#table_board', { w: rect.width, h: rect.height })
 }
 
 const styleVars = computed(() => {
     return {
         'background-image': bgUrl.value,
-        '--table-bg-line': sg.img('common#table_contentline'),
+        '--table-bg-line': res.img('common#table_contentline'),
         '--header-height': `${props.headerHeight}px`,
-        '--header-scroll-bg': sg.img('common#table_header', { w: 20, h: props.headerHeight }),
+        '--header-scroll-bg': res.img('common#table_header', { w: 20, h: props.headerHeight }),
         '--row-height': `${props.rowHeight}px`,
     };
 })

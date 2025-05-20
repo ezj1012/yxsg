@@ -2,7 +2,7 @@
 import { type Ref, inject, onMounted, ref, computed, watch } from 'vue';
 
 import type { SanGuo } from '@/app/sg';
-import type { StageCfg } from '@/app/stage';
+import type { StageCfg } from '@/app/stage/stage';
 import { CfgKey } from '@/app/cfg';
 
 const filter = ref('')

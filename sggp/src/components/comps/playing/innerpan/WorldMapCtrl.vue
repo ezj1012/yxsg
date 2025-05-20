@@ -11,7 +11,7 @@ import PBtn from '../../PBtn.vue';
 const { sg } = inject('sg') as { sg: SanGuo }
 const { mapCtx  } = inject('worldMap') as {  mapCtx: Ref<MapCtx>  }
 
-const bgUrl = `url(${sg.res.getImgGroup('playing#world#ctrl#map_controller').hasDef()?.getDataUrl()})`
+const bgUrl = `url(${sg.ctx.res.getImgGroup('playing#world#ctrl#map_controller').hasDef()?.getDataUrl()})`
 const moveBtn = new CfgStr(`K:playing#worldctrl#map_move;T:I_BTN;S:103,104,42,23,100;RFI:playing#world#ctrl#map_move;NOM;ACT:WM_mapCtx.value.moveTo`);
 const centerBtn = new CfgStr(`K:playing#worldctrl#center;T:I_BTN;S:73.5,31,42,42,100;RFI:playing#world#ctrl#map_mycity;NOM;ACT:WM_MoveCity`);
 const mapBtn = new CfgStr(`K:playing#worldctrl#open_map;T:I_BTN;S:156,107,19,18,100;RFI:playing#world#ctrl#world_map;NOM;SMSG:世界地图;`);
@@ -31,7 +31,7 @@ actionMgr.reg('WM_mapCtx.value.moveTo', async (sg) => {
     await mapCtx.value.moveTo(mapCtx.value.x, mapCtx.value.y)
 })
 actionMgr.reg('WM_MoveCity', async ({ sg }) => {
-    const cityId = sg.dataMgr.getByKey('playing#player_lastCity')
+    const cityId = sg.ctx.dataMgr.getByKey('playing#player_lastCity')
     const xy = cid2xy(cityId)
     await mapCtx.value.moveTo(xy.x, xy.y)
 })

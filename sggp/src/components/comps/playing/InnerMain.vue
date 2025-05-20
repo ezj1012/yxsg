@@ -9,7 +9,7 @@ import WorldMap from './innerpan/WorldMap.vue';
 const { sg } = inject('sg') as { sg: SanGuo }
 const { cfg } = defineProps({ cfg: { required: true } }) as { cfg: CfgStr }
 const panId = ref(1)
-watch(() => cfg, () => { sg.dataMgr.subscribeValue("group#mainPan", panId, 1) }, { immediate: true })
+watch(() => cfg, () => { sg.ctx.dataMgr.subscribeValue("group#mainPan", panId, 1) }, { immediate: true })
 </script>
 
 <template>

@@ -9,14 +9,14 @@ const inner = ref(false)
 
 const { sg } = inject('sg') as { sg: SanGuo }
 onMounted(() => {
-    sg.dataMgr.subscribe('player#time', undefined, updateBuildState)
+    sg.ctx.dataMgr.subscribe('player#time', undefined, updateBuildState)
     updateBuildState()
 })
 
 const updateBuildState = (key?: string, newValue?: any, oldValue?: any) => {
     console.log('99999999999999999999999999999999999999999999999999999999')
-    if (sg.dataMgr.playMgr.play && sg.dataMgr.playMgr.play.city) {
-        console.log('99999999999999999999999999999999999999999999999999999999', sg.dataMgr.playMgr.play.city)
+    if (sg.ctx.playMgr.play && sg.ctx.playMgr.play.city) {
+        console.log('99999999999999999999999999999999999999999999999999999999', sg.ctx.playMgr.play.city)
     } else {
         
     }
@@ -25,7 +25,7 @@ const updateBuildState = (key?: string, newValue?: any, oldValue?: any) => {
 
 const builds = computed(() => {
     const bs = []
-    const buildingsMap = sg.res.gCfgMgr.cfg!.buildingsMap
+    const buildingsMap = sg.ctx.gCfgMgr.cfg!.buildingsMap
     for (const k in buildingsMap) {
         if (inner && buildingsMap[k].place == 1) {
             if (buildingsMap[k].id != 20 && buildingsMap[k].id != 6) {

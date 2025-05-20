@@ -3,65 +3,43 @@ import type { SgApi } from "./api"
 import type { Traceable } from "./commModel";
 import { Img } from "./utils/img";
 import { CfgStr } from "./cfg";
-import { configuerImgs, ImgMgr } from "./res/imgRes";
+import { configuerImgs, ImgGroupInfo, ImgMgr } from "./res/imgRes";
 import type { FrameStageCfg } from "./api/apiModel";
+import type { GCfgMgr } from "./global";
 
-
-export class StageCfgInfo {
-    cfg: FrameStageCfg
-    cfgs: CfgStr[] = []
-    radioGroup = new Map<string, RadioGroup>()
-
-    constructor(cfg: FrameStageCfg) {
-        this.cfg = cfg
-        cfg.comps.forEach(c => this.addCfgStr(new CfgStr(c)))
-    }
-
-    updateGroup(cfgStr: CfgStr) {
-        const groupCfg = cfgStr.radio()
-        if (!groupCfg || !groupCfg.groupKey) { return }
-        let rg = this.radioGroup.get(groupCfg.groupKey)
-        if (!rg) {
-            rg = new RadioGroup(groupCfg.groupKey)
-            this.radioGroup.set(groupCfg.groupKey, rg)
-        }
-        rg.addCfg(cfgStr, groupCfg.value || cfgStr.key(), groupCfg.isDefSct)
-    }
-
-    addCfgStr(cfg: CfgStr) {
-        this.updateGroup(cfg)
-        this.cfgs.push(cfg)
-    }
+export interface StageCfgAdd {
+    clear(): Promise<void>;
+    addStageCfg(cfg: FrameStageCfg): void
+    appendStageChildrenCfg(cfg: CfgStr): void
 }
-
-export class StageCfgMgr {
-    private cfgMap = new Map<string, StageCfgInfo>()
-    clear() { this.cfgMap.clear() }
-    // get(stage: string): StageCfgInfo { return this.cfgMap.get(stage)! }
-    // getRadioGroup(stageKey: string, groupKey: string) { return this.cfgMap.get(stageKey)?.radioGroup.get(groupKey) }
-
-    addStageCfg(cfg: FrameStageCfg) { this.cfgMap.set(cfg.key, new StageCfgInfo(cfg)) }
-    appendStageChildrenCfg(cfg: CfgStr) { this.cfgMap.get(cfg.stage)?.addCfgStr(cfg) }
-}
-
 
 export class SgRes {
     private _imgMgr: ImgMgr
-    private _cfgMgr: StageCfgMgr
-    constructor() {
+    private _stageCfgAdd: StageCfgAdd
+    private _globarMgr: GCfgMgr
+    constructor(cfgMgr: StageCfgAdd, globarMgr: GCfgMgr) {
         this._imgMgr = new ImgMgr()
-        this._cfgMgr = new StageCfgMgr()
+        this._stageCfgAdd = cfgMgr
+        this._globarMgr = globarMgr
     }
 
     async clear() {
         this._imgMgr.clear()
-        this._cfgMgr.clear()
+        this._stageCfgAdd.clear()
     }
 
     get imgMgr() { return this._imgMgr }
-    get stageCfgMgr() { return this._cfgMgr }
-    get globarMgr() { return }
-    
+    get stageCfgMgr() { return this._stageCfgAdd }
+    get globarMgr() { return this._globarMgr }
+    getImg(key: string) { return this.imgMgr.get(key) }
+    getImgGroup(key: string) { return this.imgMgr.getGroup(key)! }
+
+    img(key: string, scale?: { w?: number, h?: number, filter?: (g: ImgGroupInfo) => Img.ImgDef }) {
+        const g = this.getImgGroup(key)
+        const img = scale?.filter ? scale.filter(g) : g.hasDef()
+        const imgUrl = img?.getImg(scale?.w, scale?.h).imgDataUrl
+        return `url(${imgUrl})`
+    }
 }
 
 

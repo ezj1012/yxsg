@@ -12,7 +12,7 @@ const buildBtn = new CfgStr(`K:funpanl#build_${build.id};T:I_BTN;S:0,37,60,26,4;
 
 const img = ref<string>('')
 onMounted(() => {
-    img.value = sg.img(`playing#innercity#${build.typeName}`)
+    img.value = sg.ctx.res.img(`playing#innercity#${build.typeName}`)
 })
 
 const canBuild = computed(() => {

@@ -1,7 +1,7 @@
 import { shallowRef, type Ref } from "vue"
-import type { HoverMsgDef, Shapable, Textable } from "./model"
-import type { ImgGroupInfo } from "./res"
 import sgGame from "./sg"
+import type { ImgGroupInfo } from "./res/imgRes"
+import type { HoverMsgDef, Shapable, Textable } from "./commModel"
 
 
 export function isBtn(type: string | CfgType) {
@@ -89,7 +89,6 @@ export class CfgStr {
         if (idx > 0) {
             this.stage = key.substring(0, idx)
         }
-
         let imgKey = isFromImgCfg ? key : this.cfgMap.has(CfgKey.refImg) ? this.cfgMap.get(CfgKey.refImg)! : isImgType(this.cfgMap) && this.cfgMap.has(CfgKey.key) ? this.cfgMap.get(CfgKey.key)! : undefined
         imgKey && (this.imgGroup = CfgStr.imgGroupGetter.value ? CfgStr.imgGroupGetter.value(imgKey) : undefined)
         this.size = parseCfgSize(this.get(CfgKey.size), this.imgGroup)

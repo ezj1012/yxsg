@@ -1,10 +1,9 @@
 <script lang="ts" setup>
 import { CfgKey, type CfgStr } from '@/app/cfg';
-import type { Textable } from '@/app/model';
+import type { Textable } from '@/app/commModel';
 import { ref, watch } from 'vue';
 
 const { cfg } = defineProps({ cfg: { required: true } }) as { cfg: CfgStr }
-
 const type = ref<string>()
 const text = ref<Textable>()
 const styles = ref<{ [key: string]: any }>({})

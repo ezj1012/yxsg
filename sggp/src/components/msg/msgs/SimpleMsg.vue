@@ -1,14 +1,19 @@
 <script setup lang="ts">
-import type { SanGuo } from '@/app/sg';
-import { computed, inject } from 'vue';
-const { sg } = inject('sg') as { sg: SanGuo }
+import type { HoverMsg } from '@/app/commModel';
+import type { SgRes } from '@/app/res';
+import type { SanGuo, SgCtx } from '@/app/sg';
+import { computed, inject, type Ref } from 'vue';
+const { sg, ctx, res } = inject('sg') as { sg: SanGuo, ctx: SgCtx, res: SgRes }
+const { hmgs } = inject('msg') as { hmgs: Ref<HoverMsg> }
+
 
 const msg = computed(() => {
-    return sg.dataMgr.hoverMsg.value?.content
+    return hmgs.value?.content
 })
 const isHtml = computed(() => {
-    return sg.dataMgr.hoverMsg.value?.isHtml
+    return hmgs.value?.isHtml
 })
+
 </script>
 <template>
     <div v-if="isHtml" class="msg" v-html="msg"></div>

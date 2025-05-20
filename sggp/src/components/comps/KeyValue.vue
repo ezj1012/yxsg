@@ -2,7 +2,7 @@
 
 import { actionMgr } from '@/app/action';
 import { CfgKey, type CfgStr } from '@/app/cfg';
-import { type Textable } from '@/app/model';
+import type { Textable } from '@/app/commModel';
 import type { SanGuo } from '@/app/sg';
 
 import { inject, ref, watch, } from 'vue';
@@ -18,9 +18,9 @@ const data = ref('')
 // 初始化
 watch(() => cfg, () => {
   cfg.parseCfg({ text, title })
-  bgUrl.value = `url(${sg.res.getImgGroup('common#board_input').hasDef()?.getImg(cfg.size.w, cfg.size.h).imgDataUrl})`
+  bgUrl.value = `url(${sg.ctx.res.getImgGroup('common#board_input').hasDef()?.getImg(cfg.size.w, cfg.size.h).imgDataUrl})`
   const defVal = text.value ? text.value.content : ''
-  sg.dataMgr.subscribeValue(cfg.key(), data, defVal)
+  sg.ctx.dataMgr.subscribeValue(cfg.key(), data, defVal)
 }, { immediate: true })
 
 

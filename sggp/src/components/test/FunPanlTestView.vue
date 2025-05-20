@@ -1,5 +1,6 @@
 <script lang="ts" setup>
-import { encode, gFunPanComps } from '@/app/constant';
+import { encode } from '@/app/constant';
+import { gFunPanComps } from '@/app/funPanMgr';
 import type { SanGuo } from '@/app/sg';
 import { inject, onMounted, ref } from 'vue';
 
@@ -9,15 +10,15 @@ onMounted(() => {
     panKey.value = gFunPanComps[0].key
 })
 function doChange(key: any) {
-    sg.funPanMgr.setComp(key === '' ? '' : panKey.value)
+    sg.ctx.funPanMgr.setComp(key === '' ? '' : panKey.value)
 }
 
 async function doLogin() {
     try {
-        await sg.api.userApi.login('qwe123', encode('qwe1234'))
-        await sg.refreshPlay()
+        await sg.ctx.userMgr.login('qwe123', encode('qwe1234'))
+        await sg.ctx.playMgr.refreshPlay()
     } catch (error) {
-        sg.pushMsg("登录失败!");
+        sg.ctx.errMsgMgr.pushMsg("登录失败!");
         return false;
     }
 }

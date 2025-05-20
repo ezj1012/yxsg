@@ -2,14 +2,12 @@ import { AbsApi, type IUserToken } from "./apiComm";
 import type { FrameCfg, GlobalCfg, MemMapTile, PlayInfo, Province } from "./apiModel";
 
 export class SgApi extends AbsApi {
-    token: IUserToken
     userApi: UserApi
     cfgApi: CfgApi
     playApi: PlayApi;
     envApi: EnvApi;
     constructor(token: IUserToken) {
-        super();
-        this.token = token
+        super(token);
         this.userApi = new UserApi(this)
         this.cfgApi = new CfgApi(this)
         this.playApi = new PlayApi(this)

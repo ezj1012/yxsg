@@ -21,7 +21,7 @@ provide('worldMap', { window, x, y })
 onMounted(async () => {
     if (canvas.value) {
         window.value = new CanvasWindow(sg, w, h, ws, hs, canvas.value)
-        const cityId = sg.dataMgr.getByKey('playing#player_lastCity')
+        const cityId = sg.ctx.dataMgr.getByKey('playing#player_lastCity')
         const xy = cid2xy(cityId)
         window.value.moveTo(xy.x, xy.y)
         x.value = xy.x

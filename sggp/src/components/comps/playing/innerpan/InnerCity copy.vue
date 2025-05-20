@@ -86,7 +86,7 @@ class Build {
     }
 
     isShowLvImg() {
-        return sg.dataMgr.playMgr.showLv()
+        return sg.ctx.dataMgr.playMgr.showLv()
     }
 
     getLvImg() {
@@ -130,52 +130,52 @@ const buildImgs = ref(new Map<number, Img.ImgDef>)
 function initArrays(builds: Ref<Build[]>) {
     builds.value.push(
         //         // 0: 官服,1: 城墙
-        Build.of(370, 180, sg.res.getImgGroup('playing#innercity#goverment')!.hasDef()!, sg.res.getImgGroup('playing#innercity#goverment')!.hasDef()!)
+        Build.of(370, 180, sg.ctx.res.getImgGroup('playing#innercity#goverment')!.hasDef()!, sg.ctx.res.getImgGroup('playing#innercity#goverment')!.hasDef()!)
             .setLvXy(155, 35)
         ,
-        Build.of(0, 25, sg.res.getImgGroup('playing#innercity#townwall')!.hasDef()!, sg.res.getImgGroup('playing#innercity#townwall')!.hasDef()!)
+        Build.of(0, 25, sg.ctx.res.getImgGroup('playing#innercity#townwall')!.hasDef()!, sg.ctx.res.getImgGroup('playing#innercity#townwall')!.hasDef()!)
             .setLvXy(565, 140)
         ,
         // 
-        Build.of(297, 124, sg.res.getImgGroup('playing#buildbg')!.hasDef()!, sg.res.getImgGroup('playing#buildbg')!.hasDef()!),
-        Build.of(352, 152, sg.res.getImgGroup('playing#buildbg')!.hasDef()!, sg.res.getImgGroup('playing#buildbg')!.hasDef()!),
-        Build.of(517, 236, sg.res.getImgGroup('playing#buildbg')!.hasDef()!, sg.res.getImgGroup('playing#buildbg')!.hasDef()!),
-        Build.of(572, 264, sg.res.getImgGroup('playing#buildbg')!.hasDef()!, sg.res.getImgGroup('playing#buildbg')!.hasDef()!),
+        Build.of(297, 124, sg.ctx.res.getImgGroup('playing#buildbg')!.hasDef()!, sg.ctx.res.getImgGroup('playing#buildbg')!.hasDef()!),
+        Build.of(352, 152, sg.ctx.res.getImgGroup('playing#buildbg')!.hasDef()!, sg.ctx.res.getImgGroup('playing#buildbg')!.hasDef()!),
+        Build.of(517, 236, sg.ctx.res.getImgGroup('playing#buildbg')!.hasDef()!, sg.ctx.res.getImgGroup('playing#buildbg')!.hasDef()!),
+        Build.of(572, 264, sg.ctx.res.getImgGroup('playing#buildbg')!.hasDef()!, sg.ctx.res.getImgGroup('playing#buildbg')!.hasDef()!),
 
-        Build.of(242, 152, sg.res.getImgGroup('playing#buildbg')!.hasDef()!, sg.res.getImgGroup('playing#buildbg')!.hasDef()!),
-        Build.of(297, 180, sg.res.getImgGroup('playing#buildbg')!.hasDef()!, sg.res.getImgGroup('playing#buildbg')!.hasDef()!),
-        Build.of(462, 264, sg.res.getImgGroup('playing#buildbg')!.hasDef()!, sg.res.getImgGroup('playing#buildbg')!.hasDef()!),
-        Build.of(517, 292, sg.res.getImgGroup('playing#buildbg')!.hasDef()!, sg.res.getImgGroup('playing#buildbg')!.hasDef()!),
+        Build.of(242, 152, sg.ctx.res.getImgGroup('playing#buildbg')!.hasDef()!, sg.ctx.res.getImgGroup('playing#buildbg')!.hasDef()!),
+        Build.of(297, 180, sg.ctx.res.getImgGroup('playing#buildbg')!.hasDef()!, sg.ctx.res.getImgGroup('playing#buildbg')!.hasDef()!),
+        Build.of(462, 264, sg.ctx.res.getImgGroup('playing#buildbg')!.hasDef()!, sg.ctx.res.getImgGroup('playing#buildbg')!.hasDef()!),
+        Build.of(517, 292, sg.ctx.res.getImgGroup('playing#buildbg')!.hasDef()!, sg.ctx.res.getImgGroup('playing#buildbg')!.hasDef()!),
 
-        Build.of(187, 180, sg.res.getImgGroup('playing#buildbg')!.hasDef()!, sg.res.getImgGroup('playing#buildbg')!.hasDef()!),
-        Build.of(242, 208, sg.res.getImgGroup('playing#buildbg')!.hasDef()!, sg.res.getImgGroup('playing#buildbg')!.hasDef()!),
-        Build.of(297, 236, sg.res.getImgGroup('playing#buildbg')!.hasDef()!, sg.res.getImgGroup('playing#buildbg')!.hasDef()!),
-        Build.of(352, 264, sg.res.getImgGroup('playing#buildbg')!.hasDef()!, sg.res.getImgGroup('playing#buildbg')!.hasDef()!),
-        Build.of(407, 292, sg.res.getImgGroup('playing#buildbg')!.hasDef()!, sg.res.getImgGroup('playing#buildbg')!.hasDef()!),
-        Build.of(462, 320, sg.res.getImgGroup('playing#buildbg')!.hasDef()!, sg.res.getImgGroup('playing#buildbg')!.hasDef()!),
+        Build.of(187, 180, sg.ctx.res.getImgGroup('playing#buildbg')!.hasDef()!, sg.ctx.res.getImgGroup('playing#buildbg')!.hasDef()!),
+        Build.of(242, 208, sg.ctx.res.getImgGroup('playing#buildbg')!.hasDef()!, sg.ctx.res.getImgGroup('playing#buildbg')!.hasDef()!),
+        Build.of(297, 236, sg.ctx.res.getImgGroup('playing#buildbg')!.hasDef()!, sg.ctx.res.getImgGroup('playing#buildbg')!.hasDef()!),
+        Build.of(352, 264, sg.ctx.res.getImgGroup('playing#buildbg')!.hasDef()!, sg.ctx.res.getImgGroup('playing#buildbg')!.hasDef()!),
+        Build.of(407, 292, sg.ctx.res.getImgGroup('playing#buildbg')!.hasDef()!, sg.ctx.res.getImgGroup('playing#buildbg')!.hasDef()!),
+        Build.of(462, 320, sg.ctx.res.getImgGroup('playing#buildbg')!.hasDef()!, sg.ctx.res.getImgGroup('playing#buildbg')!.hasDef()!),
 
-        Build.of(132, 208, sg.res.getImgGroup('playing#buildbg')!.hasDef()!, sg.res.getImgGroup('playing#buildbg')!.hasDef()!),
-        Build.of(187, 236, sg.res.getImgGroup('playing#buildbg')!.hasDef()!, sg.res.getImgGroup('playing#buildbg')!.hasDef()!),
-        Build.of(242, 264, sg.res.getImgGroup('playing#buildbg')!.hasDef()!, sg.res.getImgGroup('playing#buildbg')!.hasDef()!),
-        Build.of(297, 292, sg.res.getImgGroup('playing#buildbg')!.hasDef()!, sg.res.getImgGroup('playing#buildbg')!.hasDef()!),
-        Build.of(352, 320, sg.res.getImgGroup('playing#buildbg')!.hasDef()!, sg.res.getImgGroup('playing#buildbg')!.hasDef()!),
-        Build.of(407, 348, sg.res.getImgGroup('playing#buildbg')!.hasDef()!, sg.res.getImgGroup('playing#buildbg')!.hasDef()!),
-
-
-        Build.of(77, 236, sg.res.getImgGroup('playing#buildbg')!.hasDef()!, sg.res.getImgGroup('playing#buildbg')!.hasDef()!),
-        Build.of(132, 264, sg.res.getImgGroup('playing#buildbg')!.hasDef()!, sg.res.getImgGroup('playing#buildbg')!.hasDef()!),
-        Build.of(187, 292, sg.res.getImgGroup('playing#buildbg')!.hasDef()!, sg.res.getImgGroup('playing#buildbg')!.hasDef()!),
-        Build.of(242, 320, sg.res.getImgGroup('playing#buildbg')!.hasDef()!, sg.res.getImgGroup('playing#buildbg')!.hasDef()!),
-        Build.of(297, 348, sg.res.getImgGroup('playing#buildbg')!.hasDef()!, sg.res.getImgGroup('playing#buildbg')!.hasDef()!),
-        Build.of(352, 376, sg.res.getImgGroup('playing#buildbg')!.hasDef()!, sg.res.getImgGroup('playing#buildbg')!.hasDef()!),
+        Build.of(132, 208, sg.ctx.res.getImgGroup('playing#buildbg')!.hasDef()!, sg.ctx.res.getImgGroup('playing#buildbg')!.hasDef()!),
+        Build.of(187, 236, sg.ctx.res.getImgGroup('playing#buildbg')!.hasDef()!, sg.ctx.res.getImgGroup('playing#buildbg')!.hasDef()!),
+        Build.of(242, 264, sg.ctx.res.getImgGroup('playing#buildbg')!.hasDef()!, sg.ctx.res.getImgGroup('playing#buildbg')!.hasDef()!),
+        Build.of(297, 292, sg.ctx.res.getImgGroup('playing#buildbg')!.hasDef()!, sg.ctx.res.getImgGroup('playing#buildbg')!.hasDef()!),
+        Build.of(352, 320, sg.ctx.res.getImgGroup('playing#buildbg')!.hasDef()!, sg.ctx.res.getImgGroup('playing#buildbg')!.hasDef()!),
+        Build.of(407, 348, sg.ctx.res.getImgGroup('playing#buildbg')!.hasDef()!, sg.ctx.res.getImgGroup('playing#buildbg')!.hasDef()!),
 
 
-        Build.of(22, 264, sg.res.getImgGroup('playing#buildbg')!.hasDef()!, sg.res.getImgGroup('playing#buildbg')!.hasDef()!),
-        Build.of(77, 292, sg.res.getImgGroup('playing#buildbg')!.hasDef()!, sg.res.getImgGroup('playing#buildbg')!.hasDef()!),
-        Build.of(132, 320, sg.res.getImgGroup('playing#buildbg')!.hasDef()!, sg.res.getImgGroup('playing#buildbg')!.hasDef()!),
-        Build.of(187, 348, sg.res.getImgGroup('playing#buildbg')!.hasDef()!, sg.res.getImgGroup('playing#buildbg')!.hasDef()!),
-        Build.of(242, 376, sg.res.getImgGroup('playing#buildbg')!.hasDef()!, sg.res.getImgGroup('playing#buildbg')!.hasDef()!),
-        Build.of(297, 404, sg.res.getImgGroup('playing#buildbg')!.hasDef()!, sg.res.getImgGroup('playing#buildbg')!.hasDef()!),
+        Build.of(77, 236, sg.ctx.res.getImgGroup('playing#buildbg')!.hasDef()!, sg.ctx.res.getImgGroup('playing#buildbg')!.hasDef()!),
+        Build.of(132, 264, sg.ctx.res.getImgGroup('playing#buildbg')!.hasDef()!, sg.ctx.res.getImgGroup('playing#buildbg')!.hasDef()!),
+        Build.of(187, 292, sg.ctx.res.getImgGroup('playing#buildbg')!.hasDef()!, sg.ctx.res.getImgGroup('playing#buildbg')!.hasDef()!),
+        Build.of(242, 320, sg.ctx.res.getImgGroup('playing#buildbg')!.hasDef()!, sg.ctx.res.getImgGroup('playing#buildbg')!.hasDef()!),
+        Build.of(297, 348, sg.ctx.res.getImgGroup('playing#buildbg')!.hasDef()!, sg.ctx.res.getImgGroup('playing#buildbg')!.hasDef()!),
+        Build.of(352, 376, sg.ctx.res.getImgGroup('playing#buildbg')!.hasDef()!, sg.ctx.res.getImgGroup('playing#buildbg')!.hasDef()!),
+
+
+        Build.of(22, 264, sg.ctx.res.getImgGroup('playing#buildbg')!.hasDef()!, sg.ctx.res.getImgGroup('playing#buildbg')!.hasDef()!),
+        Build.of(77, 292, sg.ctx.res.getImgGroup('playing#buildbg')!.hasDef()!, sg.ctx.res.getImgGroup('playing#buildbg')!.hasDef()!),
+        Build.of(132, 320, sg.ctx.res.getImgGroup('playing#buildbg')!.hasDef()!, sg.ctx.res.getImgGroup('playing#buildbg')!.hasDef()!),
+        Build.of(187, 348, sg.ctx.res.getImgGroup('playing#buildbg')!.hasDef()!, sg.ctx.res.getImgGroup('playing#buildbg')!.hasDef()!),
+        Build.of(242, 376, sg.ctx.res.getImgGroup('playing#buildbg')!.hasDef()!, sg.ctx.res.getImgGroup('playing#buildbg')!.hasDef()!),
+        Build.of(297, 404, sg.ctx.res.getImgGroup('playing#buildbg')!.hasDef()!, sg.ctx.res.getImgGroup('playing#buildbg')!.hasDef()!),
     )
     builds.value[0].z = 1
     builds.value[1].z = 1
@@ -186,7 +186,7 @@ function initArrays(builds: Ref<Build[]>) {
         if (b.place == 1) {
             // console.log(`key: playing#innercity#${b.typeName}`)
             try {
-                buildImgs.value.set(b.id, sg.res.getImgGroup(`playing#innercity#${b.typeName}`)!.hasDef()!)
+                buildImgs.value.set(b.id, sg.ctx.res.getImgGroup(`playing#innercity#${b.typeName}`)!.hasDef()!)
             } catch (error) {
             }
         }
@@ -194,7 +194,7 @@ function initArrays(builds: Ref<Build[]>) {
 }
 
 function refreshState(builds: Ref<Build[]>) {
-    const datas = sg.dataMgr.get('playing#player_city_innerBuilds') as CityBuild[]
+    const datas = sg.ctx.dataMgr.get('playing#player_city_innerBuilds') as CityBuild[]
     if (datas) {
         for (let i = 0; i < builds.value.length; i++) {
             const build = builds.value[i];
@@ -245,8 +245,8 @@ const msgInfo = ref('')
 const msgV = ref({ msg: msgInfo, isHover: isHoverItem })
 
 
-const highBg = `url(${sg.res.getImgGroup('playing#innercity#map_high').hasDef()?.getDataUrl()})`
-const lowBg = `url(${sg.res.getImgGroup('playing#innercity#map_low').hasDef()?.getDataUrl()})`
+const highBg = `url(${sg.ctx.res.getImgGroup('playing#innercity#map_high').hasDef()?.getDataUrl()})`
+const lowBg = `url(${sg.ctx.res.getImgGroup('playing#innercity#map_low').hasDef()?.getDataUrl()})`
 const styles = computed(() => {
     const s = {} as any
     s.backgroundImage = builds.value[1].cb && builds.value[1].cb.lv > 0 ? highBg : lowBg
@@ -292,7 +292,7 @@ async function clickBuild(e: MouseEvent) {
 
 async function openBuildList(build: Build) {
     sg.funPanMgr.setComp('fun_pan#city_build_inner_list')
-    sg.dataMgr.setByKey(DATA_KEY_CITY_BUILD_INNER, build)
+    sg.ctx.dataMgr.setByKey(DATA_KEY_CITY_BUILD_INNER, build)
 }
 </script>
 

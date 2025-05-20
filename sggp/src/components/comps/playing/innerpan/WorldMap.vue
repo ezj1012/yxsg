@@ -27,12 +27,12 @@ onMounted(async () => {
     await Img.loadImages(bgRes, () => { })
     canvas.value = new MapCanvas(document.getElementById('world-map')! as HTMLCanvasElement, mapCtx.value)
 
-    const cityId = sg.dataMgr.getByKey('playing#player_lastCity')
+    const cityId = sg.ctx.dataMgr.getByKey('playing#player_lastCity')
     const xy = cid2xy(cityId)
     await mapCtx.value.moveTo(xy.x, xy.y)
 
 
-    sg.dataMgr.subscribe('playing#topbutton_level_sct', undefined, (key: string, newValue: any, oldValue: any) => { canvas.value?.showLv(newValue) })
+    sg.ctx.dataMgr.subscribe('playing#topbutton_level_sct', undefined, (key: string, newValue: any, oldValue: any) => { canvas.value?.showLv(newValue) })
 })
 
 onUnmounted(() => { canvas.value?.dispose() })

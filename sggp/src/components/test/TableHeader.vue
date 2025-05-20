@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { TableHeaderDef } from '@/app/model';
+import { TableHeaderDef } from '@/app/commModel';
 import type { SanGuo } from '@/app/sg';
 import { computed, inject, onMounted, ref } from 'vue';
 

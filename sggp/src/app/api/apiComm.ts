@@ -45,6 +45,9 @@ export interface IUserToken {
 
 export abstract class AbsApi {
     user!: IUserToken
+    constructor(userToken: IUserToken) {
+        this.user = userToken
+    }
 
     async get(url: string, data?: any): Promise<Result> {
         return axios.get(url, {
@@ -67,7 +70,7 @@ export abstract class AbsApi {
             .catch(err => {
                 if (err instanceof AxiosError) {
                     if (err.response?.status == 401) {
-                        this.user.handler401(err)
+                        this.user.handler401()
                     }
                 }
                 throw err

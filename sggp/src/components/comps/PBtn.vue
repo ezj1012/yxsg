@@ -2,12 +2,12 @@
 
 import { actionMgr } from '@/app/action';
 import { CfgKey, CfgType, type CfgStr, type RadioCfg } from '@/app/cfg';
-import { type HoverMsgDef, type Shapable, type Textable } from '@/app/model';
-import type { ImgGroupInfo } from '@/app/res';
-import type { SanGuo } from '@/app/sg';
+import type { HoverMsgDef, Shapable, Textable } from '@/app/commModel';
+import type { ImgGroupInfo } from '@/app/res/imgRes';
+import type { SanGuo, SgCtx } from '@/app/sg';
 import { computed, inject, onUnmounted, ref, shallowRef, watch, type Ref, type ShallowRef } from 'vue';
 
-const { sg } = inject('sg') as { sg: SanGuo }
+const { sg, ctx } = inject('sg') as { sg: SanGuo, ctx: SgCtx }
 const { cfg } = defineProps({ cfg: { required: true } }) as { cfg: CfgStr }
 const curEl = ref()
 
@@ -36,6 +36,7 @@ const msg = ref<HoverMsgDef>()
 
 // 初始化
 watch(() => cfg, () => {
+    // 
     cfg.parseCfg({ key, type, size, imgGroup, text, sctable, sctableDefVal, msg, dis })
     setSub(sctKey, sct, sctable.value ? `${key.value}_sct` : undefined, sctableDefVal.value.isDefSct)
     setSub(disKey, dis, imgGroup.value && imgGroup.value.hasDis() ? `${key.value}_dis` : undefined, dis.value)
@@ -43,9 +44,9 @@ watch(() => cfg, () => {
 }, { immediate: true })
 
 function setSub(keyCache: ShallowRef<string | undefined>, val: Ref<any>, newKey: string | undefined, defVal = false) {
-    keyCache.value && sg.dataMgr.unsubscribe(keyCache.value)
+    keyCache.value && ctx.dataMgr.unsubscribe(keyCache.value)
     keyCache.value = newKey
-    newKey && sg.dataMgr.subscribeValue(newKey, val, defVal)
+    newKey && ctx.dataMgr.subscribeValue(newKey, val, defVal)
 }
 
 watch(ala, () => {
@@ -61,9 +62,9 @@ watch(ala, () => {
 watch(dis, () => { })
 
 onUnmounted(() => {
-    sctKey.value && sg.dataMgr.unsubscribe(sctKey.value)
-    disKey.value && sg.dataMgr.unsubscribe(disKey.value)
-    alaKey.value && sg.dataMgr.unsubscribe(alaKey.value)
+    sctKey.value && ctx.dataMgr.unsubscribe(sctKey.value)
+    disKey.value && ctx.dataMgr.unsubscribe(disKey.value)
+    alaKey.value && ctx.dataMgr.unsubscribe(alaKey.value)
     blinkTimerId.value && clearInterval(blinkTimerId.value)
 })
 
@@ -177,7 +178,7 @@ async function doClick(e: MouseEvent) {
 
         if (type.value === CfgType.imgPanBtn) {
             const panKey = `fun_pan#${key.value.substring(key.value.indexOf("#") + 1)}`
-            sg.funPanMgr.setComp(panKey)
+            ctx.funPanMgr.setComp(panKey)
         } else {
             const act = cfg.get(CfgKey.action)
             await actionMgr.execBtn(act, cfg, e)
@@ -190,9 +191,9 @@ async function doClick(e: MouseEvent) {
             } else {
                 sct.value = !sct.value
             }
-            sg.dataMgr.setByKey(sctKey.value, sct.value)
+            ctx.dataMgr.setByKey(sctKey.value, sct.value)
 
-            // console.log(sctable.value, sct.value, sg.dataMgr.getByKey(sctKey.value), sctableDefVal.value)
+            // console.log(sctable.value, sct.value, ctx.dataMgr.getByKey(sctKey.value), sctableDefVal.value)
         }
     } finally {
         clicking.value = false
