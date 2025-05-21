@@ -21,8 +21,7 @@ const isReady = computed(() => sg.value.ready.value)
             <!--  -->
             <RFunPanl />
             <FunPanlTestView />
-            <!-- -->
-            <StageView />
+            <!--  <StageView /> -->
 
             <!--  <TableViewTest />-->
             <!-- <WorldMap /> -->

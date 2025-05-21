@@ -1,8 +1,6 @@
 package com.yxbear.sg.svc.play.bean;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 import com.yxbear.sg.domain.model.gi.GiPlayer;
 
@@ -30,5 +28,8 @@ public class PlayInfo extends GiPlayer {
 
     // 好友申请
     boolean friendFlag;
-
+    //
+    Map<Integer, Integer> foods = new HashMap<>();
+    //
+    Map<Integer, Object> usedFoods = new HashMap<>();
 }

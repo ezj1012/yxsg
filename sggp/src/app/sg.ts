@@ -15,6 +15,7 @@ import type { Stage } from "./stage/absStage";
 import { CfgStr } from "./cfg";
 import { GCfgMgr } from "./global";
 import { PlayMgr } from "./playMgr";
+import { BuildMgr } from "./buildMgr";
 
 const userCacheKey = 'currentUser'
 export interface SgCtx {
@@ -36,6 +37,7 @@ export interface SgCtx {
     get funPanMgr(): SingleComp<FunPanComp>
     hoverMsgMgr: HoverMsgMgr
     get gCfgMgr(): GCfgMgr
+    get buildMgr(): BuildMgr
 }
 
 export class SgCtxImpl implements SgCtx {
@@ -51,7 +53,7 @@ export class SgCtxImpl implements SgCtx {
     private _hoverMsgMgr: HoverMsgMgr
     private _playMgr: PlayMgr
     private _gCfgMgr: GCfgMgr
-
+    private _buildMgr: BuildMgr
     constructor() {
         this._userMgr = new UserMgr(this)
         this._api = new SgApi(this._userMgr)
@@ -63,6 +65,7 @@ export class SgCtxImpl implements SgCtx {
         this._errMsgMgr = new ErrMsgMgr()
         this._hoverMsgMgr = new HoverMsgMgr(this)
         this._playMgr = new PlayMgr(this)
+        this._buildMgr = new BuildMgr(this)
     }
 
     async loadRes(tr: Ref<Traceable>) {
@@ -88,6 +91,7 @@ export class SgCtxImpl implements SgCtx {
     get res() { return this._res }
     get playMgr() { return this._playMgr }
     get gCfgMgr() { return this._gCfgMgr }
+    get buildMgr() { return this._buildMgr }
 }
 
 export class SanGuo {

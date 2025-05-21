@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.yxbear.sg.domain.model.cfg.CfgGoods;
 import com.yxbear.sg.svc.play.bean.PlayInfo;
 
 public class ExpandTest {
@@ -89,7 +90,7 @@ public class ExpandTest {
     }
 
     public static void main(String[] args) {
-        expand(PlayInfo.class);
+        expand(CfgGoods.class);
     }
 
 }

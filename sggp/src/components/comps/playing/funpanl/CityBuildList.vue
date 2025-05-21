@@ -8,20 +8,20 @@ const datas = ref<any[]>([])
 const inner = ref(false)
 
 const { sg } = inject('sg') as { sg: SanGuo }
-onMounted(() => {
+const buildState = ref<Record<number, boolean>>({})
+onMounted(async () => {
     sg.ctx.dataMgr.subscribe('player#time', undefined, updateBuildState)
     updateBuildState()
+    console.log(builds.value)
 })
 
 const updateBuildState = (key?: string, newValue?: any, oldValue?: any) => {
-    console.log('99999999999999999999999999999999999999999999999999999999')
     if (sg.ctx.playMgr.play && sg.ctx.playMgr.play.city) {
-        console.log('99999999999999999999999999999999999999999999999999999999', sg.ctx.playMgr.play.city)
-    } else {
-        
+        const res = sg.ctx.playMgr.play.city.res
+        const r = sg.ctx.buildMgr.canBuilds(builds.value);
+        console.log(r)
     }
 }
-
 
 const builds = computed(() => {
     const bs = []
@@ -30,9 +30,8 @@ const builds = computed(() => {
         if (inner && buildingsMap[k].place == 1) {
             if (buildingsMap[k].id != 20 && buildingsMap[k].id != 6) {
                 bs.push(buildingsMap[k])
-                return bs
             }
-        } else {
+        } else if (!inner && buildingsMap[k].place == 0) {
             bs.push(buildingsMap[k])
         }
     }
@@ -44,18 +43,21 @@ const builds = computed(() => {
 </script>
 <template>
     <div class="fun-main-city-builds">
-        <Scroll :scroll="'scroll'" class="main-scroll  bor">
-            <div class="builds">
+        <!-- <Scroll :scroll="'scroll'" class="main-scroll  bor"> -->
+            <!-- <div class="builds">
                 <CityBuildItem v-for="b in builds" :build="b" :key="b.id" />
-            </div>
-        </Scroll>
+            </div> -->
+        <!-- </Scroll> -->
     </div>
 </template>
 <style lang="less" scoped>
 .fun-main-city-builds {
     position: absolute;
-    width: 100%;
-    height: 100%;
+    position: fixed;
+    left: 400px;
+    width: 1000px;
+    height: 600px;
+    background-color: #fff;
 
     .main-scroll {
         width: 100%;

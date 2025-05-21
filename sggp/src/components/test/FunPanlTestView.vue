@@ -23,6 +23,16 @@ async function doLogin() {
     }
 }
 
+async function doReg() {
+    try {
+        await sg.ctx.api.playApi.regplay({ name: 'abc', gender: 1, icon: '', provinceId: 0, agreeRules: true })
+        await sg.ctx.playMgr.refreshPlay()
+    } catch (error) {
+        sg.ctx.errMsgMgr.pushMsg("注册失败!");
+        return false;
+    }
+}
+
 </script>
 <template>
     <div class="table-wrap">
@@ -32,6 +42,7 @@ async function doLogin() {
         <div @click="doChange" class="btn">确定</div>
         <div @click="doChange('')" class="btn">取消</div>
         <div @click="doLogin()" class="btn">login</div>
+        <div v-if="!sg.ctx.play" @click="doReg()" class="btn">reg</div>
     </div>
 </template>
 <style lang="less" scoped>

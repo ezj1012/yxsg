@@ -2,6 +2,7 @@ import type { PlayInfo } from "./api/apiModel"
 import type { SgCtx } from "./sg"
 
 export class PlayMgr {
+
     private _ctx: SgCtx
     private _play?: PlayInfo
     private playerKes = new Set<string>()
@@ -86,6 +87,25 @@ export class PlayMgr {
         // })
         // this.playSet(`playing#player_city_buildMaxLv`, buildMaxLv)
 
+    }
+
+    hasUsingGoods(foodsIds: number[]): boolean {
+        if (!this._play) { return false }
+        const fs = this._play.usedFoods
+        for (let i = 0; i < foodsIds.length; i++) {
+            const fid = foodsIds[i];
+            if (fs[fid]) {
+                return true;
+            }
+        }
+        return false
+    }
+
+    getTechnicLv(tid: number): number {
+        return 0;
+    }
+    getBuildLv(bid: number): number {
+        return 0;
     }
 
     get play() { return this._play }

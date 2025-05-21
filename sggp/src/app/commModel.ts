@@ -1,6 +1,7 @@
 import { ref, type Component } from "vue"
-import type { FrameStageCfg } from "./api/apiModel"
+import type { CfgBuildingLevel, FrameStageCfg } from "./api/apiModel"
 import type { SgRes } from "./res"
+import { calculateDerateAndMin1 } from "./constant"
 
 export interface Traceable {
     msg: string
@@ -154,4 +155,85 @@ export const defaultConverDatas = (datas: any[]) => {
     });
 
     return rowDatas
+}
+
+
+// UseRes 类
+export class UseRes {
+    // 消耗资源
+    upgradeWood: number = 0;
+    upgradeRock: number = 0;
+    upgradeIron: number = 0;
+    upgradeFood: number = 0;
+    upgradeGold: number = 0;
+
+    // 升级依赖人口
+    upgradePeople: number = 0;
+    // 升级耗时（秒）
+    upgradeTime: number = 0;
+    // 占用人口
+    usingPeople: number = 0;
+
+    // 物品消耗（key: 物品ID, value: 数量）
+    useGoods: Map<number, number> = new Map();
+
+    /**
+     * 对基础资源进行减免
+     * @param rate 减免百分比（如 30 表示 30%）
+     */
+    derateBaseRes(rate: number): void {
+        this.upgradeFood = calculateDerateAndMin1(this.upgradeFood, 1, rate);
+        this.upgradeWood = calculateDerateAndMin1(this.upgradeWood, 1, rate);
+        this.upgradeRock = calculateDerateAndMin1(this.upgradeRock, 1, rate);
+        this.upgradeIron = calculateDerateAndMin1(this.upgradeIron, 1, rate);
+        this.upgradeGold = calculateDerateAndMin1(this.upgradeGold, 1, rate);
+    }
+
+    /**
+     * 对升级耗时进行减免（基于等级）
+     * @param level 等级
+     * @param rate 减免百分比
+     */
+    derateTime(level: number = 0, rate: number): void {
+        this.upgradeTime = calculateDerateAndMin1(this.upgradeTime, level, rate);
+    }
+
+    /**
+     * 从配置对象创建 UseRes 实例
+     * @param lv 配置对象（需与 UseRes 具有相同属性）
+     * @param useGoods 可选的物品消耗
+     * @returns UseRes 实例
+     */
+    public static from(lv: CfgBuildingLevel, useGoods?: Map<number, number>): UseRes {
+        const useRes = new UseRes();
+
+        // 简单属性赋值（假设 lv 包含所有需要的字段）
+        if (lv) {
+            useRes.upgradeWood = lv.upgradeWood || 0;
+            useRes.upgradeRock = lv.upgradeRock || 0;
+            useRes.upgradeIron = lv.upgradeIron || 0;
+            useRes.upgradeFood = lv.upgradeFood || 0;
+            useRes.upgradeGold = lv.upgradeGold || 0;
+            useRes.upgradePeople = lv.upgradePeople || 0;
+            useRes.upgradeTime = lv.upgradeTime || 0;
+            useRes.usingPeople = lv.usingPeople || 0;
+        }
+
+        // 合并物品消耗
+        if (useGoods && useGoods.size > 0) {
+            for (const [key, value] of useGoods.entries()) {
+                useRes.useGoods.set(key, value);
+            }
+        }
+
+        return useRes;
+    }
+
+    /**
+     * 获取升级完成时间戳（毫秒）
+     * @returns 升级完成时间戳
+     */
+    getUpgradeEndTimeMillis(): number {
+        return Date.now() + this.upgradeTime * 1000;
+    }
 }

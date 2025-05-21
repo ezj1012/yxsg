@@ -1,11 +1,12 @@
 import { AbsApi, type IUserToken } from "./apiComm";
-import type { FrameCfg, GlobalCfg, MemMapTile, PlayInfo, Province } from "./apiModel";
+import type { CfgGoods, FrameCfg, GlobalCfg, MemMapTile, PlayInfo, Province } from "./apiModel";
 
 export class SgApi extends AbsApi {
     userApi: UserApi
     cfgApi: CfgApi
     playApi: PlayApi;
     envApi: EnvApi;
+
     constructor(token: IUserToken) {
         super(token);
         this.userApi = new UserApi(this)
@@ -42,7 +43,10 @@ export class CfgApi {
     async loadGlobalCfg(): Promise<GlobalCfg> {
         return (await this.sgApi.get('/cfg/global')).data
     }
-
+    
+    async getGoods(params: number[]): Promise<CfgGoods[]> {
+        return (await this.sgApi.post('/cfg/goods', params)).data
+    }
 }
 
 // 动态数据
@@ -60,6 +64,7 @@ export class EnvApi {
     async getMapTiles(params: { x: number, y: number, xw: number, yw: number }): Promise<MemMapTile[]> {
         return (await this.sgApi.post('/env/maptiles', params)).data
     }
+
 
 }
 

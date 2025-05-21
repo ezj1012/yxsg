@@ -14,7 +14,28 @@ export interface FrameStageCfg {
     name: string
     comps: string[]
 }
-
+export interface CfgGoods {
+    id: number
+    name: string
+    inuse: number
+    battle: number
+    copperBox: number
+    silverBox: number
+    goldBox: number
+    diamondBox: number
+    goodsValue: number
+    groupType: number
+    image: string
+    description: string
+    useGuide: string
+    autoUse: number
+    zuoqiType: number
+    level: number
+    attrs: string
+    imageType: number
+    batch: number
+    compose: number
+}
 export interface FrameCfg {
     rsmHttpRoot: string
     imgs: string[]
@@ -32,8 +53,25 @@ export interface CityBuilding {
     name: string
     typeName: string
     description: string
+    levels: Record<number, CfgBuildingLevel>;
+    // lv > type
+    preCdts: Record<number, Record<0 | 1 | 2, Record<number, number>>>;
 }
 
+export interface CfgBuildingLevel {
+    id: number
+    buildId: number
+    level: number
+    upgradeWood: number
+    upgradeRock: number
+    upgradeIron: number
+    upgradeFood: number
+    upgradeGold: number
+    upgradePeople: number
+    upgradeTime: number
+    usingPeople: number
+    description: string
+}
 
 export interface PlayInfo {
     id: number
@@ -58,12 +96,67 @@ export interface PlayInfo {
     vipLevel: number
     cities: CityIntro[]
     city: PlayCityInfo
+    foods: Record<number, number>
+    usedFoods: Record<number, any>
 }
 
 export interface PlayCityInfo {
-
+    id: number
+    playId: number
+    name: string
+    cityType: number
+    state: number
+    chiefhId: number
+    counsellorId: number
+    generalId: number
+    collegelv: number
+    provinceId: number
+    conscript: number
+    discardTime: number
+    res: GiCityResource
+    // resAdd: GiCityResourceAdd
+    // buildings: CityBuilding[]
+    // defences: GiCityDefence[]
+    // soldiers: GiCitySoldier[]
+    // heros: GiCityHero[]
+    maxOuterBuild: number
 }
-
+export interface GiCityResource {
+    id: number
+    morale: number
+    moraleStable: number
+    complaint: number
+    tax: number
+    wood: number
+    woodAdd: number
+    woodMax: number
+    rock: number
+    rockAdd: number
+    rockMax: number
+    iron: number
+    ironAdd: number
+    ironMax: number
+    food: number
+    foodAdd: number
+    foodArmyUse: number
+    foodMax: number
+    gold: number
+    heroFee: number
+    goldMax: number
+    goldRate: number
+    people: number
+    peopleStable: number
+    peopleWorking: number
+    peopleBuilding: number
+    peopleMax: number
+    chiefLoyalty: number
+    changing: number
+    lastUpdate: number
+    vacation: number
+    forbidden: number
+    autoBuilding: number
+    autoTechnic: number
+}
 
 export interface MemMapTile {
     id: number
@@ -111,6 +204,14 @@ export interface CityBuilding {
     typeName: string
     description: string
 }
+
+export interface CityTechnic {
+    id: number
+    name: string
+    typeName: string
+    description: string
+}
+
 
 export interface CityIntro {
     id: number
