@@ -14,7 +14,7 @@ const mapCtx = ref<MapCtx>({
     x: 15,
     y: 15,
     showLv: false,
-    getMapTiles: async (params: { x: number, y: number, xw: number, yw: number }) => await sg.api.envApi.getMapTiles(params),
+    getMapTiles: async (params: { x: number, y: number, xw: number, yw: number }) => await sg.ctx.api.envApi.getMapTiles(params),
     updateMapPosition: (nx: number, ny: number) => { mapCtx.value.x = nx; mapCtx.value.y = ny; },
     updateHoverTile: (tile: MapTile | undefined) => { updateHover(tile) },
     moveTo: async (mapX: number, mapY: number) => { await canvas.value?.moveTo(mapX, mapY) },

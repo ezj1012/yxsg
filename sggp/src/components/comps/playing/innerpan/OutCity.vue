@@ -1,4 +1,11 @@
 <script setup lang="ts">
+import { DataMgr } from '@/app/dataMgr';
+import type { SgRes } from '@/app/res';
+import type { SanGuo, SgCtx } from '@/app/sg';
+import { computed, inject, onMounted, ref, type Ref } from 'vue';
+import type { Img } from '@/app/utils/img';
+import { BuildItem } from '@/app/cityMgr';
+
 // import Ctrl from '@/app/ctrl';
 // import { CityBuildState, type PlayerCityBuild } from '@/app/model/comm';
 // import { GCfg } from '@/app/res/GloabalCfgMgr';
@@ -133,113 +140,117 @@
 
 // }
 
-// function of(x: number, y: number, idx: number) {
-//     const b = Build.of(x, y, Res.imgCfgMgr.getGroup('playing#buildbg')!.getDef()!, Res.imgCfgMgr.getGroup('playing#buildbg')!.getDef()!)
-//     b.showLv = idx
-//     return b
-// }
+function of(x: number, y: number, idx: number) {
+    //     const b = Build.of(x, y, Res.imgCfgMgr.getGroup('playing#buildbg')!.getDef()!, Res.imgCfgMgr.getGroup('playing#buildbg')!.getDef()!)
+    //     b.showLv = idx
+    //     return b
 
-// function initArrays(builds: Ref<Build[]>) {
-//     builds.value.push(
-//         of(279, 58, 0), // 0
-//         of(335, 87, 0), // 1
-//         of(615, 232, 0), // 6
-//         of(727, 290, 0), // 8
-//         of(783, 319, 0), // 9
-//         of(223, 87, 0), // 10
-//         of(279, 116, 0), // 11
-//         of(559, 261, 0), // 16
-//         of(615, 290, 0), // 17
-//         of(727, 348, 0), // 19
-//         of(167, 116, 0), // 20
-//         of(223, 145, 0), // 21
-//         of(503, 290, 0), // 26
-//         of(559, 319, 0), // 27
-//         of(615, 348, 0), // 28
-//         of(111, 145, 0), // 30
-//         of(167, 174, 0), // 31
-//         of(223, 203, 0), // 32
-//         of(279, 232, 0), // 33
-//         of(335, 261, 0), // 34
-//         of(391, 290, 0), // 35
-//         of(447, 319, 0), // 36
-//         of(503, 348, 0), // 37
-//         of(559, 377, 0), // 38
-
-//         of(167, 232, 2), // 43
-//         of(223, 261, 2), // 44
-//         of(279, 290, 2), // 45
-
-//         of(111, 203, 3), // 42
-//         of(335, 319, 3), // 46
-//         of(391, 348, 3), // 47
-
-//         of(615, 406, 4), // 39
-//         of(447, 377, 4), // 48
-//         of(503, 406, 4), // 49
-
-//         of(111, 261, 5), // 52
-//         of(167, 290, 5), // 53
-//         of(223, 319, 5), // 54
-
-//         of(279, 348, 6), // 55
-//         of(335, 377, 6), // 56
-//         of(391, 406, 6), // 57
+    return new BuildItem(x, y)
+}
 
 
-//         of(111, 319, 7), // 63
-//         of(167, 348, 7), // 64
-//         of(223, 377, 7), // 65
 
-//         of(55, 174, 8), // 41
-//         of(55, 232, 8), // 51
-//         of(55, 290, 8), // 62
+function initArrays(builds: Ref<BuildItem[]>) {
+    builds.value.push(
+        of(279, 58, 0), // 0
+        of(335, 87, 0), // 1
+        of(615, 232, 0), // 6
+        of(727, 290, 0), // 8
+        of(783, 319, 0), // 9
+        of(223, 87, 0), // 10
+        of(279, 116, 0), // 11
+        of(559, 261, 0), // 16
+        of(615, 290, 0), // 17
+        of(727, 348, 0), // 19
+        of(167, 116, 0), // 20
+        of(223, 145, 0), // 21
+        of(503, 290, 0), // 26
+        of(559, 319, 0), // 27
+        of(615, 348, 0), // 28
+        of(111, 145, 0), // 30
+        of(167, 174, 0), // 31
+        of(223, 203, 0), // 32
+        of(279, 232, 0), // 33
+        of(335, 261, 0), // 34
+        of(391, 290, 0), // 35
+        of(447, 319, 0), // 36
+        of(503, 348, 0), // 37
+        of(559, 377, 0), // 38
 
-//         of(447, 435, 9), // 58
-//         of(279, 406, 9), // 66
-//         of(335, 435, 9), // 67
+        of(167, 232, 2), // 43
+        of(223, 261, 2), // 44
+        of(279, 290, 2), // 45
 
-//         of(55, 348, 10), // 73
-//         of(111, 377, 10), // 74
-//         of(167, 406, 10), // 75
+        of(111, 203, 3), // 42
+        of(335, 319, 3), // 46
+        of(391, 348, 3), // 47
+
+        of(615, 406, 4), // 39
+        of(447, 377, 4), // 48
+        of(503, 406, 4), // 49
+
+        of(111, 261, 5), // 52
+        of(167, 290, 5), // 53
+        of(223, 319, 5), // 54
+
+        of(279, 348, 6), // 55
+        of(335, 377, 6), // 56
+        of(391, 406, 6), // 57
 
 
-//         of(223, 435, 11), // 76
-//         of(279, 464, 11), // 77
-//         of(391, 464, 11), // 68
+        of(111, 319, 7), // 63
+        of(167, 348, 7), // 64
+        of(223, 377, 7), // 65
 
-//         of(55, 406, 12), // 84
-//         of(111, 435, 12), // 85
-//         of(167, 464, 12), // 86
+        of(55, 174, 8), // 41
+        of(55, 232, 8), // 51
+        of(55, 290, 8), // 62
 
-//         of(-1, 203, 13), // 50
-//         of(-1, 261, 13), // 61
-//         of(-1, 319, 13), // 72
+        of(447, 435, 9), // 58
+        of(279, 406, 9), // 66
+        of(335, 435, 9), // 67
 
-//         of(-1, 377, 14), // 83
-//         of(-1, 435, 14), // 94
-//         of(55, 464, 14), // 95
+        of(55, 348, 10), // 73
+        of(111, 377, 10), // 74
+        of(167, 406, 10), // 75
 
-//         of(335, 493, 15), // 78
-//         of(223, 493, 15), // 87
-//         of(111, 493, 15), // 96
-//     )
-//     console.log(`build size ${builds.value.length}`)
 
-//     // 
-//     buildImgs.value.clear()
-//     GCfg.getBuildings().forEach(b => {
-//         if (b.place == 1) {
-//             // console.log(`key: playing#innercity#${b.typeName}`)
-//             try {
-//                 buildImgs.value.set(b.id, Res.imgCfgMgr.getGroup(`playing#innercity#${b.typeName}`)!.getDef()!)
-//             } catch (error) {
+        of(223, 435, 11), // 76
+        of(279, 464, 11), // 77
+        of(391, 464, 11), // 68
 
-//             }
-//         }
-//     })
-//     refreshShowBuilds()
-// }
+        of(55, 406, 12), // 84
+        of(111, 435, 12), // 85
+        of(167, 464, 12), // 86
+
+        of(-1, 203, 13), // 50
+        of(-1, 261, 13), // 61
+        of(-1, 319, 13), // 72
+
+        of(-1, 377, 14), // 83
+        of(-1, 435, 14), // 94
+        of(55, 464, 14), // 95
+
+        of(335, 493, 15), // 78
+        of(223, 493, 15), // 87
+        of(111, 493, 15), // 96
+    )
+    //     console.log(`build size ${builds.value.length}`)
+
+    //     // 
+    //     buildImgs.value.clear()
+    //     GCfg.getBuildings().forEach(b => {
+    //         if (b.place == 1) {
+    //             // console.log(`key: playing#innercity#${b.typeName}`)
+    //             try {
+    //                 buildImgs.value.set(b.id, Res.imgCfgMgr.getGroup(`playing#innercity#${b.typeName}`)!.getDef()!)
+    //             } catch (error) {
+
+    //             }
+    //         }
+    //     })
+    //     refreshShowBuilds()
+}
 
 // function refreshState(builds: Ref<Build[]>) {
 //     const datas = DataMgr.get('playing#player_city_innerBuilds') as PlayerCityBuild[]
@@ -281,10 +292,6 @@
 // const msgV = ref({ msg: msgg, isHover: isHoverItem })
 // const cfgV = ref<OutCityVcfg>(compInfo.getCfg() as OutCityVcfg)
 // const hoverbuildIdx = ref(-1)
-
-
-// const show = ref(DataMgr.get('playing#btn_top_outcity_sct') ? true : false)
-// DataMgr.subscribe('playing#btn_top_outcity_sct', undefined, (key: string, newValue: any, oldValue: any) => { show.value = newValue ? true : false });
 
 // watch(cfgV, () => { }, { immediate: true })
 
@@ -369,17 +376,41 @@
 // }
 
 
+const { sg, ctx, res } = inject('sg') as { sg: SanGuo, ctx: SgCtx, res: SgRes }
+
+// playing#outcity#building_outercity
+const bg = res.img('playing#outcity#bg_map')
+const cityBg0 = res.img('playing#outcity#building_outercity')
+const cityBg1 = res.img('playing#outcity#building_outertown')
+const cityBg = computed(() => ctx.play?.city.buildings[1].lv == 0 ? cityBg1 : cityBg0)
+
+BuildItem.bg = res.getImg('playing#buildbg')
+const builds = ref<BuildItem[]>([])
+
+initArrays(builds)
+
+
+onMounted(() => { })
+
+
 </script>
 
 <template>
-   <!--   <div v-show="show" class="out-city" v-msg="msgV"
+    <!-- <div class="out-city" v-msg="msgV"
         :style="{ backgroundImage: `url(${cfgV.bgImg?.url})`, left: `${cfgV.x}px`, top: `${cfgV.y}px`, zIndex: cfgV.z }"
-        @click="clickFun">
+        @click="clickFun"> -->
+    <div class="out-city " :style="{ backgroundImage: bg }">
+        <div class="inner-city" :style="{ backgroundImage: cityBg }"></div>
 
-        <div class="inner-city" :style="{ backgroundImage: `url(${cityImg.getDataUrl()})` }"
-            :class="{ 'br': hoverbuildIdx == -2 }"></div>
+        <!-- :class="{ 'br': hoverbuildIdx == -2 }" -->
 
-       建筑
+        <div class="build" v-for="b, idx in builds"
+            :style="{ backgroundImage: b.bgUrl, left: b.x, top: b.y, width: b.w, height: b.h }">
+
+        </div>
+
+        <!--
+        建筑
         <div class="build" v-for="build, idx in showBuilds" :style="{
             backgroundImage: `url(${build.getUrl()})`, left: `${build.getX()}px`, top: `${build.getY()}px`, width:
                 `${build.getW()}px`, height: `${build.getH()}px`, zIndex: build.z
@@ -389,11 +420,12 @@
         }">
             {{ `${build.showLv}:${build.getX()},${build.getY()}` }}
             <div class="lv-img" v-show="build.isShowLvImg()" :style="{
-            backgroundImage: `url(${build.getLvImg().getDataUrl()})`, left: `${build.getLvX()}px`, top: `${build.getLvY()}px`
-        }"> </div>
-        </div>
-    </div>-->
-    <div>城池</div>
+                backgroundImage: `url(${build.getLvImg().getDataUrl()})`, left: `${build.getLvX()}px`, top: `${build.getLvY()}px`
+            }"> </div>
+        </div> -->
+    </div>
+    <!--<div>城池</div>
+-->
 </template>
 <style lang="less" scoped>
 .out-city {

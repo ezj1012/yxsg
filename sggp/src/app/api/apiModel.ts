@@ -44,10 +44,10 @@ export interface FrameCfg {
 
 export interface GlobalCfg {
     playerIcons: PlayerIcon[]
-    buildingsMap: Record<number, CityBuilding>
+    buildingsMap: Record<number, CityBuildingCfg>
 }
 
-export interface CityBuilding {
+export interface CityBuildingCfg {
     id: number
     place: number
     name: string
@@ -115,12 +115,24 @@ export interface PlayCityInfo {
     discardTime: number
     res: GiCityResource
     // resAdd: GiCityResourceAdd
-    // buildings: CityBuilding[]
+    buildings: CityBuilding[]
     // defences: GiCityDefence[]
     // soldiers: GiCitySoldier[]
     // heros: GiCityHero[]
     maxOuterBuild: number
 }
+export interface CityBuilding {
+    id: number
+    cityId: number
+    bid: number
+    pos: number
+    lv: number
+    status: number
+    goalLv: number
+    endTime: number
+    nextLv: number
+}
+
 export interface GiCityResource {
     id: number
     morale: number
@@ -190,19 +202,6 @@ export interface Province {
     playerMaxCount: number
     playerCount: number
     cityCount: number
-}
-
-export interface GlobalCfg {
-    playerIcons: PlayerIcon[]
-    buildingsMap: Record<number, CityBuilding>
-}
-
-export interface CityBuilding {
-    id: number
-    place: number
-    name: string
-    typeName: string
-    description: string
 }
 
 export interface CityTechnic {

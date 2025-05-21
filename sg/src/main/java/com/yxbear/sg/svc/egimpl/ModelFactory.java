@@ -76,7 +76,7 @@ public class ModelFactory {
             GiCityBuild b2 = new GiCityBuild();
             b2.setBid(20);
             b2.setPos(1);
-            b2.setLv(1);
+            b2.setLv(0);
             b2.setStatus(0);
             return new ArrayList<>(Arrays.asList(b1, b2));
         }

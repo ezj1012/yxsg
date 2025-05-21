@@ -40,15 +40,14 @@ public class PlayInfoSvcImpl implements PlayInfoSvc {
         LoginUser user = SystemUtils.getCurUser();
         // deleteAll(user.getId());
         GiPlayer player = playMapper.selectById(user.getId());
-        if (player == null) {
-            return null;
-        }
+        if (player == null) { return null; }
 
         PlayInfo info = SystemUtils.copy(player, PlayInfo.class);
 
         fillCity(info);
         fillUnion(info);
 
+        info.setTime(System.currentTimeMillis());
         return info;
     }
 
@@ -60,8 +59,7 @@ public class PlayInfoSvcImpl implements PlayInfoSvc {
             // return;
         }
 
-        GiCity city = citys.stream().filter(c -> Objects.equals(c.getId(), info.getLastCity())).findFirst()
-                .orElse(citys.getFirst());
+        GiCity city = citys.stream().filter(c -> Objects.equals(c.getId(), info.getLastCity())).findFirst().orElse(citys.getFirst());
         CityInfo cityInfo = querySvc.getCityInfo(city.getId());
 
         info.setCities(citys.stream().map(CityIntro::from).toList());

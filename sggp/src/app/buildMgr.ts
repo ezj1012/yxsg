@@ -1,4 +1,4 @@
-import type { CfgBuildingLevel, CfgGoods, CityBuilding, CityTechnic, GiCityResource } from "./api/apiModel";
+import type { CfgBuildingLevel, CfgGoods, CityBuilding, CityBuildingCfg, CityTechnic, GiCityResource } from "./api/apiModel";
 import { UseRes } from "./commModel";
 import { CfgRes } from "./constant";
 import type { SgCtx } from "./sg";
@@ -14,11 +14,11 @@ const buildTechDerateRate = 30;
 export class BuildDepItem {
     type: 0 | 1 | 2 | 3
     id: number
-    source: CityBuilding | CfgGoods | CityTechnic | CfgRes
+    source: CityBuildingCfg | CfgGoods | CityTechnic | CfgRes
     name: string
     need: number
     have: number
-    constructor(type: 0 | 1 | 2 | 3, source: CityBuilding | CfgGoods | CityTechnic | CfgRes, need: number, have: number) {
+    constructor(type: 0 | 1 | 2 | 3, source: CityBuildingCfg | CfgGoods | CityTechnic | CfgRes, need: number, have: number) {
         this.type = type
         this.have = have
         this.need = need

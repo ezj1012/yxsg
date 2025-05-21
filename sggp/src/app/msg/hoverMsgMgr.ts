@@ -12,7 +12,7 @@ export class HoverMsgMgr {
     }
 
     setHoverMsg(el: any, msg?: HoverMsg) {
-        console.log('this.setHoverMsg')
+        // console.log('this.setHoverMsg')
         if (msg) {
             this.msg = msg
             this._ctx.dataMgr.setByKey(HoverMsgMgrKey, msg)
@@ -26,4 +26,11 @@ export class HoverMsgMgr {
         this._ctx.dataMgr.subscribeValue(HoverMsgMgrKey, data)
     }
 
+}
+
+export class CompactSimpleMsg {
+    msg: string
+    constructor(msg: string) {
+        this.msg = msg;
+    }
 }

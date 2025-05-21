@@ -28,8 +28,11 @@ public class PlayInfo extends GiPlayer {
 
     // 好友申请
     boolean friendFlag;
+    
     //
     Map<Integer, Integer> foods = new HashMap<>();
     //
     Map<Integer, Object> usedFoods = new HashMap<>();
+    
+    long time;
 }

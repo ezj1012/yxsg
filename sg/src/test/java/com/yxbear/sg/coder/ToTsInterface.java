@@ -3,14 +3,8 @@ package com.yxbear.sg.coder;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.stream.Stream;
 
-import com.yxbear.core.db.mybatis.BaseMapper;
-import com.yxbear.sg.domain.model.cfg.CfgBuildingLevel;
-import com.yxbear.sg.domain.model.cfg.CfgGoods;
-import com.yxbear.sg.domain.model.gi.GiCityResource;
-import com.yxbear.sg.svc.play.bean.CityInfo;
-import net.sf.jsqlparser.statement.upsert.Upsert;
+import com.yxbear.sg.svc.play.bean.CityBuilding;
 
 public class ToTsInterface {
 
@@ -18,7 +12,7 @@ public class ToTsInterface {
         // print(ImgNode.class);
 //        print(CfgTechnicCondition.class);
 //        print(CfgTechnic.class);
-        print(CfgBuildingLevel.class);
+        print(CityBuilding.class);
     }
 
     public static void print(Class<?> cls) {
