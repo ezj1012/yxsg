@@ -4,26 +4,19 @@ import { computed, inject, onMounted, ref, watch } from 'vue';
 import Scroll from '../../Scroll.vue';
 import PBtn from '../../PBtn.vue';
 import CityBuildItem from './CityBuildItem.vue';
+import { CfgStr } from '@/app/cfg';
+import Text from '../../Text.vue';
+import type { CityBuildingCfg } from '@/app/api/apiModel';
+import { reg } from '@/app/action';
 const datas = ref<any[]>([])
 const inner = ref(false)
 
 const { sg } = inject('sg') as { sg: SanGuo }
+const builds = ref<CityBuildingCfg[]>([])
 const buildState = ref<Record<number, boolean>>({})
+const buildItem = ref({ bid: 0, pos: 0, inner: false })
+const showOnly = ref(false)
 onMounted(async () => {
-    sg.ctx.dataMgr.subscribe('player#time', undefined, updateBuildState)
-    updateBuildState()
-    console.log(builds.value)
-})
-
-const updateBuildState = (key?: string, newValue?: any, oldValue?: any) => {
-    if (sg.ctx.playMgr.play && sg.ctx.playMgr.play.city) {
-        const res = sg.ctx.playMgr.play.city.res
-        const r = sg.ctx.buildMgr.canBuilds(builds.value);
-        console.log(r)
-    }
-}
-
-const builds = computed(() => {
     const bs = []
     const buildingsMap = sg.ctx.gCfgMgr.cfg!.buildingsMap
     for (const k in buildingsMap) {
@@ -35,38 +28,83 @@ const builds = computed(() => {
             bs.push(buildingsMap[k])
         }
     }
-    return bs
+    builds.value = bs
+
+
+    buildItem.value = sg.ctx.dataMgr.getByKey('fun_pan#city_builds_params')
+    inner.value = buildItem.value.inner
+    console.log("建筑位置: ", buildItem.value)
+    sg.ctx.dataMgr.subscribe('player#time', undefined, updateBuildState)
+    await updateBuildState()
+    sg.ctx.dataMgr.subscribeValue('funpanl#build_list_canOnly_sct', showOnly)
+})
+
+const updateBuildState = async (key?: string, newValue?: any, oldValue?: any) => {
+    if (sg.ctx.playMgr.play && sg.ctx.playMgr.play.city) {
+        const res = sg.ctx.playMgr.play.city.res
+        const r = await sg.ctx.buildMgr.canBuilds(builds.value)
+        buildState.value = {}
+        r.forEach(b => {
+            console.log("bid ", b.bid, b.can(res))
+            buildState.value[b.bid] = b.can(res)
+        })
+    }
+}
+
+const sbs = computed(() => {
+    return showOnly.value ? builds.value.filter(b => buildState.value[b.id]) : builds.value
 })
 
 
 
+
+const sctBtn = new CfgStr("K:funpanl#build_list_canOnly;T:I_BTN;S:0,400,25,24,11;RFI:common#btn_osct;SCTABLE:TRUE;")
+const txt = new CfgStr("K:funpanl#build_list_canOnly_txt;T:TEXT;S:30,405,60,22,11;TXT:T:显示可建造的,F:12,C:#FFDA99,;")
+
+reg('createBuildFunPan', async () => {
+    console.log('bid', buildItem.value)
+})
+
 </script>
 <template>
     <div class="fun-main-city-builds">
-        <!-- <Scroll :scroll="'scroll'" class="main-scroll  bor"> -->
-            <!-- <div class="builds">
-                <CityBuildItem v-for="b in builds" :build="b" :key="b.id" />
-            </div> -->
-        <!-- </Scroll> -->
+        <Scroll :scroll="'scroll'" class="main-scroll  bor">
+            <div class="builds">
+                <CityBuildItem v-for="b in sbs" :build="b" :key="b.id" :can="buildState[b.id]" />
+            </div>
+            <PBtn :cfg="sctBtn" />
+            <Text :cfg="txt" />
+        </Scroll>
     </div>
 </template>
 <style lang="less" scoped>
 .fun-main-city-builds {
     position: absolute;
-    position: fixed;
-    left: 400px;
-    width: 1000px;
-    height: 600px;
-    background-color: #fff;
+    width: 100%;
+    height: 100%;
 
     .main-scroll {
         width: 100%;
         height: 390px;
         background-color: #303030a0;
+        // width: calc(100% - 12px);
+        // height: 370px;
+        // &::before{
+        //     content: '';
+        //     position: absolute;
+        //     left: 0;
+        //     top: 0;
+        //     width: 100%;
+        //     height: 370px;
+        //     z-index: 12;
+
+        //     border-top: 10px solid #303030a0;
+        //     border-bottom: 10px solid #303030a0;
+        // }
 
         .builds {
-            padding: 10px;
             position: relative;
+            padding: 10px;
 
             .build {
                 width: 100%;

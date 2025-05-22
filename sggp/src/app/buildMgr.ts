@@ -30,7 +30,7 @@ export class BuildDepItem {
 }
 
 export class BuildDep {
-
+    bid: number = 0
     items: BuildDepItem[] = []
     private _res?: UseRes
     can(res: GiCityResource) {
@@ -61,12 +61,45 @@ export class BuildMgr {
     constructor(ctx: SgCtx) {
         this._ctx = ctx
     }
+    async canBuild(bid: number, lv: number) {
+        const b = this._ctx.gCfgMgr.cfg!.buildingsMap[bid]
+        const dep = new BuildDep()
+        dep.bid = b.id
+        const goalLv = this._ctx.gCfgMgr.getBuildLv(b.id, lv)!
+        if (goalLv) {
+            const playMgr = this._ctx.playMgr
+            const bcs = this._ctx.gCfgMgr.getBuildPreCdt(b.id, 1)!
+            if (bcs) {
+                if (bcs[2]) {
+                    const fids: number[] = []
+                    const goods = await this._ctx.gCfgMgr.getGoods(fids)
+                    fids.forEach(fid => {
+                        dep.items.push(new BuildDepItem(2, goods[fid], bcs[2][fid], playMgr.play!.foods[fid]))
+                    })
+                }
+                // if (bcs[1]) {
+                //     for (const tid in bcs[1]) {
+                //         dep.items.push(new BuildDepItem(1, this._ctx.gCfgMgr.getTechnic(Number(tid))!, bcs[1][tid], playMgr.getTechnicLv(Number(tid))))
+                //     }
+                // }
+                if (bcs[0]) {
+                    for (const bid in bcs[0]) {
+                        dep.items.push(new BuildDepItem(0, this._ctx.gCfgMgr.cfg!.buildingsMap[Number(bid)]!, bcs[0][bid], playMgr.getBuildLv(Number(bid))))
+                    }
+                }
+            }
+            const useRes = this.derateRes(goalLv)
+            dep.setRes(useRes)
+        }
+        return dep
+    }
 
-    async canBuilds(bs: CityBuilding[]) {
+    async canBuilds(bs: CityBuildingCfg[]) {
         const r: BuildDep[] = []
         for (let i = 0; i < bs.length; i++) {
             const b = bs[i];
             const dep = new BuildDep()
+            dep.bid = b.id
             r.push(dep)
             const goalLv = this._ctx.gCfgMgr.getBuildLv(b.id, 1)!
             if (goalLv) {
@@ -98,7 +131,7 @@ export class BuildMgr {
         return r
     }
 
-    derateRes(goalLv: CfgBuildingLevel, heroAffairs: number = 30, useGoods: Map<number, number> = new Map()) {
+    derateRes(goalLv: CfgBuildingLevel, heroAffairs: number = 0, useGoods: Map<number, number> = new Map()) {
         const playMgr = this._ctx.playMgr
 
         const res = UseRes.from(goalLv, useGoods);

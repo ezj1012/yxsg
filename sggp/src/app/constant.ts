@@ -109,3 +109,22 @@ export function calculateDerate(base: number, level: number = 0, rate: number): 
     }
     return Math.floor(base * Math.pow((100 - rate) / 100, level));
 }
+
+export function formatSeconds(seconds: number) {
+    const hrs = Math.floor(seconds / 3600);
+    const mins = Math.floor((seconds % 3600) / 60);
+    const secs = seconds % 60;
+
+    // 使用 padStart 保证两位数格式，如 "02:03:05"
+    const hh = String(hrs).padStart(2, '0');
+    const mm = String(mins).padStart(2, '0');
+    const ss = String(secs).padStart(2, '0');
+
+    if (hrs > 0) {
+        return `${hh}小时${mm}分钟${ss}秒`;
+    } else if (mins > 0) {
+        return `${mm}分钟${ss}秒`;
+    } else {
+        return `${ss}秒`;
+    }
+}

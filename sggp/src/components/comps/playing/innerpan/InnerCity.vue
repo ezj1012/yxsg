@@ -134,9 +134,10 @@ async function clickBuild(e: MouseEvent) {
     if (hoverbuildIdx.value < 0) { return }
     const b = builds.value[hoverbuildIdx.value]
     if (b.cb) {
-        console.log(b.cb)
+        console.log(hoverbuildIdx.value, b.cb)
     } else {
-        console.log("创建新的")
+        sg.ctx.dataMgr.setByKey('fun_pan#city_builds_params', { inner: true, bid: 0, pos: hoverbuildIdx.value })
+        sg.ctx.funPanMgr.setComp('fun_pan#city_builds')
     }
 }
 

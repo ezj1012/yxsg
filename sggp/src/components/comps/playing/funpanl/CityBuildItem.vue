@@ -1,33 +1,33 @@
 <script lang="ts" setup>
 import type { SanGuo } from '@/app/sg';
-import { computed, inject, onMounted, ref } from 'vue';
+import { computed, inject, onMounted, ref, watch } from 'vue';
 import Scroll from '../../Scroll.vue';
 import PBtn from '../../PBtn.vue';
 import { CfgStr } from '@/app/cfg';
+import { actionMgr, reg } from '@/app/action';
 const { sg } = inject('sg') as { sg: SanGuo }
-const { build, lv } = defineProps({ build: { required: true }, lv: { default: 1 } }) as { build: any, lv: number }
+const { build, lv, can } = defineProps({ build: { required: true }, lv: { default: 1 }, can: { default: false } }) as { build: any, lv: number, can: boolean }
 
 
-const buildBtn = new CfgStr(`K:funpanl#build_${build.id};T:I_BTN;S:0,37,60,26,4;RFI:common#btn_red;ACT:closeFunPan;SMSG:BuildTileMsg,${build.id},${lv};TXT:T:建造,F:13,C:var(--gold),;DISABLE;}`)
+const buildBtn = new CfgStr(`K:funpanl#build_${build.id};T:I_BTN;S:0,37,60,26,4;RFI:common#btn_red;ACT:createBuildFunPan;SMSG:BuildTileMsg,${build.id},${lv};TXT:T:建造,F:13,C:var(--gold),;DISABLE;}`)
 
 const img = ref<string>('')
 onMounted(() => {
     img.value = sg.ctx.res.img(`playing#innercity#${build.typeName}`)
 })
-
-const canBuild = computed(() => {
-    return false
-})
+watch(() => can, () => {
+    sg.ctx.dataMgr.setByKey(`funpanl#build_${build.id}_dis`, !can)
+}, { deep: true, immediate: true })
 
 </script>
 <template>
     <div class="build">
-        <!-- <div class="img" :style="{ backgroundImage: img }"></div>
+        <div class="img" :style="{ backgroundImage: img }" v-msg="build.description"></div>
         <div class="info">
-            <div class="name">{{ build.name }}</div> -->
-        <PBtn :cfg="buildBtn" />
-        <!-- </div>
-        <div class="msg bor">{{ build.description }}</div> -->
+            <div class="name">{{ build.name }}</div> <!-- -->
+            <PBtn :cfg="buildBtn" />
+        </div>
+        <div class="msg bor">{{ build.description }}</div> <!---->
     </div>
 </template>
 <style lang="less" scoped>

@@ -22,6 +22,10 @@ export class BuildItem {
     }
 
     get bgImg() {
+        if (this.bid == 20 && this.lv === 0) {
+            return BuildItem.ctx?.res.getImg(`playing#innercity#townwall`)!
+        }
+
         return BuildItem.ctx?.res.getImg(`playing#innercity#${this.buildCfg?.typeName}`) || BuildItem.bg!
     }
 

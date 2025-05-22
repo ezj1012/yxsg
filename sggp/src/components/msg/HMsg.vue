@@ -3,9 +3,10 @@ import type { SanGuo, SgCtx } from '@/app/sg';
 import { computed, h, inject, onMounted, provide, ref, shallowRef, watch, type Component } from 'vue';
 import SimpleMsg from './msgs/SimpleMsg.vue';
 import type { HoverMsg } from '@/app/commModel';
+import BuildTitleMsg from './msgs/BuildTileMsg.vue';
 
 const msgComps: { [key: string]: Component } = {
-
+  BuildTileMsg: BuildTitleMsg
 }
 
 
@@ -40,7 +41,7 @@ function changeComp() {
   }
   show.value = true
 
-
+  // console.log(t.content, t.content.type, t.content.constructor.name)
   let tempComp = t.content.type ? msgComps[t.content.type] : msgComps[t.content.constructor.name]
   // console.log(`hover msg : `, t.content, tempComp)
   if (!tempComp) {

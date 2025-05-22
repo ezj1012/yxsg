@@ -6,7 +6,6 @@
 // import HeroFun from "@/components/test/funpanl/HeroFun.vue";
 // import CityBuildList from "@/components/comps/playing/funpanl/CityBuildList.vue";
 
-
 import HeroFun from "@/components/test/funpanl/HeroFun.vue";
 import CityBuildList from "@/components/comps/playing/funpanl/CityBuildList.vue";
 export const gFunPanComps = [

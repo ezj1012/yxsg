@@ -25,5 +25,6 @@ const isHtml = computed(() => {
     color: white;
     font-size: 12px;
     display: block;
+    max-width: 300px;
 }
 </style>

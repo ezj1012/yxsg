@@ -1,6 +1,6 @@
 {
     "playerTemplate": "{\"armorColumn\":50,\"money\":0,\"nobility\":0,\"officepos\":0,\"playerGroup\":0,\"playerRank\":0,\"prestige\":0,\"state\":1,\"unionId\":0,\"unionPos\":0,\"vipLevel\":0,\"warAttackPrestige\":0,\"warDefencePrestige\":0,\"warPrestige\":0}",
-    "cityTemplate":"{\"builds\":[{\"bid\":6,\"lv\":1,\"pos\":0,\"status\":0},{\"bid\":20,\"lv\":1,\"pos\":1,\"status\":0}],\"city\":{\"cityType\":0,\"name\":\"新城池\",\"state\":1}}",
+    "cityTemplate":"{\"builds\":[{\"bid\":6,\"lv\":1,\"pos\":0,\"status\":0},{\"bid\":20,\"lv\":0,\"pos\":1,\"status\":0}],\"city\":{\"cityType\":0,\"name\":\"新城池\",\"state\":1}}",
     "provinces": [
         {
             "cityCount": 0,
