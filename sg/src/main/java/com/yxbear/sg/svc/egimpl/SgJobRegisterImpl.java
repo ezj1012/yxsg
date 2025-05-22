@@ -20,8 +20,10 @@ public class SgJobRegisterImpl extends SgJobWorker {
     @Override
     public synchronized void updateJobPeriod() {
         // 使用Spring 的 Schedule 对
-        this.schedule(new SgJobWorker.Task("processBuilding", processBuilding::processBuilding),
-                Math.min(1, sg.getCtx().getData().getJobBuild()));
+//        this.schedule(new SgJobWorker.Task("processBuilding", processBuilding::processBuilding),
+//                Math.min(1, sg.getCtx().getData().getJobBuild()));
+//
+        this.execute(processBuilding);
     }
 
 

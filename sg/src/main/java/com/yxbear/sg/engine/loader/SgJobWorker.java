@@ -36,6 +36,10 @@ public abstract class SgJobWorker implements Closeable {
 
     public abstract void updateJobPeriod();
 
+    public void execute(final Runnable job) {
+        taskScheduler.execute(job);
+    }
+
     public void schedule(Task task, int delay) {
         cancelPreviousTask(task.getKey());
         try {

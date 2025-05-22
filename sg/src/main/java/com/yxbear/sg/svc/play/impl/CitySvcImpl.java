@@ -238,6 +238,10 @@ public class CitySvcImpl implements CitySvc {
     @Override
     public void finishBuildUpgrading(MemCityBuildUpgrading mem) {
         Integer id = mem.getId();
+        mem = mbMapper.selectById(id);
+        if (mem == null) {
+            return;
+        }
         mbMapper.deleteById(id);
 
         if (mem.getStatus() == 2 && mem.getGoalLv() == 0) {

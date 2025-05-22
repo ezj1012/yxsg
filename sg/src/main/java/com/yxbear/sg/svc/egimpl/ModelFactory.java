@@ -58,7 +58,7 @@ public class ModelFactory {
         cc.setResourceAdd(cc.getResourceAdd() == null ? new GiCityResourceAdd() : cc.getResourceAdd());
         cc.getResourceAdd().setId(city.getId());
 
-        cc.setBuilds(mregeBaseBuild(cc.getBuilds()));
+        cc.setBuilds(mergeBaseBuild(cc.getBuilds()));
         cc.getBuilds().forEach(b -> b.setCityId(city.getId()));
 
         cc.setDefences(cc.getDefences() == null ? new ArrayList<>() : cc.getDefences());
@@ -66,7 +66,7 @@ public class ModelFactory {
         return cc;
     }
 
-    private List<GiCityBuild> mregeBaseBuild(List<GiCityBuild> builds) {
+    private List<GiCityBuild> mergeBaseBuild(List<GiCityBuild> builds) {
         if (builds == null || builds.isEmpty()) {
             GiCityBuild b1 = new GiCityBuild();
             b1.setBid(6);
@@ -99,7 +99,7 @@ public class ModelFactory {
         GiCityBuild b2 = new GiCityBuild();
         b2.setBid(20);
         b2.setPos(1);
-        b2.setLv(1);
+        b2.setLv(0);
         b2.setStatus(0);
         c.setBuilds(Arrays.asList(b1, b2));
         System.out.println(JSON.toJSONString(c));
