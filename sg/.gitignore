@@ -28,6 +28,7 @@
 .settings/
 *.sublime-workspace
 *.db
+*.log
 # IDE - VSCode
 .vscode/*
 /**/.vscode/**
