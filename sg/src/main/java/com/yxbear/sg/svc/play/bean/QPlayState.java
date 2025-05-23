@@ -5,6 +5,9 @@ import lombok.Data;
 @Data
 public class QPlayState {
 
-    Long cityId;
+    Integer cityId;
 
+    String op;
+
+    String opParams;
 }

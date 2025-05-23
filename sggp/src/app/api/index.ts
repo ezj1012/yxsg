@@ -43,7 +43,7 @@ export class CfgApi {
     async loadGlobalCfg(): Promise<GlobalCfg> {
         return (await this.sgApi.get('/cfg/global')).data
     }
-    
+
     async getGoods(params: number[]): Promise<CfgGoods[]> {
         return (await this.sgApi.post('/cfg/goods', params)).data
     }
@@ -83,4 +83,8 @@ export class PlayApi {
         return (await this.sgApi.post('/play/reg', regParams)).data
     }
 
+    async op(op: string, cityId: number, opParams: Record<string, any> = {}): Promise<PlayInfo> {
+        return (await this.sgApi.post('/play/op', { cityId, op, opParams })).data
+    }
+    
 }

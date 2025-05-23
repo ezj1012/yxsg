@@ -6,6 +6,7 @@ export class PlayMgr {
     private _ctx: SgCtx
     private _play?: PlayInfo
     private playerKes = new Set<string>()
+    private oping: boolean = false
     constructor(ctx: SgCtx) {
         this._ctx = ctx
     }
@@ -109,4 +110,22 @@ export class PlayMgr {
     }
 
     get play() { return this._play }
+
+    async op(op: string, params: Record<any, any>) {
+        if (this.oping) {
+            this._ctx.errMsgMgr.pushMsg("操作过于平凡稍后再试!")
+            return
+        }
+        this.oping = true
+        try {
+            await this._ctx.api.playApi.op(op, this.play!.lastCity, params)
+        }
+        catch (err) {
+            console.log(err)
+            debugger
+            this._ctx.errMsgMgr.pushMsg(err as string)
+        } finally {
+            this.oping = false
+        }
+    }
 }
