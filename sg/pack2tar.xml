@@ -4,22 +4,31 @@
     <id>deploy</id>
     <formats>
         <format>dir</format>
+        <format>tar</format>
     </formats>
     <fileSets>
         <fileSet>
             <directory>src/test/resources</directory>
             <includes>
                 <include>application.properties</include>
+                <include>logback-spring.xml</include>
             </includes>
             <outputDirectory>conf</outputDirectory>
         </fileSet>
         <fileSet>
-            <directory>src/bin</directory>
-            <outputDirectory>bin</outputDirectory>
+            <directory>src/shell</directory>
+            <outputDirectory>./</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>src/test/resources/static</directory>
-            <outputDirectory>static</outputDirectory>
+            <outputDirectory>conf/static</outputDirectory>
+            <excludes>
+                <exclude>/code/</exclude>
+            </excludes>
+        </fileSet>
+        <fileSet>
+            <directory>rsm</directory>
+            <outputDirectory>rsm</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>${project.build.directory}</directory>
@@ -37,7 +46,8 @@
     <dependencySets>
         <dependencySet>
             <useProjectArtifact>false</useProjectArtifact>
-            <outputDirectory>lib</outputDirectory><!-- 将scope为runtime的依赖包打包到lib目录下。 -->
+            <outputDirectory>lib</outputDirectory><!--
+            将scope为runtime的依赖包打包到lib目录下。 -->
             <scope>runtime</scope>
         </dependencySet>
     </dependencySets>

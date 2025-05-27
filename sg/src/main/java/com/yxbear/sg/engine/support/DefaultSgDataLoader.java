@@ -12,7 +12,7 @@ import com.yxbear.sg.engine.model.SgData;
 
 public class DefaultSgDataLoader implements SgDataLoader {
 
-    Path cfgFilePath = new File("./data/sg.json").toPath();
+    Path cfgFilePath = new File("./rsm/sg.json").toPath();
 
     @Override
     public SgData load() {

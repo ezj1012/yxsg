@@ -1,5 +1,5 @@
 import axios, { AxiosError, AxiosHeaders } from "axios";
-export const baseURL = "/sg"
+export const baseURL = "/sg-api"
 
 axios.defaults.timeout = 120000; // 超时时间
 axios.defaults.baseURL = baseURL; // 请求前缀路径

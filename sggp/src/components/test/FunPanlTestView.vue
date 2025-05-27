@@ -41,7 +41,7 @@ async function doReg() {
         </select>
         <div @click="doChange" class="btn">确定</div>
         <div @click="doChange('')" class="btn">取消</div>
-        <div @click="doLogin()" class="btn">login</div>
+        <div v-if="!sg.ctx.user" @click="doLogin()" class="btn">login</div>
         <div v-if="!sg.ctx.play" @click="doReg()" class="btn">reg</div>
     </div>
 </template>

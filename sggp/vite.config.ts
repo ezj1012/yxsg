@@ -15,12 +15,13 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url))
     },
   },
+  base: process.env.NODE_ENV === 'development' ? '' : '/sg',
   server: {
     proxy: {
-      '/sg': {
-        target: 'http://localhost:80/sg',
+      '/sg-api': {
+        target: 'http://localhost:80/sg-api',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/sg/, '')
+        rewrite: (path) => path.replace(/^\/sg-api/, '')
       },
       '/rsm': {
         target: 'http://localhost:80/sg/rsm',

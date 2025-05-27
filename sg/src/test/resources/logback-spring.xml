@@ -6,7 +6,7 @@
 
     <!-- 文件输出 -->
     <appender name="FILE" class="ch.qos.logback.core.FileAppender">
-        <file>./data/sg.log</file>
+        <file>./logs/sg.log</file>
         <encoder>
             <pattern>${LOG_PATTERN}</pattern>
         </encoder>

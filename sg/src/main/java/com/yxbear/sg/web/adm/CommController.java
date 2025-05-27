@@ -18,7 +18,7 @@ import com.yxbear.sg.svc.play.bean.CityInfo;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/adm")
+@RequestMapping("${sg.api:}/adm")
 @RequiredArgsConstructor
 public class CommController {
     final SgEngine sg;

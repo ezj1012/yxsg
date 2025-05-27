@@ -13,10 +13,9 @@ import lombok.Data;
 public class GlobalCfg {
 
     private String name;
-
     private List<PlayerIcon> playerIcons;
-
     private Map<Integer, Building> buildingsMap;
+    private Map<Integer, Technic> technicsMap;
 
     public @NonNull Building getAndCheckBuilding(int bid) {
         if (this.buildingsMap == null || !this.buildingsMap.containsKey(bid)) {
@@ -24,4 +23,12 @@ public class GlobalCfg {
         }
         return this.buildingsMap.get(bid);
     }
+
+    public @NonNull Technic getAndCheckTechnic(int tid) {
+        if (this.technicsMap == null || !this.technicsMap.containsKey(tid)) {
+            throw new ServiceException("科技[" + tid + "]不存在!");
+        }
+        return this.technicsMap.get(tid);
+    }
+
 }

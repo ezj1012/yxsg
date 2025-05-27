@@ -16,7 +16,7 @@ import java.util.Collections;
 import java.util.List;
 
 @RestController
-@RequestMapping("/cfg")
+@RequestMapping("${sg.api:}/cfg")
 @RequiredArgsConstructor
 public class FrameCfgController {
 

@@ -14,7 +14,7 @@ const obs = new ResizeObserver(entries => {
     for (const en of entries) {
         if (width.value != en.contentRect.width) {
             width.value = en.contentRect.width
-            bg.value = sg.img('common#table_header', { w: width.value, h: height })
+            bg.value = sg.ctx.res.img('common#table_header', { w: width.value, h: height })
             header.realWidth = width.value
         }
     }

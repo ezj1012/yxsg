@@ -30,6 +30,7 @@ import com.yxbear.sg.engine.loader.SgWorldDataLoader;
 import com.yxbear.sg.engine.support.DefaultSgDataLoader;
 
 import cn.dev33.satoken.context.SaHolder;
+import cn.dev33.satoken.context.model.SaRequest;
 import cn.dev33.satoken.filter.SaServletFilter;
 import cn.dev33.satoken.interceptor.SaInterceptor;
 import cn.dev33.satoken.router.SaRouter;

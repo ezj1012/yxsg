@@ -405,7 +405,7 @@ onMounted(() => { })
         <!-- :class="{ 'br': hoverbuildIdx == -2 }" -->
 
         <div class="build" v-for="b, idx in builds"
-            :style="{ backgroundImage: b.bgUrl, left: b.x, top: b.y, width: b.w, height: b.h }">
+            :style="{ backgroundImage: b.bgUrl, left: b.xp, top: b.yp, width: b.wp, height: b.hp }">
 
         </div>
 

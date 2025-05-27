@@ -9,6 +9,9 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import com.yxbear.sg.domain.mapper.cfg.*;
+import com.yxbear.sg.domain.model.cfg.*;
+import com.yxbear.sg.svc.cfg.bean.*;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Service;
 
@@ -16,16 +19,7 @@ import com.alibaba.fastjson2.JSON;
 import com.yxbear.core.exception.ServiceException;
 import com.yxbear.sg.domain.SystemUtils;
 import com.yxbear.sg.domain.bean.SGProps;
-import com.yxbear.sg.domain.mapper.cfg.CfgBuildingConditionMapper;
-import com.yxbear.sg.domain.mapper.cfg.CfgBuildingLevelMapper;
-import com.yxbear.sg.domain.mapper.cfg.CfgBuildingMapper;
-import com.yxbear.sg.domain.model.cfg.CfgBuildingCondition;
-import com.yxbear.sg.domain.model.cfg.CfgBuildingLevel;
 import com.yxbear.sg.svc.cfg.FrameCfgSvc;
-import com.yxbear.sg.svc.cfg.bean.Building;
-import com.yxbear.sg.svc.cfg.bean.FrameCfg;
-import com.yxbear.sg.svc.cfg.bean.GlobalCfg;
-import com.yxbear.sg.svc.cfg.bean.PlayerIcon;
 
 import lombok.RequiredArgsConstructor;
 
@@ -45,8 +39,16 @@ public class FrameCfgSvcImpl implements FrameCfgSvc, InitializingBean {
     final SGProps sgProps;
 
     final CfgBuildingMapper buildingMapper;
+
     final CfgBuildingLevelMapper buildingLevelMapper;
+
     final CfgBuildingConditionMapper buildingConditionMapper;
+
+    final CfgTechnicMapper technicMapper;
+
+    final CfgTechnicLevelMapper technicLevelMapper;
+
+    final CfgTechnicConditionMapper technicConditionMapper;
 
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -70,32 +72,53 @@ public class FrameCfgSvcImpl implements FrameCfgSvc, InitializingBean {
     }
 
     private void readGlobalCfg() {
-        globalCfg = new GlobalCfg();
-        PlayerIcon.refresh(iconDir);
-        globalCfg.setPlayerIcons(PlayerIcon.getPlayerIcons());
-        globalCfg.setBuildingsMap(readBuilding());
+        if (globalCfg == null || globalExpired()) {
+            globalCfg = new GlobalCfg();
+            PlayerIcon.refresh(iconDir);
+            globalCfg.setPlayerIcons(PlayerIcon.getPlayerIcons());
+            globalCfg.setBuildingsMap(readBuilding());
+            globalCfg.setTechnicsMap(readTechnics());
+        }
     }
 
-    private Map<Integer, Building> readBuilding() {
-        Map<Integer, Map<Integer, CfgBuildingLevel>> bLvMap = buildingLevelMapper.queryAll().stream()
-                .collect(Collectors.groupingBy(CfgBuildingLevel::getBuildId,
-                        Collectors.toMap(CfgBuildingLevel::getLevel, Function.identity())));
+    private boolean globalExpired() {
+        return false;
+    }
+
+    private Map<Integer, Technic> readTechnics() {
+        Map<Integer, Map<Integer, CfgTechnicLevel>> bLvMap = technicLevelMapper.queryAll().stream().collect(Collectors.groupingBy(CfgTechnicLevel::getTechnicId, Collectors.toMap(CfgTechnicLevel::getLevel, Function.identity())));
         Map<Integer, Map<Integer, Map<Integer, Map<Integer, Integer>>>> bCdtMap = new HashMap<>();
-        for (CfgBuildingCondition cfgBuildingCondition : buildingConditionMapper.queryAll()) {
-            if (bCdtMap.computeIfAbsent(cfgBuildingCondition.getBuildId(), k1 -> new HashMap<>()).computeIfAbsent(cfgBuildingCondition.getLevelId(), key -> new HashMap<>()).computeIfAbsent(cfgBuildingCondition.getPreType(), k -> new HashMap<>()).put(cfgBuildingCondition.getPreId(), cfgBuildingCondition.getPreLevel()) != null) {
+        for (CfgTechnicCondition cfgTechnicCondition : technicConditionMapper.queryAll()) {
+            if (bCdtMap.computeIfAbsent(cfgTechnicCondition.getTechnicId(), k1 -> new HashMap<>()).computeIfAbsent(cfgTechnicCondition.getLevelId(), key -> new HashMap<>()).computeIfAbsent(cfgTechnicCondition.getPreType(), k -> new HashMap<>()).put(cfgTechnicCondition.getPreId(),
+                    cfgTechnicCondition.getPreLevel()) != null) {
                 throw new IllegalStateException("Duplicate key");
             }
         }
 
-        Map<Integer, Building> bMap = buildingMapper.queryAll().stream()
-                .map(b -> {
-                    Building rb = SystemUtils.copy(b, Building.class);
-                    rb.setLevels(bLvMap.get(b.getId()));
-                    rb.setPreCdts(bCdtMap.get(b.getId()));
-                    return rb;
-                }).collect(Collectors.toMap(b -> b.getId(), b -> b));
+        return buildingMapper.queryAll().stream().map(b -> {
+            Technic rb = SystemUtils.copy(b, Technic.class);
+            rb.setLevels(bLvMap.get(b.getId()));
+            rb.setPreCdts(bCdtMap.get(b.getId()));
+            return rb;
+        }).collect(Collectors.toMap(CfgTechnic::getId, b -> b));
+    }
 
-        return bMap;
+    private Map<Integer, Building> readBuilding() {
+        Map<Integer, Map<Integer, CfgBuildingLevel>> bLvMap = buildingLevelMapper.queryAll().stream().collect(Collectors.groupingBy(CfgBuildingLevel::getBuildId, Collectors.toMap(CfgBuildingLevel::getLevel, Function.identity())));
+        Map<Integer, Map<Integer, Map<Integer, Map<Integer, Integer>>>> bCdtMap = new HashMap<>();
+        for (CfgBuildingCondition cfgBuildingCondition : buildingConditionMapper.queryAll()) {
+            if (bCdtMap.computeIfAbsent(cfgBuildingCondition.getBuildId(), k1 -> new HashMap<>()).computeIfAbsent(cfgBuildingCondition.getLevelId(), key -> new HashMap<>()).computeIfAbsent(cfgBuildingCondition.getPreType(), k -> new HashMap<>())
+                    .put(cfgBuildingCondition.getPreId(), cfgBuildingCondition.getPreLevel()) != null) {
+                throw new IllegalStateException("Duplicate key");
+            }
+        }
+
+        return buildingMapper.queryAll().stream().map(b -> {
+            Building rb = SystemUtils.copy(b, Building.class);
+            rb.setLevels(bLvMap.get(b.getId()));
+            rb.setPreCdts(bCdtMap.get(b.getId()));
+            return rb;
+        }).collect(Collectors.toMap(CfgBuilding::getId, b -> b));
     }
 
     private void readFrameCfg() {

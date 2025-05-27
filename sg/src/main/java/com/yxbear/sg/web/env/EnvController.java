@@ -19,7 +19,7 @@ import com.yxbear.sg.svc.play.bean.QMapIdx;
 
 
 @RestController
-@RequestMapping("/env")
+@RequestMapping("${sg.api:}/env")
 @RequiredArgsConstructor
 public class EnvController {
 

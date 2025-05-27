@@ -19,7 +19,7 @@ import com.yxbear.sg.web.gmi.bean.LoginPlay;
 
 
 @RestController
-@RequestMapping("/play")
+@RequestMapping("${sg.api:}/play")
 @RequiredArgsConstructor
 public class PlayController {
 

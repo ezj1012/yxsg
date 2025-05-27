@@ -9,13 +9,13 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CfgBuildingCondition implements EntityBean<Integer> {
+public class CfgTechnicCondition implements EntityBean<Integer> {
 
     /** 唯一主键 */
     private Integer id;
 
     /**  */
-    private Integer buildId;
+    private Integer technicId;
 
     /** 目标等级 */
     private Integer levelId;
