@@ -45,6 +45,8 @@ export interface FrameCfg {
 export interface GlobalCfg {
     playerIcons: PlayerIcon[]
     buildingsMap: Record<number, CityBuildingCfg>
+    soldiersMap: Record<number, SoldierCfg>
+    defencesMap: Record<number, DefenceCfg>
 }
 
 export interface CityBuildingCfg {
@@ -57,6 +59,8 @@ export interface CityBuildingCfg {
     // lv > type
     preCdts: Record<number, Record<0 | 1 | 2, Record<number, number>>>;
 }
+
+
 
 export interface CfgBuildingLevel {
     id: number
@@ -71,6 +75,55 @@ export interface CfgBuildingLevel {
     upgradeTime: number
     usingPeople: number
     description: string
+}
+
+export interface CfgSoldier {
+    id: number
+    soldierType: number
+    fromCity: number
+    name: string
+    description: string
+    hp: number
+    ap: number
+    dp: number
+    apRange: number
+    speed: number
+    carry: number
+    timeNeed: number
+    woodNeed: number
+    rockNeed: number
+    ironNeed: number
+    foodNeed: number
+    goldNeed: number
+    peopleNeed: number
+    foodUse: number
+}
+
+
+export interface SoldierCfg extends CfgSoldier {
+    preCdts: Record<0 | 1 | 2, Record<number, number>>;
+}
+export interface CfgDefence {
+    id: number
+    defenceType: number
+    name: string
+    description: string
+    hp: number
+    ap: number
+    dp: number
+    apRange: number
+    speed: number
+    carry: number
+    timeNeed: number
+    woodNeed: number
+    rockNeed: number
+    ironNeed: number
+    foodNeed: number
+    goldNeed: number
+    areaNeed: number
+}
+export interface DefenceCfg extends CfgDefence {
+    preCdts: Record<0 | 1 | 2, Record<number, number>>;
 }
 
 export interface PlayInfo {
@@ -117,10 +170,27 @@ export interface PlayCityInfo {
     // resAdd: GiCityResourceAdd
     buildings: CityBuilding[]
     // defences: GiCityDefence[]
-    // soldiers: GiCitySoldier[]
+    soldiers: GiCitySoldier[]
+    defences: GiCityDefence[]
     // heros: GiCityHero[]
     maxOuterBuild: number
 }
+
+export interface GiCitySoldier {
+    id: number
+    cityId: number
+    soldierId: number
+    count: number
+    curLevel: number
+}
+
+export interface GiCityDefence {
+    id: number
+    cityId: number
+    defenceId: number
+    count: number
+}
+
 export interface CityBuilding {
     id: number
     cityId: number

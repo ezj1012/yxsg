@@ -34,3 +34,11 @@ export class CompactSimpleMsg {
         this.msg = msg;
     }
 }
+
+export class CompMsg {
+    content: any
+
+    constructor(type: string, data?: {}) {
+        this.content = { type, data }
+    }
+}
