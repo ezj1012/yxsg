@@ -65,13 +65,19 @@ const sctBtn = new CfgStr("K:funpanl#build_list_canOnly;T:I_BTN;S:0,400,25,24,11
 const txt = new CfgStr("K:funpanl#build_list_canOnly_txt;T:TEXT;S:30,405,60,22,11;TXT:T:显示可建造的,F:12,C:#FFDA99,;")
 
 reg('createBuildFunPan', async ({ cfg }) => {
-    console.log()
-    const bk: string = cfg!.key() as string
-    const bid = bk.substring(bk.lastIndexOf('_') + 1);
-    await sg.ctx.playMgr.op('upgradeBuilding', {
-        pos: buildItem.value.pos,
-        bId: Number(bid),
-    })
+    try {
+        const bk: string = cfg!.key() as string
+        const bid = bk.substring(bk.lastIndexOf('_') + 1);
+        await sg.ctx.playMgr.op('upgradeBuilding', {
+            pos: buildItem.value.pos,
+            bId: Number(bid),
+        })
+        sg.ctx.funPanMgr.setComp('')
+    } catch (error) {
+
+    }
+
+
 })
 
 </script>

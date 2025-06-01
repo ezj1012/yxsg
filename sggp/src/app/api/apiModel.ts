@@ -172,8 +172,44 @@ export interface PlayCityInfo {
     // defences: GiCityDefence[]
     soldiers: GiCitySoldier[]
     defences: GiCityDefence[]
-    // heros: GiCityHero[]
+    heros: CityHero[]
     maxOuterBuild: number
+}
+export interface GiCityHero {
+    id: number
+    playId: number
+    npcId: number
+    cityId: number
+    name: string
+    cityType: number
+    state: number
+    gender: number
+    face: number
+    heroType: number
+    heroHealth: number
+    level: number
+    exp: number
+    commandBase: number
+    commandAddOn: number
+    affairsBase: number
+    braveryBase: number
+    wisdomBase: number
+    affairsAdd: number
+    braveryAdd: number
+    wisdomAdd: number
+    affairsAddOn: number
+    braveryAddOn: number
+    wisdomAddOn: number
+    forceMaxAddOn: number
+    energyMaxAddOn: number
+    speedAddOn: number
+    attackAddOn: number
+    defenceAddOn: number
+    loyalty: number
+}
+
+export interface CityHero extends GiCityHero {
+
 }
 
 export interface GiCitySoldier {

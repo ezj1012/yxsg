@@ -13,8 +13,8 @@ import LeftCityResRock from './msgs/LeftCityResRock.vue';
 import LeftCityResWood from './msgs/LeftCityResWood.vue';
 import LeftCityArmyMsg from './msgs/LeftCityArmyMsg.vue';
 import LeftCityDefenceMsg from './msgs/LeftCityDefenceMsg.vue';
+import LeftCityHeroMsg from './msgs/LeftCityHeroMsg.vue';
 
-// import LeftCityGoldMsg from './msgs/LeftCityGoldMsg.vue';
 // import LeftCityGoldMsg from './msgs/LeftCityGoldMsg.vue';
 // import LeftCityGoldMsg from './msgs/LeftCityGoldMsg.vue';
 // import LeftCityGoldMsg from './msgs/LeftCityGoldMsg.vue';
@@ -31,7 +31,7 @@ const msgComps: { [key: string]: Component } = {
   LeftCityResWood: LeftCityResWood,
   LeftCityArmyMsg: LeftCityArmyMsg,
   LeftCityDefenceMsg: LeftCityDefenceMsg,
-  // LeftCityGoldMsg: LeftCityGoldMsg,
+  LeftCityHeroMsg: LeftCityHeroMsg,
   // LeftCityGoldMsg: LeftCityGoldMsg,
   // LeftCityGoldMsg: LeftCityGoldMsg,
 }

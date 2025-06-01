@@ -121,8 +121,8 @@ export class PlayMgr {
             await this._ctx.api.playApi.op(op, this.play!.lastCity, params)
         }
         catch (err) {
-            console.log(err)
-            this._ctx.errMsgMgr.pushMsg(err as string)
+            console.log((err as any).response.data.message )
+            this._ctx.errMsgMgr.pushMsg((err as any).response.data.message )
         } finally {
             this.oping = false
         }
