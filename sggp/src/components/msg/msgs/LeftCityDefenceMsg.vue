@@ -6,7 +6,12 @@ import { computed, inject, ref, type Ref } from 'vue';
 const { sg, ctx, res } = inject('sg') as { sg: SanGuo, ctx: SgCtx, res: SgRes }
 const { hmgs } = inject('msg') as { hmgs: Ref<HoverMsg> }
 
-const defence = computed(() => ctx.gCfgMgr.cfg?.defencesMap[hmgs.value.content.data.id])
+const defence = computed(() => {
+    if (ctx.gCfgMgr.cfg && hmgs.value && hmgs.value.content?.data?.id) {
+        return ctx.gCfgMgr.cfg?.defencesMap[hmgs.value?.content.data.id]
+    }
+    return undefined
+})
 
 </script>
 <template>
