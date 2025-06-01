@@ -21,10 +21,16 @@ onMounted(async () => {
     const buildingsMap = sg.ctx.gCfgMgr.cfg!.buildingsMap
     for (const k in buildingsMap) {
         if (inner && buildingsMap[k].place == 1) {
-            if (buildingsMap[k].id != 20 && buildingsMap[k].id != 6) {
-                bs.push(buildingsMap[k])
+            // 城内建筑
+            if (buildingsMap[k].id != 20 && buildingsMap[k].id != 6
+            ) {
+                const only = sg.ctx.gCfgMgr.isOnlyBuild(buildingsMap[k].id)
+                if (!only || only && sg.ctx.play?.city.buildings.findIndex(b => b.bid === buildingsMap[k].id) === -1) {
+                    bs.push(buildingsMap[k])
+                }
             }
         } else if (!inner && buildingsMap[k].place == 0) {
+            // 城外建筑
             bs.push(buildingsMap[k])
         }
     }
@@ -33,7 +39,7 @@ onMounted(async () => {
 
     buildItem.value = sg.ctx.dataMgr.getByKey('fun_pan#city_builds_params')
     inner.value = buildItem.value.inner
-    console.log("建筑位置: ", buildItem.value)
+    // console.log("建筑位置: ", buildItem.value)
     sg.ctx.dataMgr.subscribe('player#time', undefined, updateBuildState)
     await updateBuildState()
     sg.ctx.dataMgr.subscribeValue('funpanl#build_list_canOnly_sct', showOnly)
@@ -58,10 +64,13 @@ const sbs = computed(() => {
 const sctBtn = new CfgStr("K:funpanl#build_list_canOnly;T:I_BTN;S:0,400,25,24,11;RFI:common#btn_osct;SCTABLE:TRUE;")
 const txt = new CfgStr("K:funpanl#build_list_canOnly_txt;T:TEXT;S:30,405,60,22,11;TXT:T:显示可建造的,F:12,C:#FFDA99,;")
 
-reg('createBuildFunPan', async () => {
+reg('createBuildFunPan', async ({ cfg }) => {
+    console.log()
+    const bk: string = cfg!.key() as string
+    const bid = bk.substring(bk.lastIndexOf('_') + 1);
     await sg.ctx.playMgr.op('upgradeBuilding', {
         pos: buildItem.value.pos,
-        bId: buildItem.value.bid,
+        bId: Number(bid),
     })
 })
 

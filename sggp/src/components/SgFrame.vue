@@ -18,12 +18,12 @@ const isReady = computed(() => sg.value.ready.value)
 <template>
     <div class="sg-main">
         <template v-if="isReady">
-            <!--  
-            <RFunPanl />-->
+            <!--  -->
+            <RFunPanl />
             <FunPanlTestView />
-            <!-- 
+            <!-- -->
 
-            <StageView />-->
+            <StageView />
 
             <!--  <TableViewTest />-->
             <!-- <WorldMap /> -->

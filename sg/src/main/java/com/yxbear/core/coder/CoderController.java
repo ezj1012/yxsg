@@ -25,7 +25,7 @@ import com.yxbear.core.coder.gen.GenModelGen;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
-@RequestMapping("/code")
+@RequestMapping("/sg/code")
 @Slf4j
 public class CoderController implements InitializingBean {
 

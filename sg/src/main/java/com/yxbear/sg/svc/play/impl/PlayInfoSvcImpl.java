@@ -14,6 +14,8 @@ import com.yxbear.sg.domain.model.gi.CGiCity;
 import com.yxbear.sg.domain.model.gi.GiCity;
 import com.yxbear.sg.domain.model.gi.GiPlayer;
 import com.yxbear.sg.domain.model.gi.GiUnion;
+import com.yxbear.sg.svc.cfg.FrameCfgSvc;
+import com.yxbear.sg.svc.cfg.bean.GlobalCfg;
 import com.yxbear.sg.svc.play.CommQuerySvc;
 import com.yxbear.sg.svc.play.PlayInfoSvc;
 import com.yxbear.sg.svc.play.bean.CityInfo;
@@ -35,6 +37,8 @@ public class PlayInfoSvcImpl implements PlayInfoSvc {
 
     final CommQuerySvc querySvc;
 
+    final FrameCfgSvc cfgSvc;
+
     @Override
     public PlayInfo getPlayInfo(QPlayState state) {
         LoginUser user = SystemUtils.getCurUser();
@@ -43,6 +47,9 @@ public class PlayInfoSvcImpl implements PlayInfoSvc {
         if (player == null) { return null; }
 
         PlayInfo info = SystemUtils.copy(player, PlayInfo.class);
+        GlobalCfg gCfg = cfgSvc.getGlobalCfg();
+        info.setPlayerOffice(gCfg.getOfficeMap().get(info.getOfficepos()));
+        info.setPlayerNobility(gCfg.getNobilityMap().get(info.getNobility()));
 
         fillCity(info);
         fillUnion(info);

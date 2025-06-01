@@ -58,6 +58,7 @@ class GCfgDb {
 }
 
 export class GCfgMgr {
+    uniqueBids = [6, 7, 13, 14, 16, 15, 10, 17, 8, 11, 12, 18, 19, 20];
 
     cfg?: GlobalCfg
     buildImgs = {}
@@ -127,5 +128,9 @@ export class GCfgMgr {
     }
 
     getTechLv(buildTechId: number): any {
+    }
+
+    isOnlyBuild(bid: number): boolean {
+        return this.uniqueBids.findIndex(b => b == bid) !== -1
     }
 }

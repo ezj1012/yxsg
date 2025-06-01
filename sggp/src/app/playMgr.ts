@@ -122,7 +122,6 @@ export class PlayMgr {
         }
         catch (err) {
             console.log(err)
-            debugger
             this._ctx.errMsgMgr.pushMsg(err as string)
         } finally {
             this.oping = false
