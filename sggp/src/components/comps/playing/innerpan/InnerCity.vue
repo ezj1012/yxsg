@@ -7,80 +7,6 @@ import { CompactSimpleMsg } from '@/app/msg/hoverMsgMgr';
 import type { SgRes } from '@/app/res';
 import type { SanGuo, SgCtx } from '@/app/sg';
 import { computed, inject, onMounted, onUnmounted, ref, watch } from 'vue';
-
-
-// import { CityBuildState, type CityBuild } from '@/app/api';
-// import { DATA_KEY_CITY_BUILD_INNER } from '@/app/constant';
-// import { DataMgr } from '@/app/dataMgr';
-// import type { SanGuo } from '@/app/sg';
-// import type Img from '@/app/utils/Img';
-// import { ref, inject, type Ref, watch, onMounted, computed } from 'vue'
-
-// 
-
-// const hoverbuildIdx = ref(-1)
-
-// onMounted(() => { })
-
-// // const msgInfo = ref('')
-// const msgV = ref({ content: '', isHover: isHoverItem })
-// const buildMgr = sg.ctx.dataMgr.playMgr.cityMgr.innerBuildMgr
-// const builds = ref(buildMgr.builds)
-// const isShowLvImg = ref(true)
-// const highBg = `url(${sg.ctx.res.getImgGroup('playing#innercity#map_high').hasDef()?.getDataUrl()})`
-// const lowBg = `url(${sg.ctx.res.getImgGroup('playing#innercity#map_low').hasDef()?.getDataUrl()})`
-// const styles = computed(() => {
-//     const s = {} as any
-//     s.backgroundImage = builds.value[1].getLv() && builds.value[1].getLv() > 0 ? highBg : lowBg
-//     return s
-// })
-
-// function isHoverItem(e: MouseEvent) {
-//     for (let i = builds.value.length - 1; i >= 0; i--) {
-//         const build = builds.value[i]
-//         if (build.getImg().isHover(e.offsetX - build.getX(), e.offsetY - build.getY())) {
-//             msgV.value.content = build.getMsg()
-//             // sg.ctx.dataMgr.setHoverMsg(build.getMsg())
-//             if (hoverbuildIdx.value !== i) {
-//                 hoverbuildIdx.value = i
-//             }
-//             return true
-//         }
-//     }
-
-//     if (hoverbuildIdx.value !== -1) {
-//         hoverbuildIdx.value = -1
-//     }
-//     return false
-// }
-
-// async function clickBuild(e: MouseEvent) {
-//     if (hoverbuildIdx.value === -1) {
-//         console.log('啥也没电')
-//         return
-//     } else if (hoverbuildIdx.value === 0) {
-//         console.log(hoverbuildIdx.value, '官府 ')
-//     } else if (hoverbuildIdx.value === 1) {
-//         console.log(hoverbuildIdx.value, '城墙 ')
-//     } else {
-//         const build = builds.value[hoverbuildIdx.value]
-//         console.log(build)
-//         if (build.cb && build.cb.state != 0) {
-
-//         } else {
-//             await openBuildList(build)
-//         }
-//     }
-
-// }
-
-// async function openBuildList(build: any) {
-//     // sg.funPanMgr.setComp('fun_pan#city_build_inner_list')
-//     // sg.ctx.dataMgr.setByKey(DATA_KEY_CITY_BUILD_INNER, build)
-// }
-
-
-
 const { sg, ctx, res } = inject('sg') as { sg: SanGuo, ctx: SgCtx, res: SgRes }
 const bgLow = res.img("playing#innercity#map_low")
 const bgHigh = res.img("playing#innercity#map_high")
@@ -93,14 +19,13 @@ const showLv = ref(false)
 onMounted(() => {
     ctx.dataMgr.subscribe("playing#player_time", undefined, sub)
     ctx.dataMgr.subscribeValue('playing#topbutton_level_sct', showLv)
-    sub('')
+    sub()
 })
 onUnmounted(() => {
     ctx.dataMgr.unsubscribe("playing#player_time", sub)
-    // ctx.dataMgr.unsubscribe()
 })
 
-function sub(cfg: any) {
+function sub() {
     const bmap = new Map<Number, CityBuilding>()
     ctx.play?.city.buildings.forEach(b => {
         bmap.set(b.pos, b)
@@ -135,6 +60,8 @@ async function clickBuild(e: MouseEvent) {
     const b = builds.value[hoverbuildIdx.value]
     if (b.cb) {
         console.log(hoverbuildIdx.value, b.cb)
+        sg.ctx.dataMgr.setByKey('fun_pan#city_builds_params', { inner: true, build: b.cb })
+        sg.ctx.funPanMgr.setComp('fun_pan#build_house')
     } else {
         sg.ctx.dataMgr.setByKey('fun_pan#city_builds_params', { inner: true, bid: 0, pos: hoverbuildIdx.value })
         sg.ctx.funPanMgr.setComp('fun_pan#city_builds')
