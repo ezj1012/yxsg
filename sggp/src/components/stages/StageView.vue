@@ -24,7 +24,6 @@ watch(sg.ctx.stageMgr.stageKey, async (newStageKey, oldStageKey) => {
     console.log(`stageView: watch newStage: ${newStageKey},oldStage: ${oldStageKey}`)
     const oldStage = sg.ctx.stageMgr.getStage(oldStageKey)
     const newStage = sg.ctx.stageMgr.getStage(newStageKey)
-
     oldStage && await oldStage.onUnmounted()
     newStage && await newStage.onMounted()
 

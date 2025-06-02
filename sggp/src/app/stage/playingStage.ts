@@ -7,14 +7,14 @@ export class PlayStage extends Stage {
     timer: any
     constructor(ctx: SgCtx) {
         super('playing', ctx)
-        // this.regAll()
     }
-    async onUnmounted() {
+
+    async onMounted() {
         this.timer = setInterval(() => {
             this.ctx.playMgr.refreshPlay()
         }, 1000);
     }
-    async onMounted() {
+    async onUnmounted() {
         this.timer && clearInterval(this.timer)
     }
 

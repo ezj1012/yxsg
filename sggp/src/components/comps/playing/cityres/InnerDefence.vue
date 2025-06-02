@@ -1,49 +1,4 @@
 <script setup lang="ts">
-// import Ctrl from '@/app/ctrl';
-// import { CityBuildState, type PlayerCityBuild } from '@/app/model/comm';
-// import { GCfg } from '@/app/res/GloabalCfgMgr';
-// import ActionMgr from '@/app/stage/ActionMgr';
-// import { CompType } from '@/app/stage/CompMappingCache';
-// import type { CompInfo } from '@/app/stage/CompMgr';
-// import type { BgVcfg, InnerPanVCfg, OutCityVcfg, ProvincesMapVcfg } from '@/app/stage/CompModel';
-// import DataMgr from '@/app/stage/DataMgr';
-// import type Img from '@/app/utils/Img';
-// import Msg from '@/app/utils/Msg';
-// import Res from '@/app/utils/Res';
-// import { Content } from 'view-ui-plus';
-// import Scroll from '@/components/comps/Scroll.vue';
-// import { onMounted, ref } from 'vue';
-// interface Defence {
-//     id: number
-//     lv: number
-//     count: number
-//     url?: string
-//     msg?: any
-// }
-// const btnKey = 'playing#btn_left_defence_sct'
-// const defencesKey = 'playing#player_city_defences'
-// const { compInfo } = defineProps({ compInfo: { required: true } }) as { compInfo: CompInfo }
-// const cfgV = ref<InnerPanVCfg>(compInfo.getCfg() as InnerPanVCfg)
-// const show = ref(DataMgr.get(btnKey) ? true : false)
-// const defences = ref<Defence[]>([])
-// DataMgr.subscribe(btnKey, undefined, (key: string, newValue: any, oldValue: any) => { show.value = newValue ? true : false })
-// DataMgr.subscribe(defencesKey, undefined, (key: string, newValue: any, oldValue: any) => { refreshDefences() })
-
-// onMounted(() => {
-//     refreshDefences()
-
-// })
-
-// function refreshDefences() {
-//     const datas = DataMgr.get(defencesKey) as Defence[] || []
-//     datas.forEach(d => {
-//         d.url = `url(${Res.imgCfgMgr.getGroup(`playing#comm#defence_${d.id}`)?.getDef()?.getDataUrl()})`
-//         d.msg = { msg: Msg.of({ type: 'LeftCityDefenceMsg', content: { id: d.id } }) }
-//     })
-//     defences.value = datas
-// }
-
-
 import { CompMsg } from '@/app/msg/hoverMsgMgr';
 import type { SgRes } from '@/app/res';
 import type { SanGuo, SgCtx } from '@/app/sg';

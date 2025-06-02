@@ -151,6 +151,7 @@ export interface PlayInfo {
     city: PlayCityInfo
     foods: Record<number, number>
     usedFoods: Record<number, any>
+    time: number
 }
 
 export interface PlayCityInfo {
@@ -236,6 +237,7 @@ export interface CityBuilding {
     status: number
     goalLv: number
     endTime: number
+    endTimeFormat?: string //后端计算
     nextLv: number
 }
 
