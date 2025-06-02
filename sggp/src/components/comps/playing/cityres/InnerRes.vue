@@ -26,9 +26,9 @@ function configureCommPlus(x: number, y: number, w: number, h: number, clickKey:
 
 const cityReses = ref<any[]>([
     { msg: new CompMsg('LeftCityResFood'), bg: food, y: 35, cur: createText('player_city_res_food', 30, 0, 100, 25, '粮食数量'), add: createText('player_city_res_foodAdd', 130, 0, 95, 25, '粮食产量'), plus: configureCommPlus(228, 8, 11, 11, 'player_city_res_foodAdd', '使用宝物增加粮食产量') },
-    { msg: new CompMsg('LeftCityResWood'), bg: iron, y: 60, cur: createText('player_city_res_iron', 30, 0, 100, 25, '木材数量'), add: createText('player_city_res_ironAdd', 130, 0, 95, 25, '木材产量'), plus: configureCommPlus(228, 8, 11, 11, 'player_city_res_ironAdd', '使用宝物增加木材产量') },
+    { msg: new CompMsg('LeftCityResWood'), bg: wood, y: 60, cur: createText('player_city_res_wood', 30, 0, 100, 25, '木材数量'), add: createText('player_city_res_woodAdd', 130, 0, 95, 25, '木材产量'), plus: configureCommPlus(228, 8, 11, 11, 'player_city_res_woodAdd', '使用宝物增加木材产量') },
     { msg: new CompMsg('LeftCityResRock'), bg: rock, y: 85, cur: createText('player_city_res_rock', 30, 0, 100, 25, '石料数量'), add: createText('player_city_res_rockAdd', 130, 0, 95, 25, '石料产量'), plus: configureCommPlus(228, 8, 11, 11, 'player_city_res_rockAdd', '使用宝物增加石料产量') },
-    { msg: new CompMsg('LeftCityResIron'), bg: wood, y: 110, cur: createText('player_city_res_wood', 30, 0, 100, 25, '铁锭数量'), add: createText('player_city_res_woodAdd', 130, 0, 95, 25, '铁锭产量'), plus: configureCommPlus(228, 8, 11, 11, 'player_city_res_woodAdd', '使用宝物增加铁锭产量') },
+    { msg: new CompMsg('LeftCityResIron'), bg: iron, y: 110, cur: createText('player_city_res_iron', 30, 0, 100, 25, '铁锭数量'), add: createText('player_city_res_ironAdd', 130, 0, 95, 25, '铁锭产量'), plus: configureCommPlus(228, 8, 11, 11, 'player_city_res_ironAdd', '使用宝物增加铁锭产量') },
 ]);
 
 

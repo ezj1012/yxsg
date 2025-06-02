@@ -51,7 +51,7 @@ const updateBuildState = async (key?: string, newValue?: any, oldValue?: any) =>
         const r = await sg.ctx.buildMgr.canBuilds(builds.value)
         buildState.value = {}
         r.forEach(b => {
-            console.log("bid ", b.bid, b.can(res))
+            console.log("bid ", b.bid, sg.ctx.gCfgMgr.cfg?.buildingsMap[b.bid].name, b.can(res), b)
             buildState.value[b.bid] = b.can(res)
         })
     }

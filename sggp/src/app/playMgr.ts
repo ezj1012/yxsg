@@ -106,7 +106,7 @@ export class PlayMgr {
         return 0;
     }
     getBuildLv(bid: number): number {
-        return 0;
+        return this.play?.city.buildings.find(b => b.bid == bid)?.lv || 0;
     }
 
     get play() { return this._play }
@@ -121,8 +121,8 @@ export class PlayMgr {
             await this._ctx.api.playApi.op(op, this.play!.lastCity, params)
         }
         catch (err) {
-            console.log((err as any).response.data.message )
-            this._ctx.errMsgMgr.pushMsg((err as any).response.data.message )
+            console.log((err as any).response.data.message)
+            this._ctx.errMsgMgr.pushMsg((err as any).response.data.message)
         } finally {
             this.oping = false
         }

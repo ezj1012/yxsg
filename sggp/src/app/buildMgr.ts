@@ -117,16 +117,7 @@ export class BuildMgr {
             dep.bid = b.id
             dep.only = this._ctx.gCfgMgr.isOnlyBuild(b.id)
             dep.rep = (dep.only && (this._ctx.play?.city.buildings.findIndex(bb => bb.bid == b.id) !== -1 || false))
-            // if (dep.bid == 13) {
-            //     console.log(this._ctx.play?.city.buildings.findIndex(bb => bb.bid == b.id))
-            //     debugger;
-            // }
-
-
             r.push(dep)
-
-
-
             const goalLv = this._ctx.gCfgMgr.getBuildLv(b.id, 1)!
             if (goalLv) {
                 const playMgr = this._ctx.playMgr
