@@ -14,6 +14,7 @@ import type { Stage } from '@/app/stage/absStage';
 import CitySelect from '../comps/playing/CitySelect.vue';
 import InnerMain from '../comps/playing/InnerMain.vue';
 import CityRes from '../comps/playing/CityRes.vue';
+import CityBuilding from '../comps/playing/funpanl/CityBuilding.vue';
 
 
 const { sg } = inject('sg') as { sg: SanGuo }
@@ -54,6 +55,9 @@ onUnmounted(async () => {
                     <CitySelect v-if="comp.show() && comp.refComp() == 'citySelect'" :cfg="comp" :id="comp.key()" />
                     <InnerMain v-if="comp.show() && comp.refComp() == 'innerMain'" :cfg="comp" :id="comp.key()" />
                     <CityRes v-if="comp.show() && comp.refComp() == 'cityRes'" :cfg="comp" :id="comp.key()" />
+                    <CityBuilding v-if="comp.show() && comp.refComp() == 'buildList'" :cfg="comp" :id="comp.key()" />
+
+                    
                     <!--                        -->
 
 
