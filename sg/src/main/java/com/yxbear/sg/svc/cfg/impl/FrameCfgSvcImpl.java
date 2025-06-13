@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -50,6 +51,10 @@ public class FrameCfgSvcImpl implements FrameCfgSvc, InitializingBean {
 
     final CfgTechnicConditionMapper technicConditionMapper;
 
+    final CfgNobilityMapper nobilityMapper;
+
+    final CfgOfficeMapper officeMapper;
+
     @Override
     public void afterPropertiesSet() throws Exception {
         frameCfgFile = new File(sgProps.getRsmDir(), "cfgFrame.json");
@@ -78,6 +83,12 @@ public class FrameCfgSvcImpl implements FrameCfgSvc, InitializingBean {
             globalCfg.setPlayerIcons(PlayerIcon.getPlayerIcons());
             globalCfg.setBuildingsMap(readBuilding());
             globalCfg.setTechnicsMap(readTechnics());
+            LinkedHashMap<Integer, CfgNobility> nobilityMap = new LinkedHashMap<>();
+            LinkedHashMap<Integer, CfgOffice> officeMap = new LinkedHashMap<>();
+            nobilityMapper.queryList(CCfgNobility.builder().build(), "ID").forEach(n -> nobilityMap.put(n.getId(), n));
+            officeMapper.queryList(CCfgOffice.builder().build(), "ID").forEach(n -> officeMap.put(n.getId(), n));
+            globalCfg.setNobilityMap(nobilityMap);
+            globalCfg.setOfficeMap(officeMap);
         }
     }
 

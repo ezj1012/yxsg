@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { SanGuo } from '@/app/sg';
 import Empty from './Empty.vue';
-import { computed, inject, watch } from 'vue';
+import { computed, inject, provide, ref, watch } from 'vue';
 import type { FunPanComp } from '@/app/commModel';
 import { CfgStr } from '@/app/cfg';
 import PBtn from './PBtn.vue';
@@ -12,11 +12,30 @@ const { sg } = inject('sg') as { sg: SanGuo }
 const bgUrl = computed(() => sg.ctx.res.img('common#title'))
 const empty: FunPanComp = { key: 'fun_pan#empty', comp: Empty, content: '', size: 12, color: '--c-', x: 0, y: 0, w: 0, h: 0 }
 const comp = computed(() => (sg.ctx.funPanMgr.getComp() || empty) as FunPanComp)
-const w = computed(() => comp.value.w || 680)
-const h = computed(() => comp.value.h || 490)
-const x = computed(() => comp.value.x || 290)
-const y = computed(() => comp.value.y || 50)
-const closeBtn = new CfgStr("K:funpanl#close;T:I_BTN;S:580,400,60,32,4;RFI:common#btn_red;ACT:closeFunPan;TXT:T:关闭,F:15,C:#FFF,;")
+const cfg = ref({
+    w: 680,
+    h: 490,
+    x: 290,
+    y: 50,
+    content: ''
+})
+provide('funpan', { cfg })
+watch(comp, () => {
+    cfg.value.content = comp.value.content
+    cfg.value.x = comp.value.x || 290
+    cfg.value.y = comp.value.y || 50
+    cfg.value.w = comp.value.w || 680
+    cfg.value.h = comp.value.h || 490
+})
+
+const w = computed(() => cfg.value.w || 680)
+const h = computed(() => cfg.value.h || 490)
+const x = computed(() => cfg.value.x || 290)
+const y = computed(() => cfg.value.y || 50)
+const content = computed(() => cfg.value.content || '')
+
+
+const closeBtn = new CfgStr("K:funpanl#close;T:I_BTN;S:0,0,60,32,4;RFI:common#btn_red;ACT:closeFunPan;TXT:T:关闭,F:15,C:#FFF,;")
 
 </script>
 
@@ -24,13 +43,14 @@ const closeBtn = new CfgStr("K:funpanl#close;T:I_BTN;S:580,400,60,32,4;RFI:commo
     <main v-show="comp.key != empty.key" class="fun-main" :style="{
         left: `${x}px`, top: `${y}px`, width: `${w}px`, height: `${h}px`,
     }">
-        <div v-show="comp.show" class="bg"
-            :style="{ color: `var(${comp.color})`, fontSize: `${comp.size}px`, backgroundImage: bgUrl }">
-            {{ comp.content }}
+        <div class="bg" :style="{ color: `var(${comp.color})`, fontSize: `${comp.size}px`, backgroundImage: bgUrl }">
+            {{ content }}
         </div>
         <div class="body">
             <component class="fun-body" :is="comp.comp" :id="comp.key"></component>
-            <PBtn :cfg="closeBtn" />
+            <div class="closeBtn">
+                <PBtn :cfg="closeBtn" />
+            </div>
         </div>
     </main>
 </template>
@@ -73,6 +93,14 @@ const closeBtn = new CfgStr("K:funpanl#close;T:I_BTN;S:580,400,60,32,4;RFI:commo
             left: 0;
             top: 0;
             position: absolute;
+        }
+
+        .closeBtn {
+            position: absolute;
+            width: 100px;
+            height: 38px;
+            left: 580px;
+            bottom: -8px;
         }
     }
 }

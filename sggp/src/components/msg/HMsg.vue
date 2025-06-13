@@ -4,9 +4,36 @@ import { computed, h, inject, onMounted, provide, ref, shallowRef, watch, type C
 import SimpleMsg from './msgs/SimpleMsg.vue';
 import type { HoverMsg } from '@/app/commModel';
 import BuildTitleMsg from './msgs/BuildTileMsg.vue';
+import LeftCityMorale from './msgs/LeftCityMorale.vue';
+import LeftCityGoldMsg from './msgs/LeftCityGoldMsg.vue';
+import LeftCityPeopleMsg from './msgs/LeftCityPeopleMsg.vue';
+import LeftCityResFood from './msgs/LeftCityResFood.vue';
+import LeftCityResIron from './msgs/LeftCityResIron.vue';
+import LeftCityResRock from './msgs/LeftCityResRock.vue';
+import LeftCityResWood from './msgs/LeftCityResWood.vue';
+import LeftCityArmyMsg from './msgs/LeftCityArmyMsg.vue';
+import LeftCityDefenceMsg from './msgs/LeftCityDefenceMsg.vue';
+import LeftCityHeroMsg from './msgs/LeftCityHeroMsg.vue';
+
+// import LeftCityGoldMsg from './msgs/LeftCityGoldMsg.vue';
+// import LeftCityGoldMsg from './msgs/LeftCityGoldMsg.vue';
+// import LeftCityGoldMsg from './msgs/LeftCityGoldMsg.vue';
+// import LeftCityGoldMsg from './msgs/LeftCityGoldMsg.vue';
 
 const msgComps: { [key: string]: Component } = {
-  BuildTileMsg: BuildTitleMsg
+  BuildTileMsg: BuildTitleMsg,
+  LeftCityMorale: LeftCityMorale,
+  LeftCityGoldMsg: LeftCityGoldMsg,
+  LeftCityPeopleMsg: LeftCityPeopleMsg,
+  LeftCityResFood: LeftCityResFood,
+  LeftCityResIron: LeftCityResIron,
+  LeftCityResRock: LeftCityResRock,
+  LeftCityResWood: LeftCityResWood,
+  LeftCityArmyMsg: LeftCityArmyMsg,
+  LeftCityDefenceMsg: LeftCityDefenceMsg,
+  LeftCityHeroMsg: LeftCityHeroMsg,
+  // LeftCityGoldMsg: LeftCityGoldMsg,
+  // LeftCityGoldMsg: LeftCityGoldMsg,
 }
 
 

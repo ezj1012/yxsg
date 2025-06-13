@@ -49,8 +49,8 @@ async function refresh() {
             <div class="line" v-for="i in bDep?.items" :key="i.name">
                 <template v-if="i.type === 0">
                     <div class="p1">{{ i.type == 0 ? '前提建筑' : i.type == 1 ? '前提资源' : '前提科技' }}</div>
-                    <div class="p2">{{ `${i.source.name}${i.need}级` }}</div>
-                    <div class="p3" :style="{ color: i.ok ? '' : 'red' }">
+                    <div class="p2" :style="{ color: i.ok ? '' : 'red' }">{{ `${i.source.name}${i.need}级` }}</div>
+                    <div class="p3">
                         {{ `${i.have}级` }}
                     </div>
                 </template>
@@ -77,35 +77,35 @@ async function refresh() {
                 <div class="p2">{{ bDep?.res?.upgradePeople }}</div>
                 <div class="p3" :style="{ color: cityRes!.people < bDep!.res!.upgradePeople ? 'red' : '' }">{{
                     cityRes?.people
-                    }}
+                }}
                 </div>
             </div>
             <div class="line">
                 <div class="p1">消耗粮食</div>
                 <div class="p2">{{ bDep?.res?.upgradeFood }}</div>
                 <div class="p3" :style="{ color: cityRes!.food < bDep!.res!.upgradeFood ? 'red' : '' }">{{ cityRes?.food
-                    }}
+                }}
                 </div>
             </div>
             <div class="line">
                 <div class="p1">消耗木材</div>
                 <div class="p2">{{ bDep?.res?.upgradeWood }}</div>
                 <div class="p3" :style="{ color: cityRes!.wood < bDep!.res!.upgradeWood ? 'red' : '' }">{{ cityRes?.wood
-                    }}
+                }}
                 </div>
             </div>
             <div class="line">
                 <div class="p1">消耗石料</div>
                 <div class="p2">{{ bDep?.res?.upgradeRock }}</div>
                 <div class="p3" :style="{ color: cityRes!.rock < bDep!.res!.upgradeRock ? 'red' : '' }">{{ cityRes?.rock
-                    }}
+                }}
                 </div>
             </div>
             <div class="line">
                 <div class="p1">消耗铁锭</div>
                 <div class="p2">{{ bDep?.res?.upgradeIron }}</div>
                 <div class="p3" :style="{ color: cityRes!.iron < bDep!.res!.upgradeIron ? 'red' : '' }">{{ cityRes?.iron
-                    }}
+                }}
                 </div>
             </div>
             <div class="split"></div>

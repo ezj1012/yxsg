@@ -84,7 +84,7 @@ export class PlayApi {
     }
 
     async op(op: string, cityId: number, opParams: Record<string, any> = {}): Promise<PlayInfo> {
-        return (await this.sgApi.post('/play/op', { cityId, op, opParams })).data
+        return (await this.sgApi.post('/play/op', { cityId, op, opParams: JSON.stringify(opParams) })).data
     }
-    
+
 }

@@ -1,4 +1,4 @@
-import type { CfgBuildingLevel, CfgGoods, CityTechnic, GlobalCfg } from "./api/apiModel"
+import type { CfgBuildingLevel, CfgGoods, CityTechnic, GlobalCfg, SoldierCfg } from "./api/apiModel"
 import type { SgCtx } from "./sg"
 
 
@@ -58,6 +58,8 @@ class GCfgDb {
 }
 
 export class GCfgMgr {
+
+    uniqueBids = [6, 7, 13, 14, 16, 15, 10, 17, 8, 11, 12, 18, 19, 20];
 
     cfg?: GlobalCfg
     buildImgs = {}
@@ -127,5 +129,20 @@ export class GCfgMgr {
     }
 
     getTechLv(buildTechId: number): any {
+    }
+
+    isOnlyBuild(bid: number): boolean {
+        return this.uniqueBids.findIndex(b => b == bid) !== -1
+    }
+
+    getCitySoldiers(): SoldierCfg[] {
+        const r = []
+        for (const k in this.cfg!.soldiersMap) {
+            const s = this.cfg!.soldiersMap[k]
+            if (s.fromCity == 1) {
+                r.push(s)
+            }
+        }
+        return r
     }
 }

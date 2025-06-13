@@ -5,7 +5,6 @@ import { Stage } from "./absStage";
 
 function regAll() {
     reg('login', async ({ sg, ctx, res }) => {
-        debugger
         const loginCode = ctx.dataMgr.get('login#login_code')
         const loginPwd = ctx.dataMgr.get('login#login_pwd')
         if (!loginCode || !loginPwd) {

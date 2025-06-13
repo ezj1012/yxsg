@@ -113,7 +113,7 @@ export function calculateDerate(base: number, level: number = 0, rate: number): 
 export function formatSeconds(seconds: number) {
     const hrs = Math.floor(seconds / 3600);
     const mins = Math.floor((seconds % 3600) / 60);
-    const secs = seconds % 60;
+    const secs = Math.floor(seconds % 60);
 
     // 使用 padStart 保证两位数格式，如 "02:03:05"
     const hh = String(hrs).padStart(2, '0');

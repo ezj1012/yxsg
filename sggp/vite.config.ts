@@ -24,7 +24,7 @@ export default defineConfig({
         rewrite: (path) => path.replace(/^\/sg-api/, '')
       },
       '/rsm': {
-        target: 'http://localhost:80/sg/rsm',
+        target: 'http://localhost:80/rsm',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/rsm/, '')
       }

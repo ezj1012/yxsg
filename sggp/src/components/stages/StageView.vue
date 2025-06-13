@@ -13,6 +13,8 @@ import ProvincesMap from '../comps/regplay/ProvincesMap.vue';
 import type { Stage } from '@/app/stage/absStage';
 import CitySelect from '../comps/playing/CitySelect.vue';
 import InnerMain from '../comps/playing/InnerMain.vue';
+import CityRes from '../comps/playing/CityRes.vue';
+import CityBuilding from '../comps/playing/funpanl/CityBuilding.vue';
 
 
 const { sg } = inject('sg') as { sg: SanGuo }
@@ -22,7 +24,6 @@ watch(sg.ctx.stageMgr.stageKey, async (newStageKey, oldStageKey) => {
     console.log(`stageView: watch newStage: ${newStageKey},oldStage: ${oldStageKey}`)
     const oldStage = sg.ctx.stageMgr.getStage(oldStageKey)
     const newStage = sg.ctx.stageMgr.getStage(newStageKey)
-
     oldStage && await oldStage.onUnmounted()
     newStage && await newStage.onMounted()
 
@@ -51,13 +52,16 @@ onUnmounted(async () => {
                 <template v-else-if="comp.type() == CfgType.customComp" v-show="comp.show()">
                     <ProvincesMap v-if="comp.show() && comp.refComp() == 'provincesMap'" :cfg="comp" :id="comp.key()" />
                     <CitySelect v-if="comp.show() && comp.refComp() == 'citySelect'" :cfg="comp" :id="comp.key()" />
-                    <!--                        -->
                     <InnerMain v-if="comp.show() && comp.refComp() == 'innerMain'" :cfg="comp" :id="comp.key()" />
+                    <CityRes v-if="comp.show() && comp.refComp() == 'cityRes'" :cfg="comp" :id="comp.key()" />
+                    <CityBuilding v-if="comp.show() && comp.refComp() == 'buildList'" :cfg="comp" :id="comp.key()" />
+
+                    
+                    <!--                        -->
 
 
                     <!--  -->
                     <!-- <ChatPan v-if="comp.show() && comp.refComp() == 'chatPan'" :cfg="comp" :id="comp.key()" />
-                    <CityRes v-if="comp.show() && comp.refComp() == 'cityRes'" :cfg="comp" :id="comp.key()" />
                      -->
                 </template>
                 <div v-else>{{ comp.cfg }}</div>

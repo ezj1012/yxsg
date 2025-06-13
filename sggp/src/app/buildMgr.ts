@@ -33,7 +33,15 @@ export class BuildDep {
     bid: number = 0
     items: BuildDepItem[] = []
     private _res?: UseRes
+    // 是否已经有同样的建筑
+    rep: boolean = false
+    // 是否为唯一建筑
+    only: boolean = false
     can(res: GiCityResource) {
+        if (this.rep && this.only) {
+            return false
+        }
+
         for (let i = 0; i < this.items.length; i++) {
             if (!this.items[i].ok) {
                 return false
@@ -65,6 +73,13 @@ export class BuildMgr {
         const b = this._ctx.gCfgMgr.cfg!.buildingsMap[bid]
         const dep = new BuildDep()
         dep.bid = b.id
+        dep.only = this._ctx.gCfgMgr.isOnlyBuild(b.id)
+        dep.rep = (dep.only && (this._ctx.play?.city.buildings.findIndex(b => b.bid == b.id) !== -1 || false))
+        // if (dep.bid == 13) {
+        //     console.log(this._ctx.play?.city.buildings.findIndex(b => b.bid == b.id))
+        //     debugger;
+        // }
+
         const goalLv = this._ctx.gCfgMgr.getBuildLv(b.id, lv)!
         if (goalLv) {
             const playMgr = this._ctx.playMgr
@@ -100,6 +115,8 @@ export class BuildMgr {
             const b = bs[i];
             const dep = new BuildDep()
             dep.bid = b.id
+            dep.only = this._ctx.gCfgMgr.isOnlyBuild(b.id)
+            dep.rep = (dep.only && (this._ctx.play?.city.buildings.findIndex(bb => bb.bid == b.id) !== -1 || false))
             r.push(dep)
             const goalLv = this._ctx.gCfgMgr.getBuildLv(b.id, 1)!
             if (goalLv) {
