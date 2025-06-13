@@ -1,20 +1,16 @@
 package com.yxbear.sg.svc.play.impl;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
-import com.yxbear.core.CommUtils;
-import com.yxbear.sg.domain.SGConstant;
-import com.yxbear.sg.domain.mapper.gi.ext.GiCityExtMapper;
-import com.yxbear.sg.domain.mapper.gi.ext.GiCityResourceExtMapper;
-import com.yxbear.sg.domain.mapper.mem.MemCityBuildUpgradingMapper;
-import com.yxbear.sg.domain.model.gi.*;
-import com.yxbear.sg.domain.model.mem.MemCityBuildUpgrading;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.yxbear.core.CommUtils;
 import com.yxbear.core.exception.ServiceException;
+import com.yxbear.sg.domain.SGConstant;
 import com.yxbear.sg.domain.SystemUtils;
 import com.yxbear.sg.domain.bean.Userable;
 import com.yxbear.sg.domain.mapper.gi.GiCityBuildMapper;
@@ -23,7 +19,20 @@ import com.yxbear.sg.domain.mapper.gi.GiCityHeroMapper;
 import com.yxbear.sg.domain.mapper.gi.GiCityMapper;
 import com.yxbear.sg.domain.mapper.gi.GiCityResourceAddMapper;
 import com.yxbear.sg.domain.mapper.gi.GiCityResourceMapper;
+import com.yxbear.sg.domain.mapper.gi.ext.GiCityExtMapper;
+import com.yxbear.sg.domain.mapper.gi.ext.GiCityResourceExtMapper;
+import com.yxbear.sg.domain.mapper.mem.MemCityBuildUpgradingMapper;
 import com.yxbear.sg.domain.model.cfg.CfgBuildingLevel;
+import com.yxbear.sg.domain.model.gi.CGiCity;
+import com.yxbear.sg.domain.model.gi.CGiCityBuild;
+import com.yxbear.sg.domain.model.gi.CGiCityDefence;
+import com.yxbear.sg.domain.model.gi.CGiCityResource;
+import com.yxbear.sg.domain.model.gi.CGiCityResourceAdd;
+import com.yxbear.sg.domain.model.gi.GiCity;
+import com.yxbear.sg.domain.model.gi.GiCityBuild;
+import com.yxbear.sg.domain.model.gi.GiCityHero;
+import com.yxbear.sg.domain.model.gi.GiCityResource;
+import com.yxbear.sg.domain.model.mem.MemCityBuildUpgrading;
 import com.yxbear.sg.engine.PlayContext;
 import com.yxbear.sg.engine.SgEngine;
 import com.yxbear.sg.engine.model.ProvinceLand;
@@ -44,16 +53,25 @@ import lombok.RequiredArgsConstructor;
 public class CitySvcImpl implements CitySvc {
 
     final SgEngine sgEngine;
+
     final FrameCfgSvc cfgSvc;
+
     final ModelFactory modelFactory;
+
     final GiCityMapper cityMapper;
+
     final GiCityExtMapper cityExtMapper;
+
     final GiCityResourceMapper cityResourceMapper;
+
     final GiCityResourceExtMapper cityResourceExtMapper;
 
     final GiCityResourceAddMapper cityResourceAddMapper;
+
     final GiCityDefenceMapper cityDefenceMapper;
+
     final GiCityBuildMapper cityBuildMapper;
+
     final GiCityHeroMapper heroMapper;
 
     final MemCityBuildUpgradingMapper mbMapper;
@@ -83,9 +101,7 @@ public class CitySvcImpl implements CitySvc {
     @Override
     public void deleteAll(int playId) {
         List<GiCity> citys = cityMapper.queryList(CGiCity.builder().playId(playId).build(), null);
-        if (citys.isEmpty()) {
-            return;
-        }
+        if (citys.isEmpty()) { return; }
         Integer[] cityIds = citys.stream().map(GiCity::getId).toArray(Integer[]::new);
 
         cityResourceMapper.deleteByCdt(CGiCityResource.builder().ids(cityIds).build());
@@ -112,8 +128,7 @@ public class CitySvcImpl implements CitySvc {
         b.setStatus(1);
         cityBuildMapper.updateById(cbId, b);
 
-        MemCityBuildUpgrading mb = new MemCityBuildUpgrading(cbId, city.getPlayId(), cid, 1, lv,
-                useRes.getUpgradeEndTimeMillis());
+        MemCityBuildUpgrading mb = new MemCityBuildUpgrading(cbId, city.getPlayId(), cid, 1, lv, useRes.getUpgradeEndTimeMillis());
         mbMapper.save(mb);
         sgEngine.event(mb);
     }
@@ -140,8 +155,7 @@ public class CitySvcImpl implements CitySvc {
         cityBuildMapper.save(b);
         int cbId = b.getId();
 
-        MemCityBuildUpgrading mb = new MemCityBuildUpgrading(cbId, city.getPlayId(), cid, 1, lv,
-                useRes.getUpgradeEndTimeMillis());
+        MemCityBuildUpgrading mb = new MemCityBuildUpgrading(cbId, city.getPlayId(), cid, 1, lv, useRes.getUpgradeEndTimeMillis());
         mbMapper.save(mb);
         sgEngine.event(mb);
     }
@@ -175,17 +189,13 @@ public class CitySvcImpl implements CitySvc {
     }
 
     public void useBaseRes(int cid, UseRes res) {
-        cityResourceExtMapper.useBaseRes(cid, res.getUpgradeWood(), res.getUpgradeRock(), res.getUpgradeIron(),
-                res.getUpgradeFood(), res.getUpgradeGold(), res.getUpgradePeople());
+        cityResourceExtMapper.useBaseRes(cid, res.getUpgradeWood(), res.getUpgradeRock(), res.getUpgradeIron(), res.getUpgradeFood(), res.getUpgradeGold(), res.getUpgradePeople());
     }
 
     public boolean checkBuildCdt(int cityId, Map<Integer, Integer> buildIdAndLv) {
         if (CommUtils.isEmpty(buildIdAndLv))
             return true;
-        Map<Integer, Integer> idLv = cityBuildMapper
-                .queryList(CGiCityBuild.builder().cityId(cityId).bids(buildIdAndLv.keySet().toArray(Integer[]::new))
-                        .build(), "id")
-                .stream().collect(Collectors.toMap(GiCityBuild::getBid, GiCityBuild::getLv));
+        Map<Integer, Integer> idLv = cityBuildMapper.queryList(CGiCityBuild.builder().cityId(cityId).bids(buildIdAndLv.keySet().toArray(Integer[]::new)).build(), "id").stream().collect(Collectors.toMap(GiCityBuild::getBid, GiCityBuild::getLv));
         for (Map.Entry<Integer, Integer> e : buildIdAndLv.entrySet()) {
             Integer rLv = idLv.get(e.getKey());
             if (rLv == null || rLv < e.getValue())
@@ -205,18 +215,14 @@ public class CitySvcImpl implements CitySvc {
 
     private GiCity getAndCheck(int cid) {
         GiCity city = cityMapper.selectById(cid);
-        if (city == null) {
-            throw new ServiceException("城池不存在!");
-        }
+        if (city == null) { throw new ServiceException("城池不存在!"); }
         return city;
     }
 
     private boolean checkPosAndCount(int cityId, int pos) {
         if (pos >= 0 && pos < 34 || pos >= 100 && pos <= 196) {
             Long count = cityBuildMapper.count(CGiCityBuild.builder().cityId(cityId).pos(pos).build());
-            if (count < 1) {
-                return true;
-            }
+            if (count < 1) { return true; }
         }
         return false;
     }
@@ -234,9 +240,7 @@ public class CitySvcImpl implements CitySvc {
     public void finishBuildUpgrading(MemCityBuildUpgrading mem) {
         Integer id = mem.getId();
         mem = mbMapper.selectById(id);
-        if (mem == null) {
-            return;
-        }
+        if (mem == null) { return; }
         mbMapper.deleteById(id);
 
         if (mem.getStatus() == 2 && mem.getGoalLv() == 0) {
@@ -248,19 +252,24 @@ public class CitySvcImpl implements CitySvc {
             cityBuildMapper.updateById(id, upt);
         }
 
-        if (mem.getStatus() == 1) {
+        if (mem.getStatus() == 1) { // 升级
             GiCityBuild build = cityBuildMapper.selectById(id);
             if (build != null) {
                 GiCity hero = cityExtMapper.getCityTakeOfficeHero(build.getCityId());
                 if (hero != null && hero.getChiefhId() != null) {
-                    long exp = cfgSvc.getGlobalCfg().getAndCheckBuilding(build.getBid()).getAndCheckLv(mem.getGoalLv())
-                            .getUpgradeTime();
+                    long exp = cfgSvc.getGlobalCfg().getAndCheckBuilding(build.getBid()).getAndCheckLv(mem.getGoalLv()).getUpgradeTime();
                     HeroAddExp expAdd = HeroAddExp.fromBuild(hero.getChiefhId(), exp);
                     sgEngine.event(expAdd);
                 }
             }
         }
 
+    }
+
+    @Override
+    public void updateCityProduction(int cid) {
+        // TODO Auto-generated method stub
+        
     }
 
 }
