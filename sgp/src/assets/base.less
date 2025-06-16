@@ -1,0 +1,43 @@
+.sg-scroll {
+
+    &::-webkit-scrollbar {
+        width: 20px;
+        border: 8px solid;
+        border-top: 25px solid;
+        border-bottom: 25px solid;
+        border-image: url('@/assets/imgs/scroll_track.png') 25 8 fill;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        border: 6px solid transparent;
+        border-image: url('@/assets/imgs/scroll_bar.png') 6 6 fill;
+
+        &:hover {
+            border: 6px solid transparent;
+            border-image: url('@/assets/imgs/scroll_bar_on.png') 6 6 fill;
+        }
+    }
+
+    &::-webkit-scrollbar-button {
+        height: 19px;
+
+        &:decrement {
+            background: url('@/assets/imgs/scroll_uparr.png') no-repeat scroll 3px 1px;
+
+
+            &:active {
+                background: url('@/assets/imgs/scroll_uparr_down.png') no-repeat scroll 3px 1px;
+            }
+
+        }
+
+        &:increment {
+            background: url('@/assets/imgs/scroll_downarr.png') no-repeat scroll 3px -1px;
+
+            &:active {
+                background: url('@/assets/imgs/scroll_downarr_down.png') no-repeat scroll 3px -1px;
+            }
+        }
+
+    }
+}
