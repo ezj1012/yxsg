@@ -29,5 +29,19 @@ export default defineConfig({
         additionalData: `@import "${path.resolve(__dirname, 'src/assets/base.less')}";`
       }
     }
-  }
+  },
+  server: {
+    proxy: {
+      '/sg-api': {
+        target: 'http://localhost:80/sg-api',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/sg-api/, '')
+      },
+      '/rsm': {
+        target: 'http://localhost:80/rsm',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/rsm/, '')
+      }
+    }
+  },
 })
