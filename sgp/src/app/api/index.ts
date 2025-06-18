@@ -18,10 +18,10 @@ export class SgApi extends AbsApi {
 }
 
 export class RsmApi {
-    constructor(public rsmHttpRoot: string = "/rsm") { }
+    constructor(public rsmHttpRoot: string = "/rsm/") { }
 
     async loadFrameCfg(): Promise<FrameCfg> {
-        return (await fetch(`${this.rsmHttpRoot}/cfgFrame.json`)).text().then(a => {
+        return (await fetch(`${this.rsmHttpRoot}cfgFrame.json`)).text().then(a => {
             const s = a.split("\n").filter(line => !line.trimStart().startsWith('//')).join("")
             return JSON.parse(s)
         })
