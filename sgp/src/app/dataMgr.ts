@@ -73,8 +73,8 @@ export function useMapStorage(storageName: string) {
     })
 
     function getByKey(key: string) { return dataCache.get(key) }
-    function setByKey(key: string, data: any) { return dataCache.set(key, data) }
-    function set(cfg: any, data: any) { return dataCache.set(toKey(cfg), data) }
+    function setByKey(key: string, data: any) { dataCache.set(key, data) }
+    function set(cfg: any, data: any) { dataCache.set(toKey(cfg), data) }
     function get(cfg: any, data?: any) {
         const key = toKey(cfg);
         const r = dataCache.get(key)

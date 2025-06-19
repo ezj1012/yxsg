@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import type { CfgStr } from '@/app/cfg';
 import type { SgRes } from '@/app/res';
-import { useRedBtn } from '@/app/sgComp';
+import type { Sg } from '@/app/sg';
 import Img from '@/components/comps/Img.vue';
 import PBtn from '@/components/comps/PBtn.vue';
 import { inject, onMounted, ref } from 'vue'
-const { res, set } = inject('sg') as { res: SgRes, set: any }
+const { res, set, btnRed } = inject('sg') as Sg
 const imgCfgStr = "K:regplay#user_icon;T:IMG;S:140,135,76,92,21;STYL:YmFja2dyb3VuZC1jb2xvcjogIzA0MDEwMTllOwogICAgYm9yZGVyLXJhZGl1czogMnB4OwogICAgYm94LXNoYWRvdzogcmdiKDU0LCAyOCwgNSkgMHB4IDBweCAwcHggMXB4LCByZ2IoMTY1LCAxNDMsIDEwNSkgMHB4IDBweCAwcHggMnB4OwogICAgYmFja2dyb3VuZC1yZXBlYXQ6IG5vLXJlcGVhdDsKICAgIGJhY2tncm91bmQtcG9zaXRpb246IDVweDs=;"
 // const btnCfgStr = "K:login#btn_login;T:I_BTN;S:400,542,200,35,4;RFI:common#btn_red;ACT:login;TXT:T:登入,F:14,C:#E3EA03,;"
 // const { cfg } = defineProps({ cfg: { required: true } }) as { cfg: CfgStr }
@@ -23,7 +23,7 @@ onMounted(() => {
 })
 const show = ref(true)
 
-const Btn = useRedBtn(res, 'key_acb')
+const Btn = btnRed('key_acb','0,0,100,35,10',"T:你好,F:18,C:#E3EA03")
 const cfgStr = ref('')
 </script>
 
