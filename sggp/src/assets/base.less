@@ -1,0 +1,73 @@
+.sg-scroll {
+
+    &::-webkit-scrollbar {
+        width: 20px;
+        border: 8px solid;
+        border-top: 25px solid;
+        border-bottom: 25px solid;
+        border-image: url('@/assets/imgs/scroll/scroll_track.png') 25 8 fill;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        border: 6px solid transparent;
+        border-image: url('@/assets/imgs/scroll/scroll_bar.png') 6 6 fill;
+
+        &:hover {
+            border: 6px solid transparent;
+            border-image: url('@/assets/imgs/scroll/scroll_bar_on.png') 6 6 fill;
+        }
+    }
+
+    &::-webkit-scrollbar-button {
+        height: 19px;
+
+        &:decrement {
+            background: url('@/assets/imgs/scroll/scroll_uparr.png') no-repeat scroll 3px 1px;
+
+
+            &:active {
+                background: url('@/assets/imgs/scroll/scroll_uparr_down.png') no-repeat scroll 3px 1px;
+            }
+
+        }
+
+        &:increment {
+            background: url('@/assets/imgs/scroll/scroll_downarr.png') no-repeat scroll 3px -1px;
+
+            &:active {
+                background: url('@/assets/imgs/scroll/scroll_downarr_down.png') no-repeat scroll 3px -1px;
+            }
+        }
+
+    }
+}
+
+.sg-comm {
+    padding: 3px;
+    position: absolute;
+    font-size: 12px;
+    box-sizing: border-box;
+
+    &::before {
+        position: absolute;
+        content: '';
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        border: 4px solid transparent;
+        border-image: url('@/assets/imgs/comm_board.png') 4 fill;
+        z-index: -1;
+    }
+}
+
+#app {
+    width: 100%;
+    height: 100%;
+    position: relative;
+
+    --rxsg-table-header-font-color: #2ebdd7;
+    --rxsg-table-row-bg-color: #182828d9;
+    --rxsg-table-row-hover-bg-color: #2e4e54;
+    --rxsg-table-row-select-bg-color: var(--rxsg-table-row-hover-bg-color)
+}

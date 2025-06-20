@@ -1,5 +1,5 @@
 import { shallowRef, type App, type Component, type Ref } from "vue"
-import { DivBg } from "./directives"
+import { DivBg, installClickout, installMsg } from "./directives"
 import type { SgRes } from "./res"
 import type { CallBack } from "./dataMgr"
 import type { Shapable, Textable } from "./commModel"
@@ -25,9 +25,9 @@ namespace sgGame {
     export const sg = shallowRef<SanGuo>()
 
     export function install(app: App) {
-        // installMsg(app, sg)
-        // installClickout(app, sg)
-        // DivBg.installBg(app, sg)
+        installMsg(app, sg)
+        installClickout(app, sg)
+        DivBg.installBg(app, sg)
         DivBg.installSize(app, sg)
     }
 }

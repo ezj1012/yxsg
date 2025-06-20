@@ -187,7 +187,13 @@ function isImgType(t: Map<string, string>) {
     return type === 'I_PTN'
 }
 
-function parseCfgSize(cfg?: String, imgGroup?: ImgGroupInfo) {
+/**
+ * 
+ * @param cfg x,y,w,h,z
+ * @param imgGroup 
+ * @returns 
+ */
+export function parseCfgSize(cfg?: String, imgGroup?: ImgGroupInfo) {
     const size: Shapable = { x: 0, y: 0, w: 0, h: 0, z: 1, styles: {} }
     if (!cfg) {
         if (imgGroup) {

@@ -43,9 +43,9 @@ const closeBtn = new CfgStr("K:funpanl#close;T:I_BTN;S:0,0,60,32,4;RFI:common#bt
     <main v-show="comp.key != empty.key" class="fun-main" :style="{
         left: `${x}px`, top: `${y}px`, width: `${w}px`, height: `${h}px`,
     }">
-        <div class="bg" :style="{ color: `var(${comp.color})`, fontSize: `${comp.size}px`, backgroundImage: bgUrl }">
+        <!-- <div class="bg" :style="{ color: `var(${comp.color})`, fontSize: `${comp.size}px`, backgroundImage: bgUrl }">
             {{ content }}
-        </div>
+        </div> -->
         <div class="body">
             <component class="fun-body" :is="comp.comp" :id="comp.key"></component>
             <div class="closeBtn">

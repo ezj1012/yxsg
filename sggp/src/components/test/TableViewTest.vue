@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
-import Table from './Table.vue';
+import Table from '../comps/Table.vue';
 
 function aa(data: any) {
     console.log('change: ' + JSON.stringify(data))

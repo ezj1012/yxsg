@@ -3,7 +3,6 @@ import './assets/base.less';
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
-
 import App from './App.vue'
 import sgGame from './app/sg';
 
