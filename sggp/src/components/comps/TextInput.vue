@@ -16,7 +16,6 @@ const type = ref<string>()
 const text = ref<Textable>()
 watch(() => cfg, () => {
   cfg.parseCfg({ text })
-  cfg.imgGroup = sg.ctx.res.getImgGroup('common#board_input')
   type.value = cfg.get(CfgKey.inputType)
   sg.ctx.dataMgr.subscribeValue(cfg.key(), data, '')
 }, { immediate: true })
@@ -28,7 +27,7 @@ const textStyles = computed(() => text.value ? { ...text.value.styles, '--color'
 
 </script>
 <template>
-  <div v-bg="cfg" class="comm_input_container ">
+  <div v-size="cfg" class="sg-comm-input">
     <input v-model.trim="data" :type="type" autocomplete="on" class="input" :style="textStyles" />
   </div>
 </template>
@@ -39,8 +38,8 @@ const textStyles = computed(() => text.value ? { ...text.value.styles, '--color'
   outline: none;
   border: 0;
   background-color: transparent;
-  padding: 0 5px;
-
+  padding: 0 2px;
+  box-sizing: border-box;
 
   // /* 屏蔽chrome浏览器默认项输入框背景色 */
   &:-internal-autofill-previewed,

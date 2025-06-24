@@ -1,0 +1,13 @@
+import './assets/main.css'
+import './assets/base.less';
+
+import { createApp } from 'vue'
+import { createPinia } from 'pinia'
+import App from './App.vue'
+import sgGame from './app/sg';
+
+const app = createApp(App)
+
+app.use(createPinia())
+app.use(sgGame)
+app.mount('#app')

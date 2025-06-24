@@ -12,7 +12,6 @@ const { sg, ctx } = inject('sg') as { sg: SanGuo, ctx: SgCtx }
 const { cfg } = defineProps({ cfg: { required: true } }) as { cfg: CfgStr }
 
 const data = ref('')
-const type = ref<string>()
 const text = ref<Textable>()
 const html = ref(false)
 const msg = ref<any>()
@@ -20,7 +19,6 @@ const msg = ref<any>()
 const styles = ref<{ [key: string]: any }>({})
 watch(() => cfg, () => {
   cfg.parseCfg({ text, styles, html, msg })
-  type.value = cfg.get(CfgKey.inputType)
   const defVal = text.value ? text.value.content : ''
   ctx.dataMgr.subscribeValue(cfg.key(), data, defVal)
 }, { immediate: true })

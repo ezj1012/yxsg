@@ -7,9 +7,12 @@ const sgEl = ref()
 const sg = new SanGuo(sgEl)
 sg.debug.value = true
 sgGame.sg.value = sg
+
+
 </script>
 
 <template>
+  <!---->
   <div class="main">
     <SgFrame ref="sgEl" v-model="sg" />
   </div>

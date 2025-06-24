@@ -15,6 +15,7 @@ import CitySelect from '../comps/playing/CitySelect.vue';
 import InnerMain from '../comps/playing/InnerMain.vue';
 import CityRes from '../comps/playing/CityRes.vue';
 import CityBuilding from '../comps/playing/funpanl/CityBuilding.vue';
+import ChatPan from '../comps/playing/chat/ChatPan.vue';
 
 
 const { sg } = inject('sg') as { sg: SanGuo }
@@ -55,7 +56,7 @@ onUnmounted(async () => {
                     <InnerMain v-if="comp.show() && comp.refComp() == 'innerMain'" :cfg="comp" :id="comp.key()" />
                     <CityRes v-if="comp.show() && comp.refComp() == 'cityRes'" :cfg="comp" :id="comp.key()" />
                     <CityBuilding v-if="comp.show() && comp.refComp() == 'buildList'" :cfg="comp" :id="comp.key()" />
-
+                    <ChatPan v-if="comp.show() && comp.refComp() == 'chatPan'" :cfg="comp" :id="comp.key()" />
                     
                     <!--                        -->
 

@@ -27,9 +27,9 @@
 
     <!-- 特定包的日志级别 -->
     <logger name="org.mybatis" level="debug"/>
+    <logger name="org.mybatis.spring" level="WARN"/>
     <logger name="org.mybatis.spring.SqlSessionUtils" level="WARN"/>
     <logger name="org.mybatis.spring.transaction.SpringManagedTransaction" level="WARN"/>
-
 
     <logger name="org.apache.catalina" level="ERROR"/>
     <logger name="org.apache.coyote" level="ERROR"/>

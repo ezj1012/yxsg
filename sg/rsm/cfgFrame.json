@@ -257,7 +257,7 @@
 		"T:I;K:playing#comm#level_7;",
 		"T:I;K:playing#comm#level_8;",
 		"T:I;K:playing#comm#level_9;",
-		"T:I_PTN;K:common#btn_next;IDOWN;ION;",
+		"T:I_PTN;K:common#btn_next;IDOWN;ION;IP;",
 		"T:I_PTN;K:common#btn_osct;ION;ISCT;",
 		"T:I_PTN;K:common#btn_plus;IDIS;IDOWN;",
 		"T:I_PTN;K:common#btn_cancel;IDOWN;",

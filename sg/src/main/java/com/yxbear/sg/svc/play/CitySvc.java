@@ -12,9 +12,26 @@ public interface CitySvc {
 
     void upgradeBuilding(int cid, int cbId);
 
-    // void degradeBuilding(int cid, int cbId, boolean useGoods);
-
     void deleteAll(int playId);
 
     void finishBuildUpgrading(MemCityBuildUpgrading item);
+
+    /**
+     * 更新城池资源生产
+     * <li>建筑升降级</li>
+     * <li>科技升降</li>
+     * <li>城守装备变更</li>
+     * <li>生产比例变化</li>
+     * 
+     * @param cid
+     */
+    void updateCityProduction(int cid);
+
+    /**
+     * 更新城池资源
+     * 
+     * @param cid
+     */
+
+    void updateCityResource(int cid);
 }

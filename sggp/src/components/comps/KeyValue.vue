@@ -3,14 +3,13 @@
 import { actionMgr } from '@/app/action';
 import { CfgKey, type CfgStr } from '@/app/cfg';
 import type { Textable } from '@/app/commModel';
-import type { SanGuo } from '@/app/sg';
+import type { Sg } from '@/app/sg';
 
-import { inject, ref, watch, } from 'vue';
+import { inject, onUnmounted, ref, watch, } from 'vue';
 
-const { sg } = inject('sg') as { sg: SanGuo }
+const { sg } = inject('sg') as Sg
 const { cfg } = defineProps({ cfg: { required: true } }) as { cfg: CfgStr }
 
-const bgUrl = ref<string>()
 const text = ref<Textable>()
 const title = ref<Textable>()
 const data = ref('')
@@ -18,11 +17,12 @@ const data = ref('')
 // 初始化
 watch(() => cfg, () => {
   cfg.parseCfg({ text, title })
-  bgUrl.value = `url(${sg.ctx.res.getImgGroup('common#board_input').hasDef()?.getImg(cfg.size.w, cfg.size.h).imgDataUrl})`
+  sg.ctx.dataMgr.unsubscribe(cfg.key())
   const defVal = text.value ? text.value.content : ''
   sg.ctx.dataMgr.subscribeValue(cfg.key(), data, defVal)
 }, { immediate: true })
 
+onUnmounted(() => { sg.ctx.dataMgr.unsubscribe(cfg.key()) })
 
 async function doClick(e: MouseEvent) {
   if (cfg.cfgMap.has(CfgKey.action)) {
@@ -33,7 +33,7 @@ async function doClick(e: MouseEvent) {
 
 </script>
 <template>
-  <div v-size="cfg" :style="{ backgroundImage: bgUrl }" class="comm_input_container">
+  <div v-size="cfg" :style="{ '--h': `${cfg.size.h! - 6}px` }" class="comm_input_container  sg-comm-input">
     <div class="title" :style="title?.styles" @click="doClick">
       {{ title?.content }}
     </div>
@@ -50,7 +50,7 @@ async function doClick(e: MouseEvent) {
   background-size: 100% 100%;
   font-size: 13px;
   display: flex;
-  line-height: 24px;
+  line-height: var(--h);
   user-select: none;
 
   .title {

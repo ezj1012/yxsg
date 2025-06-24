@@ -4,12 +4,11 @@ import type { Textable } from '@/app/commModel';
 import { ref, watch } from 'vue';
 
 const { cfg } = defineProps({ cfg: { required: true } }) as { cfg: CfgStr }
-const type = ref<string>()
+
 const text = ref<Textable>()
 const styles = ref<{ [key: string]: any }>({})
 watch(() => cfg, () => {
   cfg.parseCfg({ text, styles })
-  type.value = cfg.get(CfgKey.inputType)
 }, { immediate: true })
 
 </script>

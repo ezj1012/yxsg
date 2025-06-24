@@ -1,8 +1,8 @@
 import type { App, DirectiveBinding, ShallowRef } from "vue"
 import type { SanGuo } from "./sg"
-import { CfgStr } from "./cfg"
+import { CfgStr, parseCfgSize } from "./cfg"
 import { Img } from "../app/utils/img"
-import type { HoverMsgDef } from "./commModel"
+import type { HoverMsgDef, Shapable } from "./commModel"
 
 
 export function installMsg(app: App, sg: ShallowRef<SanGuo | undefined>) {
@@ -72,8 +72,14 @@ export namespace DivBg {
         if (!binding.value || !sg.value) {
             return
         }
-        if (binding.value instanceof CfgStr) {
-            const size = binding.value.size
+
+        let size: Shapable | undefined = undefined
+        if (typeof binding.value === 'string') {
+            size = parseCfgSize(binding.value)
+        } else if (binding.value instanceof CfgStr) {
+            size = binding.value.size
+        }
+        if (size) {
             el.style.position = 'absolute';
             el.style.width = `${size.w}px`
             el.style.height = `${size.h}px`

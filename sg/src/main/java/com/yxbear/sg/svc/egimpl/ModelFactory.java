@@ -54,7 +54,7 @@ public class ModelFactory {
 
         cc.setResource(cc.getResource() == null ? new GiCityResource() : cc.getResource());
         cc.getResource().setId(city.getId());
-
+        cc.getResource().setLastUpdate(System.currentTimeMillis());
         cc.setResourceAdd(cc.getResourceAdd() == null ? new GiCityResourceAdd() : cc.getResourceAdd());
         cc.getResourceAdd().setId(city.getId());
 

@@ -16,16 +16,25 @@ import { CfgStr } from "./cfg";
 import { GCfgMgr } from "./global";
 import { PlayMgr } from "./playMgr";
 import { BuildMgr } from "./buildMgr";
+import type { ImgGroupInfo } from "./res/imgRes";
+import type { Img } from "./utils/img";
+import { ChatMgr } from "./chatMgr";
 
 const userCacheKey = 'currentUser'
+
+
+export type Sg = {
+    sg: SanGuo
+    ctx: SgCtx
+    res: SgRes
+    chatMgr: ChatMgr
+}
+
 export interface SgCtx {
 
     refresh(): Promise<void>
-
     get user(): User | undefined
-
     get play(): PlayInfo | undefined
-
     get stage(): Stage
     get res(): SgRes
     get api(): SgApi
@@ -38,6 +47,7 @@ export interface SgCtx {
     hoverMsgMgr: HoverMsgMgr
     get gCfgMgr(): GCfgMgr
     get buildMgr(): BuildMgr
+    get chatMgr(): ChatMgr
 }
 
 export class SgCtxImpl implements SgCtx {
@@ -54,6 +64,7 @@ export class SgCtxImpl implements SgCtx {
     private _playMgr: PlayMgr
     private _gCfgMgr: GCfgMgr
     private _buildMgr: BuildMgr
+    private _chatMgr: ChatMgr
     constructor() {
         this._userMgr = new UserMgr(this)
         this._api = new SgApi(this._userMgr)
@@ -66,6 +77,7 @@ export class SgCtxImpl implements SgCtx {
         this._hoverMsgMgr = new HoverMsgMgr(this)
         this._playMgr = new PlayMgr(this)
         this._buildMgr = new BuildMgr(this)
+        this._chatMgr = new ChatMgr(this)
     }
 
     async loadRes(tr: Ref<Traceable>) {
@@ -92,6 +104,7 @@ export class SgCtxImpl implements SgCtx {
     get playMgr() { return this._playMgr }
     get gCfgMgr() { return this._gCfgMgr }
     get buildMgr() { return this._buildMgr }
+    get chatMgr() { return this._chatMgr }
 }
 
 export class SanGuo {
@@ -123,7 +136,6 @@ export class SanGuo {
         return this._ctx
     }
 }
-
 
 
 namespace sgGame {
