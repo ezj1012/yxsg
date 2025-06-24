@@ -13,8 +13,8 @@ const bgUrl = computed(() => sg.ctx.res.img('common#title'))
 const empty: FunPanComp = { key: 'fun_pan#empty', comp: Empty, content: '', size: 12, color: '--c-', x: 0, y: 0, w: 0, h: 0 }
 const comp = computed(() => (sg.ctx.funPanMgr.getComp() || empty) as FunPanComp)
 const cfg = ref({
-    w: 680,
-    h: 490,
+    w: 683,
+    h: 494,
     x: 290,
     y: 50,
     content: ''
@@ -24,12 +24,12 @@ watch(comp, () => {
     cfg.value.content = comp.value.content
     cfg.value.x = comp.value.x || 290
     cfg.value.y = comp.value.y || 50
-    cfg.value.w = comp.value.w || 680
-    cfg.value.h = comp.value.h || 490
+    cfg.value.w = comp.value.w || 683
+    cfg.value.h = comp.value.h || 494
 })
 
-const w = computed(() => cfg.value.w || 680)
-const h = computed(() => cfg.value.h || 490)
+const w = computed(() => cfg.value.w || 683)
+const h = computed(() => cfg.value.h || 494)
 const x = computed(() => cfg.value.x || 290)
 const y = computed(() => cfg.value.y || 50)
 const content = computed(() => cfg.value.content || '')
@@ -40,12 +40,13 @@ const closeBtn = new CfgStr("K:funpanl#close;T:I_BTN;S:0,0,60,32,4;RFI:common#bt
 </script>
 
 <template>
-    <main v-show="comp.key != empty.key" class="fun-main" :style="{
+    <main v-show="comp.key != empty.key" class="fun-main sg-comm-fun" :style="{
         left: `${x}px`, top: `${y}px`, width: `${w}px`, height: `${h}px`,
     }">
-        <!-- <div class="bg" :style="{ color: `var(${comp.color})`, fontSize: `${comp.size}px`, backgroundImage: bgUrl }">
+        <!---->
+        <div class="bg" :style="{ color: `var(${comp.color})`, fontSize: `${comp.size}px`, backgroundImage: bgUrl }">
             {{ content }}
-        </div> -->
+        </div>
         <div class="body">
             <component class="fun-body" :is="comp.comp" :id="comp.key"></component>
             <div class="closeBtn">
@@ -56,18 +57,7 @@ const closeBtn = new CfgStr("K:funpanl#close;T:I_BTN;S:0,0,60,32,4;RFI:common#bt
 </template>
 <style lang="less">
 .fun-main {
-    --pan-bg1: #1f3d47cc;
-    --pan-bg2: #193139cc;
-
-    position: absolute;
     z-index: var(--fun-pan-z);
-    background-color: var(--pan-bg1);
-    box-shadow: 0px 0px 0px 1px #80867C inset,
-        0px 0px 0px 2px #7D6F66 inset,
-        0px 0px 0px 3px #271B25 inset,
-        0px 0px 0px 4px #111A00 inset,
-        0px 0px 0px 5px #7E6A49 inset,
-        0px 0px 0px 6px #7B7472 inset;
 
     .bg {
         position: absolute;
@@ -100,7 +90,7 @@ const closeBtn = new CfgStr("K:funpanl#close;T:I_BTN;S:0,0,60,32,4;RFI:common#bt
             width: 100px;
             height: 38px;
             left: 580px;
-            bottom: -8px;
+            bottom: 0px;
         }
     }
 }

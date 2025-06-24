@@ -105,8 +105,8 @@ export class GCfgMgr {
             }
         }
         return rData
-    }
-
+    } 
+    
     /**
        * 通过配置获取相对地址
        * @param cfg 

@@ -69,6 +69,12 @@ export class BuildMgr {
     constructor(ctx: SgCtx) {
         this._ctx = ctx
     }
+
+    /** 市场 */
+    marketLv() {
+        return this._ctx.play?.city.buildings.find(b => b.bid == 13)?.lv || 0
+    }
+
     async canBuild(bid: number, lv: number) {
         const b = this._ctx.gCfgMgr.cfg!.buildingsMap[bid]
         const dep = new BuildDep()

@@ -11,13 +11,17 @@ import FunPanlTestView from './test/FunPanlTestView.vue';
 import CommTest from './test/CommTest.vue';
 import type { Img } from '@/app/utils/img';
 import type { ImgGroupInfo } from '@/app/res/imgRes';
+import StageView from './stages/StageView.vue';
+import { useSgComm } from '@/app/sgComp';
 
 const sg: ModelRef<SanGuo> = defineModel({ required: true })
 const ctx = sg.value.ctx
 const res = sg.value.ctx.res
 const chatMgr = ctx.chatMgr
+const sgComm = useSgComm(res)
 provide('sg', {
     sg: sg.value, ctx, res, chatMgr,
+    btnRed: sgComm.btnRed.bind(sgComm.btnRed),
     img: res.img.bind(res)
 })
 const isReady = computed(() => sg.value.ready.value)
@@ -25,14 +29,14 @@ const isReady = computed(() => sg.value.ready.value)
 </script>
 <template>
     <div class="sg-main">
-        <CommTest v-if="isReady" />
+        <!-- <CommTest v-if="isReady" /> -->
         <template v-if="isReady">
             <!--  -->
             <RFunPanl />
             <FunPanlTestView />
-            <!--
+            <!---->
 
-            <StageView /> -->
+            <StageView />
 
             <!--  <TableViewTest />-->
             <!-- <WorldMap /> -->

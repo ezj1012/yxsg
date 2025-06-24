@@ -1,15 +1,22 @@
+import { ref } from "vue";
 import type { DataMgr } from "../dataMgr";
 
 export class ErrMsgMgr {
-    msgs: any = []
+    msgs = ref<any>([])
     constructor() {
     }
-
-    pushMsg(msg: string) {
-        this.msgs.push(msg)
-    }
     removeMsg() {
-
+        if (this.msgs.value.length > 0) {
+            this.msgs.value.pop()
+        }
     }
+    pushMsg(msg: string | { content: string, ok?: any, cancel?: any }) {
+
+        this.msgs.value.push(typeof msg === 'string' ? {
+            content: msg
+        } : msg)
+        console.log('err msg : ', msg)
+    }
+
 
 }

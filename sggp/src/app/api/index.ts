@@ -1,5 +1,5 @@
-import { AbsApi, type IUserToken } from "./apiComm";
-import type { CfgGoods, FrameCfg, GlobalCfg, MemMapTile, PlayInfo, Province } from "./apiModel";
+import { AbsApi, type IUserToken, type PageResult } from "./apiComm";
+import type { CfgGoods, FrameCfg, GlobalCfg, MemMapTile, PlayGoods, PlayInfo, Province } from "./apiModel";
 
 export class SgApi extends AbsApi {
     userApi: UserApi
@@ -65,7 +65,6 @@ export class EnvApi {
         return (await this.sgApi.post('/env/maptiles', params)).data
     }
 
-
 }
 
 export class PlayApi {
@@ -86,5 +85,10 @@ export class PlayApi {
     async op(op: string, cityId: number, opParams: Record<string, any> = {}): Promise<PlayInfo> {
         return (await this.sgApi.post('/play/op', { cityId, op, opParams: JSON.stringify(opParams) })).data
     }
+
+    async goods(pageNum: number, pageSize: number, type: number): Promise<PageResult<PlayGoods>> {
+        return (await this.sgApi.post('/play/goods', { pageNum, pageSize, cdt: type })).data
+    }
+
 
 }

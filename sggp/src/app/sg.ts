@@ -1,4 +1,4 @@
-import { ref, shallowRef, type App, type Ref } from "vue";
+import { ref, shallowRef, type App, type Component, type Ref } from "vue";
 import { SingleComp, type FunPanComp, type Traceable } from "./commModel";
 import { SgApi } from "./api";
 import type { IUserToken } from "./api/apiComm";
@@ -28,6 +28,7 @@ export type Sg = {
     ctx: SgCtx
     res: SgRes
     chatMgr: ChatMgr
+    btnRed(key: string, size: string, act: string): Component
 }
 
 export interface SgCtx {

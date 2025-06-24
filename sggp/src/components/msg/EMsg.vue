@@ -1,36 +1,45 @@
 <script setup lang="ts">
-import { actionMgr } from '@/app/action';
+import { actionMgr, reg } from '@/app/action';
 import { CfgStr } from '@/app/cfg';
 import type { SanGuo } from '@/app/sg';
-import { inject, computed, ref } from 'vue';
+import { inject, computed, ref, watch, onMounted } from 'vue';
 import PBtn from '../comps/PBtn.vue';
 import type { ErrMsgMgr } from '@/app/msg/errMsg';
 const { sg } = inject('sg') as { sg: SanGuo }
-const errMgs = ref<ErrMsgMgr>(sg.ctx.errMsgMgr)
-const msgs = computed(() => errMgs.value.msgs)
+const msgs = sg.ctx.errMsgMgr.msgs
 const key = 'any#msg_ok'
 const key2 = 'any#msg_cancel'
 actionMgr.register({
     key, desc: key, fun: async () => {
         try {
-            const msg = msgs.value[msgs.value.length - 1]
+            const msg = sg.ctx.errMsgMgr.msgs.value[msgs.value.length - 1]
             msg.ok && await msg.ok()
         } finally {
-            errMgs.value.removeMsg()
+            sg.ctx.errMsgMgr.removeMsg()
         }
     }
 })
 actionMgr.register({
     key: key2, desc: key2, fun: async () => {
         try {
-            const msg = msgs.value[msgs.value.length - 1]
+            const msg = sg.ctx.errMsgMgr.msgs.value[msgs.value.length - 1]
             msg.cancel && await msg.cancel()
         } finally {
-            errMgs.value.removeMsg()
+            sg.ctx.errMsgMgr.removeMsg()
         }
     }
 })
-
+onMounted(() => {
+    reg(key, async ({ sg }) => {
+        try {
+            const msg = sg.ctx.errMsgMgr.msgs.value[msgs.value.length - 1]
+            console.log(msg)
+            msg.ok && await msg.ok()
+        } finally {
+            sg.ctx.errMsgMgr.removeMsg()
+        }
+    })
+})
 
 const cfg = new CfgStr(`K:${key};T:I_BTN;S:0,0,52,26,4;RFI:common#btn_red;ACT:${key};TXT:T:确定,F:12,C:#E3EA03,;`)
 const cfg2 = new CfgStr(`K:${key2};T:I_BTN;S:70,0,52,26,4;RFI:common#btn_red;ACT:${key};TXT:T:取消,F:12,C:#E3EA03,;`)
@@ -40,7 +49,8 @@ const cfg2 = new CfgStr(`K:${key2};T:I_BTN;S:70,0,52,26,4;RFI:common#btn_red;ACT
 <template>
     <main v-show="msgs.length > 0" class="err-main"
         :style="{ backgroundColor: `rgba(100, 100, 100, ${0.3 + 0.12 * msgs.length})` }">
-        <div v-for="(item, idx) in msgs" :key="idx" :style="{ top: `calc(50% - ${idx * 3}px)` }" class="err-info">
+        <div v-for="(item, idx) in msgs" :key="idx + item.content" :style="{ top: `calc(50% - ${idx * 3}px)` }"
+            class="err-info">
             <div class="text" v-html="item.content"></div>
             <div class="btn">
                 <div v-if="item.cancel" class="btn-w2">
@@ -87,6 +97,7 @@ const cfg2 = new CfgStr(`K:${key2};T:I_BTN;S:70,0,52,26,4;RFI:common#btn_red;ACT
         .text {
             font-size: 12px;
             padding: 15px 18px 42px 18px;
+            user-select: auto;
         }
     }
 

@@ -154,6 +154,16 @@ export interface PlayInfo {
     time: number
 }
 
+export interface PlayGoods {
+    id: number
+    goodsId: number
+    playId: number
+    goodsType: number
+    count: number
+    cfg?: CfgGoods
+    img?: string
+}
+
 export interface PlayCityInfo {
     id: number
     playId: number
