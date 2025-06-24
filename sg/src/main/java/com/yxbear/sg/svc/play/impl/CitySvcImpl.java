@@ -1,5 +1,6 @@
 package com.yxbear.sg.svc.play.impl;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -292,11 +293,15 @@ public class CitySvcImpl implements CitySvc {
         long woodAdd = (long) (res.getWoodAdd() / 3600D * time);
         long rockAdd = (long) (res.getRockAdd() / 3600D * time);
         long ironAdd = (long) (res.getIronAdd() / 3600D * time);
-//        long goldAdd = (long)(res.getPeople() )
-        
-        
-        
-        
+        // long goldAdd = (long)(res.getPeople() )
+
+    }
+
+    public static void main(String[] args) {
+
+        Map<String, Object> a = new HashMap<String, Object>();
+        a.put("aa", Map.of("12", "bb"));
+
     }
 
 }
