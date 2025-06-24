@@ -8,6 +8,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import com.yxbear.sg.domain.mapper.cfg.*;
@@ -55,6 +56,14 @@ public class FrameCfgSvcImpl implements FrameCfgSvc, InitializingBean {
 
     final CfgOfficeMapper officeMapper;
 
+    final CfgSoldierMapper soldierMapper;
+
+    final CfgSoldierConditionMapper soldierConditionMapper;
+
+    final CfgDefenceMapper defenceMapper;
+
+    final CfgDefenceConditionMapper defenceConditionMapper;
+
     @Override
     public void afterPropertiesSet() throws Exception {
         frameCfgFile = new File(sgProps.getRsmDir(), "cfgFrame.json");
@@ -83,6 +92,9 @@ public class FrameCfgSvcImpl implements FrameCfgSvc, InitializingBean {
             globalCfg.setPlayerIcons(PlayerIcon.getPlayerIcons());
             globalCfg.setBuildingsMap(readBuilding());
             globalCfg.setTechnicsMap(readTechnics());
+            globalCfg.setSoldiersMap(readSoldiers());
+            globalCfg.setDefencesMap(readDefences());
+
             LinkedHashMap<Integer, CfgNobility> nobilityMap = new LinkedHashMap<>();
             LinkedHashMap<Integer, CfgOffice> officeMap = new LinkedHashMap<>();
             nobilityMapper.queryList(CCfgNobility.builder().build(), "ID").forEach(n -> nobilityMap.put(n.getId(), n));
@@ -106,12 +118,37 @@ public class FrameCfgSvcImpl implements FrameCfgSvc, InitializingBean {
             }
         }
 
-        return buildingMapper.queryAll().stream().map(b -> {
+        return technicMapper.queryAll().stream().map(b -> {
             Technic rb = SystemUtils.copy(b, Technic.class);
             rb.setLevels(bLvMap.get(b.getId()));
             rb.setPreCdts(bCdtMap.get(b.getId()));
             return rb;
         }).collect(Collectors.toMap(CfgTechnic::getId, b -> b));
+    }
+
+    private Map<Integer, Defence> readDefences() {
+        Map<Integer, Map<Integer, Map<Integer, Integer>>> pCdtMap = new HashMap<>();
+        for (CfgDefenceCondition cdt : defenceConditionMapper.queryAll()) {
+            if (pCdtMap.computeIfAbsent(cdt.getDefenceId(), k1 -> new HashMap<>()).computeIfAbsent(cdt.getPreType(), key -> new HashMap<>()).put(cdt.getPreId(), cdt.getPreLevel()) != null) { throw new IllegalStateException("Duplicate key"); }
+        }
+        return defenceMapper.queryAll().stream().map(b -> {
+            Defence rb = SystemUtils.copy(b, Defence.class);
+            rb.setPreCdts(pCdtMap.get(rb.getId()));
+            return rb;
+        }).collect(Collectors.toMap(CfgDefence::getId, b -> b));
+    }
+
+    private Map<Integer, Soldier> readSoldiers() {
+        Map<Integer, Map<Integer, Map<Integer, Integer>>> pCdtMap = new HashMap<>();
+        for (CfgSoldierCondition cdt : soldierConditionMapper.queryAll()) {
+            if (pCdtMap.computeIfAbsent(cdt.getSoldierId(), k1 -> new HashMap<>()).computeIfAbsent(cdt.getPreType(), key -> new HashMap<>()).put(cdt.getPreId(), cdt.getPreLevel()) != null) { throw new IllegalStateException("Duplicate key"); }
+        }
+        return soldierMapper.queryAll().stream().map(b -> {
+            Soldier rb = SystemUtils.copy(b, Soldier.class);
+            rb.setPreCdts(pCdtMap.get(rb.getId()));
+            return rb;
+        }).collect(Collectors.toMap(CfgSoldier::getId, b -> b));
+
     }
 
     private Map<Integer, Building> readBuilding() {

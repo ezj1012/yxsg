@@ -8,6 +8,5 @@ public interface HeroSvc {
 
     void createFirstHero(ProvinceLand land, Userable user);
 
-    void fillHero(PlayInfo info);
 
 }

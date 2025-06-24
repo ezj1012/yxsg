@@ -4,15 +4,16 @@ import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
-import com.yxbear.sg.svc.play.bean.CityBuilding;
+import com.yxbear.sg.domain.model.cfg.CfgDefence;
+import com.yxbear.sg.domain.model.gi.GiCityHero;
 
 public class ToTsInterface {
 
     public static void main(String[] args) {
         // print(ImgNode.class);
-//        print(CfgTechnicCondition.class);
-//        print(CfgTechnic.class);
-        print(CityBuilding.class);
+        // print(CfgTechnicCondition.class);
+        // print(CfgTechnic.class);
+        print(GiCityHero.class);
     }
 
     public static void print(Class<?> cls) {
@@ -45,4 +46,5 @@ public class ToTsInterface {
             System.out.println("    " + t);
         }
     }
+
 }

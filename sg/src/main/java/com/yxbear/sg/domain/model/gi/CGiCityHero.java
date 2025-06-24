@@ -253,20 +253,4 @@ public class CGiCityHero implements Condition {
 
     private Integer endLoyalty;
 
-    private Long createTime;
-
-    private Long[] createTimes;
-
-    private Long startCreateTime;
-
-    private Long endCreateTime;
-
-    private Long modifyTime;
-
-    private Long[] modifyTimes;
-
-    private Long startModifyTime;
-
-    private Long endModifyTime;
-
 }

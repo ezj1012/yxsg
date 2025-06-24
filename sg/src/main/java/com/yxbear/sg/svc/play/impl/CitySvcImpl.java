@@ -171,7 +171,7 @@ public class CitySvcImpl implements CitySvc {
     }
 
     private int countWorkProcess(int cid) {
-        return cityBuildMapper.count(CGiCityBuild.builder().cityId(cid).startStatus(0).build()).intValue();
+        return cityBuildMapper.count(CGiCityBuild.builder().cityId(cid).startStatus(1).build()).intValue();
     }
 
     public void useBaseRes(int cid, UseRes res) {

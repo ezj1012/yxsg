@@ -2,9 +2,13 @@ package com.yxbear.sg.domain.model.gi;
 
 import com.yxbear.core.bean.EntityBean;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class GiCityHero implements EntityBean<Integer> {
 
     /** 唯一主键 */
@@ -96,11 +100,5 @@ public class GiCityHero implements EntityBean<Integer> {
 
     /** 忠诚 */
     private Integer loyalty;
-
-    /** 创建时间 */
-    private Long createTime;
-
-    /** 最后一次修改时间 */
-    private Long modifyTime;
 
 }

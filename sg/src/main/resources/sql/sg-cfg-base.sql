@@ -42,3 +42,7 @@ REPLACE INTO CFG_OFFICE (ID,SALARY,NAME) VALUES
      (12,100000,'州牧'),
      (13,150000,'丞相'),
      (14,200000,'皇帝');
+     
+     
+
+     

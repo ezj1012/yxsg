@@ -40,10 +40,10 @@
 		"T:I_BTN;K:playing#topbutton_outercity;ION;ISCT;S:344,4,76,29,150;SCTABLE:mainPan,2,FALSE;",
 		"T:I_BTN;K:playing#topbutton_map;ION;ISCT;S:414,4,76,29,150;SCTABLE:mainPan,3,FALSE;",
 		"T:I_BTN;K:playing#topbutton_battle;ION;ISCT;S:484,4,76,29,150;SCTABLE:mainPan,4,FALSE;",
-		"T:I_BTN;K:playing#topbutton_build;ISCT;S:570,4,18,22,150;SCTABLE:FALSE;",
+		"T:I_BTN;K:playing#topbutton_build;ISCT;S:570,4,18,22,150;SCTABLE:TRUE;",
 		"T:I_BTN;K:playing#topbutton_craft;IDOWN;S:608,10,17,17,150;",
 		"T:I_BTN;K:playing#topbutton_tactic;IDOWN;S:632,10,17,17,150;",
-		"T:I_BTN;K:playing#topbutton_level;ISCT;S:670,4,18,22,150;SCTABLE:FALSE;",
+		"T:I_BTN;K:playing#topbutton_level;ISCT;S:670,4,18,22,150;SCTABLE:TRUE;",
 		"T:I_PTN;K:playing#topbutton_hero;IDOWN;ION;S:700,4,61,26,150;",
 		"T:I_PTN;K:playing#topbutton_army;IALA;IDOWN;ION;S:765,4,61,26,150;",
 		"T:I_PTN;K:playing#topbutton_union;IALA;IDOWN;ION;S:830,4,61,26,150;",
@@ -260,8 +260,11 @@
 		"T:I_PTN;K:common#btn_next;IDOWN;ION;",
 		"T:I_PTN;K:common#btn_osct;ION;ISCT;",
 		"T:I_PTN;K:common#btn_plus;IDIS;IDOWN;",
+		"T:I_PTN;K:common#btn_cancel;IDOWN;",
+		"T:I_PTN;K:common#btn_accer;IDOWN;",
 		"T:I_PTN;K:common#btn_prev;IDOWN;ION;",
 		"T:I_PTN;K:common#btn_red;IDOWN;ION;IDIS;IS:13,13,47,17;",
+		"T:I_PTN;K:common#btn_green;IDOWN;ION;IDIS;IS:13,13,47,17;",
 		"T:I_PTN;K:common#scroll_bar;ION;IS:3,3,9,22;",
 		"T:I_PTN;K:common#scroll_downarr;IDOWN;ION;",
 		"T:I_PTN;K:common#scroll_uparr;IDOWN;",
@@ -351,6 +354,10 @@
 				"K:playing#pl_left_city_res;T:CST_C;RFC:cityRes;S:3,313,256,283,10;",
 				// ===== 主页面
 				"K:playing#pl_main_pan;T:CST_C;RFC:innerMain;S:264,0,731,550,1;STYL:Ym94LXNoYWRvdzogaW5zZXQgMCAwIDAgMXB4ICMwMDAsIGluc2V0IDAgMCAwIDJweCAjNTUzODBlLCBpbnNldCAwIDAgMCAzcHggIzliOTU0MTs=;",
+				// ===== 建筑列表
+				"K:playing#player_city_build_ing;T:CST_C;RFC:buildList;S:264,32,255,130,100;",
+				
+				
 				//
 				// ==== 聊天
 				"K:playing#chatpan;T:CST_C;RFC:chatPan;S:266,560,420,36,150;RFI:playing#chat_pan;",

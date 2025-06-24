@@ -29,42 +29,45 @@ import lombok.RequiredArgsConstructor;
 public class CommQuerySvcImpl implements CommQuerySvc {
 
     final GiCityMapper cityMapper;
+
     final GiCityResourceMapper resMapper;
+
     final GiCityResourceAddMapper resAddMapper;
+
     final GiCityBuildMapper buildMapper;
+
     final GiCityDefenceMapper defMapper;
+
     final GiCitySoldierMapper soldierMapper;
+
     final GiCityHeroMapper heroMapper;
+
     private final GiCityExtMapper giCityExtMapper;
 
     final MemCityBuildUpgradingMapper mbMapper;
 
     final FrameCfgSvc cfgSvc;
-    final CfgGoodsMapper goodsMapper;
-    final DerateSvc derateSvc;
 
+    final CfgGoodsMapper goodsMapper;
+
+    final DerateSvc derateSvc;
 
     @Override
     public CityInfo getCityInfo(int cid) {
         GiCity city = cityMapper.selectById(cid);
-        if (city == null) {
-            return null;
-        }
+        if (city == null) { return null; }
         CityInfo info = SystemUtils.copy(city, CityInfo.class);
 
-        info.setHeros(heroMapper.queryList(CGiCityHero.builder().cityId(cid).build(), "name"));
+        info.setHeros(getCityHeroInfo(cid));
 
         info.setRes(resMapper.selectById(cid));
         info.setResAdd(resAddMapper.selectById(cid));
-        info.getBuildings().addAll(
-                buildMapper.queryList(CGiCityBuild.builder().cityId(cid).build(), "pos").stream()
-                        .map(b -> SystemUtils.copy(b, CityBuilding.class)).toList());
+        info.getBuildings().addAll(buildMapper.queryList(CGiCityBuild.builder().cityId(cid).build(), "pos").stream().map(b -> SystemUtils.copy(b, CityBuilding.class)).toList());
         Integer[] bids = info.getBuildings().stream().filter(b -> b.getStatus() != 0).map(GiCityBuild::getId).toArray(Integer[]::new);
 
         if (bids.length != 0) {
             Map<Integer, MemCityBuildUpgrading> idMap = new HashMap<>();
-            mbMapper.queryList(CMemCityBuildUpgrading.builder().ids(bids).build(), "id")
-                    .forEach(b -> idMap.put(b.getId(), b));
+            mbMapper.queryList(CMemCityBuildUpgrading.builder().ids(bids).build(), "id").forEach(b -> idMap.put(b.getId(), b));
             info.getBuildings().forEach(b -> {
                 MemCityBuildUpgrading memCityBuildUpgrading = idMap.get(b.getId());
                 if (memCityBuildUpgrading != null) {
@@ -74,21 +77,22 @@ public class CommQuerySvcImpl implements CommQuerySvc {
             });
         }
 
-        info.getSoldiers().addAll(
-                soldierMapper.queryList(CGiCitySoldier.builder().cityId(cid).build(), "id"));
-        info.getDefences().addAll(
-                defMapper.queryList(CGiCityDefence.builder().cityId(cid).build(), "id"));
+        info.getSoldiers().addAll(soldierMapper.queryList(CGiCitySoldier.builder().cityId(cid).build(), "id"));
+        info.getDefences().addAll(defMapper.queryList(CGiCityDefence.builder().cityId(cid).build(), "id"));
         int lv = info.getBuildings().getFirst().getLv();
         info.setMaxOuterBuild(20 + lv * 3);
         return info;
     }
 
+    @Override
+    public List<CityHero> getCityHeroInfo(int cid) {
+        List<CityHero> heros = heroMapper.queryList(CGiCityHero.builder().cityId(cid).build(), "name").stream().map(c -> SystemUtils.copy(c, CityHero.class)).toList();
+        return heros;
+    }
 
     @Override
     public List<CfgGoods> getGoods(Collection<Integer> ids) {
-        if (CommUtils.isEmpty(ids)) {
-            return new ArrayList<>();
-        }
+        if (CommUtils.isEmpty(ids)) { return new ArrayList<>(); }
         return goodsMapper.queryList(CCfgGoods.builder().ids(ids.toArray(Integer[]::new)).build(), "id");
     }
 
@@ -98,7 +102,6 @@ public class CommQuerySvcImpl implements CommQuerySvc {
         SystemUtils.checkEmpty(city, "城池");
         final int playId = city.getPlayId();
         Long heroAffairs = giCityExtMapper.getCityChiefHeroAffairs(cid);
-
 
         List<CityBuildingUseRes> res = new ArrayList<>();
         cfgSvc.getGlobalCfg().getBuildingsMap().forEach((bid, b) -> {
@@ -116,6 +119,5 @@ public class CommQuerySvcImpl implements CommQuerySvc {
 
         return result;
     }
-
 
 }

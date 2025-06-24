@@ -23,6 +23,10 @@ public class GlobalCfg {
 
     private Map<Integer, Technic> technicsMap;
 
+    private Map<Integer, Soldier> soldiersMap;
+
+    private Map<Integer, Defence> defencesMap;
+
     private LinkedHashMap<Integer, CfgOffice> officeMap;
 
     private LinkedHashMap<Integer, CfgNobility> nobilityMap;

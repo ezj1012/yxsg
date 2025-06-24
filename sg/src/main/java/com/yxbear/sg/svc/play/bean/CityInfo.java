@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.yxbear.sg.domain.model.gi.GiCity;
 import com.yxbear.sg.domain.model.gi.GiCityDefence;
-import com.yxbear.sg.domain.model.gi.GiCityHero;
 import com.yxbear.sg.domain.model.gi.GiCityResource;
 import com.yxbear.sg.domain.model.gi.GiCityResourceAdd;
 import com.yxbear.sg.domain.model.gi.GiCitySoldier;
@@ -27,7 +26,8 @@ public class CityInfo extends GiCity {
 
     List<GiCitySoldier> soldiers = new ArrayList<>();
 
-    List<GiCityHero> heros = new ArrayList<>();
+    List<CityHero> heros = new ArrayList<>();
 
     int maxOuterBuild;
+
 }
