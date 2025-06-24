@@ -46,9 +46,7 @@ onMounted(() => {
     calcDatas()
 })
 
-onUnmounted(() => {
-    obs.disconnect()
-})
+onUnmounted(() => obs.disconnect())
 
 function calcDatas() {
     if (dataEl.value) {
@@ -123,7 +121,7 @@ function hStyle(header: TableHeaderDef) {
         right: 0;
         bottom: 0;
         border: 10px solid transparent;
-        border-image: url('../../assets/imgs/comm_board.png') 10 fill;
+        border-image: url('../../assets/imgs/board_comm.png') 10 fill;
         z-index: -1;
     }
 

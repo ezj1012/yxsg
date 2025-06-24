@@ -4,19 +4,28 @@ import { computed, onMounted, provide, defineAsyncComponent, type ModelRef, ref,
 
 import type { SanGuo } from '@/app/sg';
 import LoadingView from './stages/LoadingView.vue';
-import StageView from './stages/StageView.vue';
 import EMsg from './msg/EMsg.vue';
 import HMsg from './msg/HMsg.vue';
 import RFunPanl from './comps/RFunPanl.vue';
 import FunPanlTestView from './test/FunPanlTestView.vue';
+import CommTest from './test/CommTest.vue';
+import type { Img } from '@/app/utils/img';
+import type { ImgGroupInfo } from '@/app/res/imgRes';
 
 const sg: ModelRef<SanGuo> = defineModel({ required: true })
-provide('sg', { sg: sg.value, ctx: sg.value.ctx, res: sg.value.ctx.res })
+const ctx = sg.value.ctx
+const res = sg.value.ctx.res
+const chatMgr = ctx.chatMgr
+provide('sg', {
+    sg: sg.value, ctx, res, chatMgr,
+    img: res.img.bind(res)
+})
 const isReady = computed(() => sg.value.ready.value)
 
 </script>
 <template>
     <div class="sg-main">
+        <CommTest v-if="isReady" />
         <template v-if="isReady">
             <!--  -->
             <RFunPanl />

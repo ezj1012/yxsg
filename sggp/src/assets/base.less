@@ -55,8 +55,27 @@
         top: 0;
         right: 0;
         bottom: 0;
-        border: 4px solid transparent;
-        border-image: url('@/assets/imgs/comm_board.png') 4 fill;
+        border: 3px solid transparent;
+        border-image: url('@/assets/imgs/board_comm.png') 4 fill;
+        z-index: -1;
+    }
+}
+
+.sg-comm-input {
+    padding: 3px 3px 3px 4px;
+    position: absolute;
+    box-sizing: border-box;
+
+    &::before {
+        position: absolute;
+        content: '';
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        border: 3px solid transparent;
+        border-left: 4px solid transparent;
+        border-image: url('@/assets/imgs/board_input.png') 4 fill;
         z-index: -1;
     }
 }

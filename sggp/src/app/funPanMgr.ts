@@ -18,5 +18,5 @@ export const gFunPanComps = [
     { key: 'fun_pan#topbutton_hero', comp: HeroFun, content: '英雄', size: 13, color: '--gold' },
     
     
-    { key: 'fun_pan#build_house', comp: BuildHouse, content: '英雄', size: 13, color: '--gold' },
+    { key: 'fun_pan#build_house', comp: BuildHouse, content: '建筑_房子', size: 13, color: '--gold' },
 ]

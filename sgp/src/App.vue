@@ -35,13 +35,19 @@ onMounted(async () => {
 </script>
 
 <template>
+
   <div class="main">
     <span style="position: absolute;left: 0;top: 0;z-index: 10000;">{{ `${x},${y}` }}</span>
     <TestImg v-if="ready" />
   </div>
+ 
 </template>
 
 <style lang="less" scoped>
+.a4 {
+  background-image: url('/rsm/images/common/btn_prev.png');
+}
+
 .main {
   position: relative;
   width: 100%;

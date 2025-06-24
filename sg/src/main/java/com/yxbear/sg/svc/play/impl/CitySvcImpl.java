@@ -269,6 +269,33 @@ public class CitySvcImpl implements CitySvc {
     @Override
     public void updateCityProduction(int cid) {
         // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    @Transactional
+    public void updateCityResource(int cid) {
+        GiCityResource res = cityResourceMapper.selectById(cid);
+        Long lastUpdate = res.getLastUpdate();
+        long curTime = System.currentTimeMillis();
+        long time = lastUpdate == null ? 0 : (curTime - lastUpdate)/1000;
+        GiCityResource upt = new GiCityResource();
+        upt.setId(cid);
+        upt.setLastUpdate(curTime);
+
+        if (lastUpdate == null || time <= 0) {
+            cityResourceMapper.updateById(cid, upt);
+            return;
+        }
+        
+        long foodAdd = (long) (res.getFoodAdd() / 3600D * time - res.getFoodArmyUse() / 3600D * time);
+        long woodAdd = (long) (res.getWoodAdd() / 3600D * time);
+        long rockAdd = (long) (res.getRockAdd() / 3600D * time);
+        long ironAdd = (long) (res.getIronAdd() / 3600D * time);
+//        long goldAdd = (long)(res.getPeople() )
+        
+        
+        
         
     }
 

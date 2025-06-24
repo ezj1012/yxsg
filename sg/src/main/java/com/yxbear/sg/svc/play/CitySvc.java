@@ -27,4 +27,11 @@ public interface CitySvc {
      */
     void updateCityProduction(int cid);
 
+    /**
+     * 更新城池资源
+     * 
+     * @param cid
+     */
+
+    void updateCityResource(int cid);
 }

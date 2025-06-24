@@ -3,7 +3,7 @@ import { CfgKey, type CfgStr } from '@/app/cfg';
 
 
 import type { SanGuo } from '@/app/sg';
-import { computed, inject, onUnmounted, ref, watch } from 'vue';
+import { inject, ref, watch } from 'vue';
 import Scroll from './Scroll.vue';
 import type { Shapable, Textable } from '@/app/commModel';
 
