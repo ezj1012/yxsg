@@ -1,5 +1,5 @@
 import { ref, shallowRef, type App, type Component, type Ref } from "vue";
-import { SingleComp, type FunPanComp, type Traceable } from "./commModel";
+import { SingleComp, type FunPanComp, type Traceable, type UsePanComp } from "./commModel";
 import { SgApi } from "./api";
 import type { IUserToken } from "./api/apiComm";
 import type { AxiosError } from "axios";
@@ -8,7 +8,7 @@ import { StageMgr } from "./stage/stage";
 import { SgRes, SgResLoader } from "./res";
 import { DataMgr } from "./dataMgr";
 import { ErrMsgMgr } from "./msg/errMsg";
-import { gFunPanComps } from "./funPanMgr";
+import { gFunPanComps, gUsePanComps } from "./funPanMgr";
 import { HoverMsgMgr } from "./msg/hoverMsgMgr";
 import { DivBg, installClickout, installMsg } from "./directives";
 import type { Stage } from "./stage/absStage";
@@ -45,6 +45,7 @@ export interface SgCtx {
     get dataMgr(): DataMgr
     get errMsgMgr(): ErrMsgMgr
     get funPanMgr(): SingleComp<FunPanComp>
+    get usePanMgr(): SingleComp<UsePanComp>
     hoverMsgMgr: HoverMsgMgr
     get gCfgMgr(): GCfgMgr
     get buildMgr(): BuildMgr
@@ -59,7 +60,8 @@ export class SgCtxImpl implements SgCtx {
     private _resLoader: SgResLoader
     private _res: SgRes
     private _dataMgr: DataMgr
-    private _funPanMgr = new SingleComp<FunPanComp>(gFunPanComps)
+    readonly funPanMgr = new SingleComp<FunPanComp>(gFunPanComps)
+    readonly usePanMgr = new SingleComp<UsePanComp>(gUsePanComps)
     private _errMsgMgr: ErrMsgMgr
     private _hoverMsgMgr: HoverMsgMgr
     private _playMgr: PlayMgr
@@ -99,7 +101,6 @@ export class SgCtxImpl implements SgCtx {
     get stageMgr() { return this._stageMgr }
     get dataMgr() { return this._dataMgr }
     get errMsgMgr() { return this._errMsgMgr }
-    get funPanMgr() { return this._funPanMgr }
     get hoverMsgMgr() { return this._hoverMsgMgr }
     get res() { return this._res }
     get playMgr() { return this._playMgr }

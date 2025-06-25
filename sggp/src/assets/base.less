@@ -96,8 +96,42 @@
         border-image: url('@/assets/imgs/board_fun.png') 20 fill;
         z-index: -1;
     }
+}
 
+.sg-comm-use {
+    padding: 10px;
+    position: absolute;
+    box-sizing: border-box;
 
+    &::before {
+        position: absolute;
+        content: '';
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        border: 20px solid transparent;
+        border-image: url('@/assets/imgs/board_use.png') 20 fill;
+        z-index: -1;
+    }
+}
+
+.sg-comm-use-title {
+    padding: 10px;
+    position: absolute;
+    box-sizing: border-box;
+
+    &::before {
+        position: absolute;
+        content: '';
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        border: 10px solid transparent;
+        border-image: url('@/assets/imgs/board_use_title.png') 10 fill;
+        z-index: -1;
+    }
 }
 
 #app {

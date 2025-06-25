@@ -10,6 +10,7 @@ import HeroFun from "@/components/test/funpanl/HeroFun.vue";
 import CityBuildList from "@/components/comps/playing/funpanl/CityBuildList.vue";
 import BuildHouse from "@/components/comps/playing/building/House.vue";
 import PlayInventory from "@/components/comps/playing/funpanl/PlayInventory.vue";
+import UseGoodsBatch from "@/components/usepan/UseGoodsBatch.vue";
 export const gFunPanComps = [
     // { key: 'fun_pan#playerinfo_inventory', comp: FunPanlInventory, content: '宝物', size: 13, color: '--gold' },
     // { key: 'fun_pan#playerinfo_armor', comp: FunPanlArmor, content: '装备', size: 13, color: '--gold' },
@@ -23,3 +24,15 @@ export const gFunPanComps = [
 
     { key: 'fun_pan#build_house', comp: BuildHouse, content: '建筑_房子', size: 13, color: '--gold' },
 ]
+
+
+export const gUsePanComps = [
+    // { key: 'fun_pan#playerinfo_inventory', comp: FunPanlInventory, content: '宝物', size: 13, color: '--gold' },
+    // { key: 'fun_pan#playerinfo_armor', comp: FunPanlArmor, content: '装备', size: 13, color: '--gold' },
+    // { key: 'fun_pan#playerinfo_king', comp: FunPanlKing, content: '君主', size: 13, color: '--gold' },
+    // { key: 'fun_pan#city_build_inner_list', comp: FunPanInnverBuild, content: '建造建筑', size: 13, color: '--gold' },
+    { key: 'use_pan#goods_batch', comp: UseGoodsBatch, content: '批量使用宝物', size: 13, color: '--gold' },
+
+]
+
+

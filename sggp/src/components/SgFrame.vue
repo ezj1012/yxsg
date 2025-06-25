@@ -13,6 +13,7 @@ import type { Img } from '@/app/utils/img';
 import type { ImgGroupInfo } from '@/app/res/imgRes';
 import StageView from './stages/StageView.vue';
 import { useSgComm } from '@/app/sgComp';
+import RUsePanl from './comps/RUsePanl.vue';
 
 const sg: ModelRef<SanGuo> = defineModel({ required: true })
 const ctx = sg.value.ctx
@@ -33,9 +34,10 @@ const isReady = computed(() => sg.value.ready.value)
         <template v-if="isReady">
             <!--  -->
             <RFunPanl />
+            <RUsePanl />
             <FunPanlTestView />
-            <!---->
-
+            <!--
+-->
             <StageView />
 
             <!--  <TableViewTest />-->

@@ -1,16 +1,22 @@
 <script lang="ts" setup>
 import { encode } from '@/app/constant';
-import { gFunPanComps } from '@/app/funPanMgr';
+import { gFunPanComps, gUsePanComps } from '@/app/funPanMgr';
 import type { SanGuo } from '@/app/sg';
 import { inject, onMounted, ref } from 'vue';
 
 const { sg } = inject('sg') as { sg: SanGuo }
 const panKey = ref('')
+const useKey = ref('')
 onMounted(() => {
     panKey.value = gFunPanComps[0].key
+    useKey.value = gUsePanComps[0].key
 })
-function doChange(key: any) {
-    sg.ctx.funPanMgr.setComp(key === '' ? '' : panKey.value)
+function doChange(type: number, key?: any) {
+    if (type === 0) {
+        sg.ctx.funPanMgr.setComp(key === '' ? '' : panKey.value)
+    } else {
+        sg.ctx.usePanMgr.setComp(key === '' ? '' : useKey.value)
+    }
 }
 
 async function doLogin() {
@@ -39,10 +45,18 @@ async function doReg() {
         <select v-model="panKey">
             <option v-for="pan in gFunPanComps" :key="pan.key" :value="pan.key">{{ pan.content }}</option>
         </select>
-        <div @click="doChange" class="btn">确定</div>
-        <div @click="doChange('')" class="btn">取消</div>
+        <select v-model="panKey">
+            <option v-for="pan in gUsePanComps" :key="pan.key" :value="pan.key">{{ pan.content }}</option>
+        </select>
+        <div @click="doChange(0)" class="btn">确定</div>
+        <div @click="doChange(0, '')" class="btn">取消</div>
+
+        <div @click="doChange(1)" class="btn">确定</div>
+        <div @click="doChange(1, '')" class="btn">取消</div>
+
         <div v-if="!sg.ctx.user" @click="doLogin()" class="btn">login</div>
         <div v-if="!sg.ctx.play" @click="doReg()" class="btn">reg</div>
+
     </div>
 </template>
 <style lang="less" scoped>

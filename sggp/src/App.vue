@@ -39,12 +39,13 @@ sgGame.sg.value = sg
   --btn-pan-z: 500;
   // 军队啊.
   --fun-pan-z: 600;
+  --use-pan-z: 700;
   // 购买宝物弹出框,使用宝物弹出框
-  --pop-pan-z: 700;
+  --pop-pan-z: 800;
   // 确认干什么的通知框
-  --aff-pan-z: 800;
+  --aff-pan-z: 900;
   // 异常,通知框
-  --msg-pan-z: 900;
+  --msg-pan-z: 1000;
 
   /** */
   /* 绿色 */
@@ -58,7 +59,7 @@ sgGame.sg.value = sg
   /* 红色 */
   --red: #f43838;
   /* 金色 */
-  --gold: #e5c21e;
+  --gold: #e4ff92;
 
   --rxsg-table-header-font-color: #2ebdd7;
   --rxsg-table-row-bg-color: #182828d9;

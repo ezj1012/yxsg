@@ -64,6 +64,9 @@ export interface Compable extends Shapable {
 export interface FunPanComp extends Compable, Textable {
     show?: boolean
 }
+export interface UsePanComp extends Compable, Textable {
+    show?: boolean
+}
 
 export interface StageComp extends Compable { }
 
