@@ -144,6 +144,7 @@ export interface PlayInfo {
     officepos: number
     unionId: number
     unionPos: number
+    unionName: string
     money: number
     armorColumn: number
     vipLevel: number
@@ -333,4 +334,5 @@ export interface CityTechnic {
 export interface CityIntro {
     id: number
     name: string
+    people: number
 }

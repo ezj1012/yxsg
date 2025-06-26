@@ -29,6 +29,7 @@ export type Sg = {
     res: SgRes
     chatMgr: ChatMgr
     btnRed(key: string, size: string, act: string): Component
+    // text(key: string, size: string, text: string): Component
 }
 
 export interface SgCtx {

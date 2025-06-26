@@ -11,6 +11,7 @@ import CityBuildList from "@/components/comps/playing/funpanl/CityBuildList.vue"
 import BuildHouse from "@/components/comps/playing/building/House.vue";
 import PlayInventory from "@/components/comps/playing/funpanl/PlayInventory.vue";
 import UseGoodsBatch from "@/components/usepan/UseGoodsBatch.vue";
+import PlayInfo from "@/components/comps/playing/funpanl/PlayInfo.vue";
 export const gFunPanComps = [
     // { key: 'fun_pan#playerinfo_inventory', comp: FunPanlInventory, content: '宝物', size: 13, color: '--gold' },
     // { key: 'fun_pan#playerinfo_armor', comp: FunPanlArmor, content: '装备', size: 13, color: '--gold' },
@@ -19,6 +20,8 @@ export const gFunPanComps = [
     { key: 'fun_pan#city_builds', comp: CityBuildList, content: '建筑', size: 13, color: '--gold' },
     { key: 'fun_pan#topbutton_hero', comp: HeroFun, content: '英雄', size: 13, color: '--gold' },
 
+
+    { key: 'fun_pan#playerinfo_king', comp: PlayInfo, content: '玩家信息', size: 13, color: '--gold' },
     { key: 'fun_pan#playerinfo_inventory', comp: PlayInventory, content: '我的宝物', size: 13, color: '--gold' },
 
 

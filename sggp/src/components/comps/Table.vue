@@ -54,7 +54,7 @@ function calcDatas() {
 
         const dataHeight = props.datas.length * props.rowHeight
         showScroll.value = dataHeight > dataRect.height
-        const rowDatas: TableDataRowDef[] = props.datasConver(props.datas)
+        const rowDatas: TableDataRowDef[] = props.datasConver(headers.value, props.datas)
 
         while (rowDatas.length < Math.max(Math.ceil(dataRect.height / props.rowHeight), props.datas.length, (props.h - props.headerHeight) / props.rowHeight)) {
             rowDatas.push(empty)
