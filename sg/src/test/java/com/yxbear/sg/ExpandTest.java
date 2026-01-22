@@ -7,14 +7,15 @@ import java.util.List;
 import java.util.Set;
 
 import com.yxbear.sg.domain.model.cfg.CfgGoods;
-import com.yxbear.sg.svc.play.bean.PlayInfo;
 
 public class ExpandTest {
 
     private static Set<String> processedClasses = new HashSet<>(); // 避免重复处理相同的类
 
     public static void expand(Class<?> clazz) {
-        if (clazz == null || !processedClasses.add(clazz.getName())) { return; }
+        if (clazz == null || !processedClasses.add(clazz.getName())) {
+            return;
+        }
 
         List<String> fieldNames = new ArrayList<>();
         Class<?> currentClass = clazz;
@@ -71,7 +72,8 @@ public class ExpandTest {
 
     private static Method findSetterMethod(Class<?> clazz, String fieldName) {
         try {
-            return clazz.getMethod("set" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1), Object.class);
+            return clazz.getMethod("set" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1),
+                    Object.class);
         } catch (NoSuchMethodException e) {
             return null;
         }

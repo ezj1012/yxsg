@@ -1,6 +1,5 @@
 package com.yxbear.sg.domain.mapper.gi.ext;
 
-import com.yxbear.sg.domain.model.gi.GiCityHero;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 

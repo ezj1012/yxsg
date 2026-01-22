@@ -26,11 +26,9 @@ import com.yxbear.sg.domain.bean.SGProps;
 import com.yxbear.sg.engine.SgContext;
 import com.yxbear.sg.engine.SgEngine;
 import com.yxbear.sg.engine.loader.SgDataLoader;
-import com.yxbear.sg.engine.loader.SgWorldDataLoader;
 import com.yxbear.sg.engine.support.DefaultSgDataLoader;
 
 import cn.dev33.satoken.context.SaHolder;
-import cn.dev33.satoken.context.model.SaRequest;
 import cn.dev33.satoken.filter.SaServletFilter;
 import cn.dev33.satoken.interceptor.SaInterceptor;
 import cn.dev33.satoken.router.SaRouter;
